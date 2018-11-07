@@ -2,8 +2,6 @@ package gauntlet;
 
 import jig.Entity;
 import jig.ResourceManager;
-import java.io.FileInputStream;
-import java.io.IOException;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
