@@ -27,20 +27,19 @@ public class GameSocket extends Thread {
 		}
 	}
 	
-	public void runServer(int guests) {
+	public void runServer() {
 		
-		while (guests-1 > 0) {
+		while (true) {
+			System.out.println("started server");
 			try {
 				serverSocket.accept();
+				break;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			guests--;
-			
-			System.out.println("Client connected");
 		}
+		System.out.println("Client connected");
 	}
 	
 	public void createClient(String serverIP) {
