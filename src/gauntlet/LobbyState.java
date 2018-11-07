@@ -5,11 +5,9 @@ import java.io.IOException;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.gui.*;
-import org.newdawn.slick.font.*;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import jig.ResourceManager;
 
 public class LobbyState extends BasicGameState{
 
