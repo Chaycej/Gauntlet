@@ -27,7 +27,6 @@ public class LobbyState extends BasicGameState{
 	    } catch (SlickException e) {};
 		tf = new TextField(container, uc, 275, 300, 175, 50, new ComponentListener() {
 			public void componentActivated(AbstractComponent source) {
-	            System.out.println("DEBUG: "+tf.getText());
 	            tf.setFocus(true);
 	         }
 		});
@@ -54,30 +53,14 @@ public class LobbyState extends BasicGameState{
 		
 		// Start server
 		if (input.isKeyDown(input.KEY_SPACE)) {
-			GameSocket socket = null;
-			try {
-				socket = new GameSocket();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			socket.createServer();
-			socket.runServer();
-			
+			Server server = new Server();
+			server.run();
 		} 
 		
 		// Join a server
 		if (input.isKeyDown(input.KEY_ENTER)) {
-			
-			System.out.println("IP address: " + tf.getText());
-			GameSocket socket = null;
-			try {
-				socket = new GameSocket();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			socket.createClient(tf.getText());
+			Client client = new Client(tf.getText());
+			client.joinServer();
 		}
 		
 	}
