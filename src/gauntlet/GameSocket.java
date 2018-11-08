@@ -38,13 +38,14 @@ public class GameSocket extends Thread {
 	            int port = packet.getPort();
 	            
 	            System.out.println("Received packet from: " + address + ": " +port);
-				break;
+	            break;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Client connected");
+		
+		
 	}
 	
 	public void createClient(String serverIP) {

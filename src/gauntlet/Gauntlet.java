@@ -21,9 +21,7 @@ public class Gauntlet extends StateBasedGame {
 	
 	public static AppGameContainer app;
 	
-	public static boolean isServer;
-	public static int partySize;
-	public static String serverIP;
+	public GameSocket socket;
 	
 	int[][] map;
 	MapMatrix[][] mapM;
