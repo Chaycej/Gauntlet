@@ -53,8 +53,10 @@ public class LobbyState extends BasicGameState{
 		
 		// Start server
 		if (input.isKeyDown(input.KEY_SPACE)) {
-			Server server = new Server();
-			server.run();
+			if (bg.server == null) {
+				bg.server = new Server();
+				bg.server.run();
+			}
 		} 
 		
 		// Join a server
