@@ -32,12 +32,11 @@ public class Server {
 			DatagramPacket packet = new DatagramPacket(buf, buf.length);
 			try {
 				this.socket.receive(packet);
+				System.out.println("Received join message from: " + packet.getAddress().toString()
+						+ ": " + packet.getPort());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
-			System.out.println("Received join message from: " + packet.getAddress().toString()
-					+ ": " + packet.getPort());
 			break;
 		}
 	}

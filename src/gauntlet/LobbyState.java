@@ -59,8 +59,10 @@ public class LobbyState extends BasicGameState{
 		
 		// Join a server
 		if (input.isKeyDown(input.KEY_ENTER)) {
-			Client client = new Client(tf.getText());
-			client.joinServer();
+			if (bg.client == null) {
+				bg.client = new Client(tf.getText());
+				bg.client.joinServer();
+			}
 		}
 		
 	}

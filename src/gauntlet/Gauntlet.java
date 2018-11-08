@@ -26,6 +26,9 @@ public class Gauntlet extends StateBasedGame {
 	int[][] map;
 	MapMatrix[][] mapM;
 	
+	Server server;
+	Client client;
+	
 	
 	public Gauntlet(String title, int width, int height) {
 		super(title);
