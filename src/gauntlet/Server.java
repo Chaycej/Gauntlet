@@ -41,5 +41,9 @@ public class Server {
 		}
 	}
 	
+	public void closeServer() {
+		this.socket.close();
+	}
+	
 	
 }
