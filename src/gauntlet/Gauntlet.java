@@ -19,6 +19,9 @@ public class Gauntlet extends StateBasedGame {
 	public static final String wallTile = "Gauntlet/resources/WallTile.png";
 	public static final String JOIN_GAME_RSC = "Gauntlet/resources/joinGame.png";
 	public static final String HOST_GAME_RSC = "Gauntlet/resources/hostGame.png";
+	
+	public static final String rangerS = "Gauntlet/resources/ranger_s.png";
+	public static final String warriorS = "Gauntlet/resources/warrior_s.png";
 
 	public final int ScreenWidth;
 	public final int ScreenHeight;
@@ -30,6 +33,7 @@ public class Gauntlet extends StateBasedGame {
 	int[][] map;
 	MapMatrix[][] mapM;
 	
+	Warrior warrior;
 	Server server;
 	Client client;
 	
@@ -42,6 +46,7 @@ public class Gauntlet extends StateBasedGame {
 		Entity.setCoarseGrainedCollisionBoundary(Entity.AABB);
 		map = new int[25][25];
 		mapM = new MapMatrix[25][25];
+		warrior = new Warrior(200, 200, 0f, 0f);
 		
 	}
 
@@ -54,6 +59,10 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(pathTile);
 		ResourceManager.loadImage(JOIN_GAME_RSC);
 		ResourceManager.loadImage(HOST_GAME_RSC);
+		ResourceManager.loadImage(rangerS);
+		ResourceManager.loadImage(warriorS);
+		
+		
 		
 		 int rowB = 0;
 	        int colB = 0;
