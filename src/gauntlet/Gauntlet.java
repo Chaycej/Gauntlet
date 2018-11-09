@@ -34,8 +34,10 @@ public class Gauntlet extends StateBasedGame {
 	MapMatrix[][] mapM;
 	
 	Warrior warrior;
+	Ranger ranger;
 	Server server;
 	Client client;
+	GameThread clientThread;
 	
 	
 	public Gauntlet(String title, int width, int height) {
@@ -62,6 +64,7 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(rangerS);
 		ResourceManager.loadImage(warriorS);
 		warrior = new Warrior(200, 200, 0f, 0f);
+		ranger = new Ranger(280, 200, 0f, 0f);
 		
 		
 		 int rowB = 0;
