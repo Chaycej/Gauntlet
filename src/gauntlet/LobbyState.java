@@ -65,6 +65,7 @@ public class LobbyState extends BasicGameState{
 			if (bg.client == null) {
 				bg.client = new Client(tf.getText());
 				bg.client.joinServer();
+				bg.enterState(bg.GAMESTARTSTATE);
 			}
 		}
 		
