@@ -2,6 +2,7 @@ package gauntlet;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class GameThread extends Thread {
@@ -15,5 +16,10 @@ public class GameThread extends Thread {
 		
 		Graphics g = container.getGraphics();
 		bg.ranger.render(g);
+		
+		Input input = container.getInput();
+		if (input.isKeyDown(input.KEY_DOWN)) {
+			System.out.println("Key down");
+		}
 	}
 }
