@@ -8,6 +8,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import jig.ResourceManager;
+import jig.Vector;
 
 public class GameStartUp extends BasicGameState{
 	int north = 0;
@@ -52,31 +53,13 @@ public class GameStartUp extends BasicGameState{
 		Input input = container.getInput();
 		Gauntlet bg = (Gauntlet)game;
 		if (input.isKeyDown(Input.KEY_RIGHT)) {
-			bg.warrior.eastCheck(game);
-			if (bg.warrior.notPossible == 0) {
-				north = 0;
-				south = 0;
-				west = 0;
-				east = 1;
-			}
+			bg.warrior.setVelocity(new Vector(0.1f, 0));
 		}
 		if (input.isKeyDown(Input.KEY_LEFT)) {
-			bg.warrior.westCheck(game);
-			if (bg.warrior.notPossible == 0) {
-				north = 0;
-				south = 0;
-				west = 1;
-				east = 0;
-			}
+			bg.warrior.setVelocity(new Vector(-0.1f, 0));
 		}
 		if (input.isKeyDown(Input.KEY_UP)) {
-			bg.warrior.northCheck(game);
-			if (bg.warrior.notPossible == 0) {
-				north = 1;
-				south = 0;
-				west = 0;
-				east = 0;
-			}
+			bg.warrior.setVelocity(new Vector(0, -0.1f));
 		}
 		if (input.isKeyDown(Input.KEY_DOWN)) {
 			bg.warrior.southCheck(game);
@@ -87,19 +70,19 @@ public class GameStartUp extends BasicGameState{
 				east = 0;
 			}
 		}
-		if(north==1) {
-			bg.warrior.northCheck(game);
-		}
-		if(south==1) {
-			bg.warrior.southCheck(game);
-		}
-		if(west==1) {
-			bg.warrior.westCheck(game);
-		}
-		if(east==1) {
-			bg.warrior.eastCheck(game);
-		}
-		bg.warrior.notPossible = 0;
+//		if(north==1) {
+//			bg.warrior.northCheck(game);
+//		}
+//		if(south==1) {
+//			bg.warrior.southCheck(game);
+//		}
+//		if(west==1) {
+//			bg.warrior.westCheck(game);
+//		}
+//		if(east==1) {
+//			bg.warrior.eastCheck(game);
+//		}
+//		bg.warrior.notPossible = 0;
 		bg.warrior.update(delta);
 		
 	}
