@@ -2,6 +2,10 @@ package gauntlet;
 
 import jig.Entity;
 import jig.ResourceManager;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -36,27 +40,51 @@ public class Gauntlet extends StateBasedGame {
 		ScreenWidth = width;
 
 		Entity.setCoarseGrainedCollisionBoundary(Entity.AABB);
-		map = new int[75][75];
-		mapM = new MapMatrix[75][75];
+		map = new int[25][25];
+		mapM = new MapMatrix[25][25];
 		
 	}
 
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
 		addState(new LobbyState());
-		//addState(new GameStartUp());
+		addState(new GameStartUp());
 		
 		ResourceManager.loadImage(wallTile);
 		ResourceManager.loadImage(pathTile);
 		ResourceManager.loadImage(JOIN_GAME_RSC);
 		ResourceManager.loadImage(HOST_GAME_RSC);
 		
+		 int rowB = 0;
+	        int colB = 0;
+	        try {
+	            FileInputStream inputStream = new FileInputStream("../Gauntlet/src/gauntlet/map.txt");
+	            while (inputStream.available() > 0) {
+	                int numRead = inputStream.read();
+	                if (!Character.isDigit(numRead)){
+	                    continue;
+	                }
+	                //System.out.println("number is " + (char) numRead);
+	                //System.out.println("col " + colB);
+	                //System.out.println("row " + rowB);
+	                map[rowB][colB] = numRead;
+	                colB++;
+	                if (colB == 25) {
+	                    colB = 0;
+	                    rowB++;
+	                }
+	            }
+	            inputStream.close();
+	        } catch (IOException ioe) {
+	            System.out.println("Trouble reading from the file: " + ioe.getMessage());
+	        }
+		
 	}
 	
 	public static void main(String[] args) {
 		try {
 			app = new AppGameContainer(new Gauntlet("Gauntlet", 800, 800));		//(x,y)
-			app.setDisplayMode(700, 700, false);
+			app.setDisplayMode(800, 800, false);
 			app.setVSync(true);
 			app.start();
 		} catch (SlickException e) {

@@ -22,9 +22,9 @@ public class GameStartUp extends BasicGameState{
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		Gauntlet bg = (Gauntlet)game;
 		int x = 16;
-		int y = 16+200;
-		for (int row=0; row<75; row++ ) {
-			for (int col=0; col<75; col++) {
+		int y = 16;
+		for (int row=0; row<25; row++ ) {
+			for (int col=0; col<25; col++) {
 				if ( bg.map[row][col] == 48) {		//equals a 0 is a path
 					bg.mapM[row][col]= new MapMatrix(x,y, 0f, 0f);
 					bg.mapM[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.pathTile));

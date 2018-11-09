@@ -56,6 +56,7 @@ public class LobbyState extends BasicGameState{
 			if (bg.server == null) {
 				bg.server = new Server();
 				bg.server.run();
+				bg.enterState(bg.GAMESTARTSTATE);
 			}
 		} 
 		
