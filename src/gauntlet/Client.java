@@ -46,5 +46,9 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
+	
+	public void closeClient() {
+		this.socket.close();
+	}
 
 }

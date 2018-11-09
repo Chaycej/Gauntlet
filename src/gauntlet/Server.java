@@ -34,11 +34,18 @@ public class Server {
 				this.socket.receive(packet);
 				System.out.println("Received join message from: " + packet.getAddress().toString()
 						+ ": " + packet.getPort());
+				GameThread clientThread= new GameThread();
+				clientThread.run();
+				break;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			break;
 		}
+	}
+	
+	public void closeServer() {
+		this.socket.close();
 	}
 	
 	
