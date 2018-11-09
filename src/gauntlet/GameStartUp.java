@@ -16,11 +16,13 @@ public class GameStartUp extends BasicGameState{
 		container.setSoundOn(true);
 		
 		Gauntlet gg = (Gauntlet)game;
+		gg.warrior.setPosition(200,200);
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		Gauntlet bg = (Gauntlet)game;
+		
 		int x = 16;
 		int y = 16;
 		for (int row=0; row<25; row++ ) {
@@ -38,6 +40,7 @@ public class GameStartUp extends BasicGameState{
 			y = y+32;
 			x=16;
 		}
+		bg.warrior.render(g);
 	}
 
 	@Override
