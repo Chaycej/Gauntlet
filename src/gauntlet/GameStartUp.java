@@ -62,29 +62,10 @@ public class GameStartUp extends BasicGameState{
 			bg.warrior.setVelocity(new Vector(0, -0.1f));
 		}
 		if (input.isKeyDown(Input.KEY_DOWN)) {
-			bg.warrior.southCheck(game);
-			if (bg.warrior.notPossible == 0) {
-				north = 0;
-				south = 1;
-				west = 0;
-				east = 0;
-			}
+			bg.warrior.setVelocity(new Vector(0, 0.1f));
 		}
-//		if(north==1) {
-//			bg.warrior.northCheck(game);
-//		}
-//		if(south==1) {
-//			bg.warrior.southCheck(game);
-//		}
-//		if(west==1) {
-//			bg.warrior.westCheck(game);
-//		}
-//		if(east==1) {
-//			bg.warrior.eastCheck(game);
-//		}
-//		bg.warrior.notPossible = 0;
-		bg.warrior.update(delta);
 		
+		bg.warrior.update(delta);
 	}
 
 	@Override

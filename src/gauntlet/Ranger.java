@@ -5,15 +5,15 @@ import jig.Entity;
 import jig.ResourceManager;
 import jig.Vector;
 
-class Warrior extends Entity {
+class Ranger extends Entity {
 	public Vector velocity;
 	private int countdown;
 	int notPossible = 0;
 	public int guardGotHit =-1;
 	
-	public Warrior(final float x, final float y, final float vx, final float vy) {
+	public Ranger(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
-		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorS));
+		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.rangerS));
 		velocity = new Vector(vx, vy);
 		countdown = 0;
 	}
