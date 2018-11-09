@@ -1,16 +1,20 @@
 package gauntlet;
 
 import java.io.IOException;
-
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import jig.ResourceManager;
 
 public class GameStartUp extends BasicGameState{
-
+	int north = 0;
+	int south = 0;
+	int west = 0;
+	int east = 0;
+	
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		container.setSoundOn(true);
@@ -45,6 +49,58 @@ public class GameStartUp extends BasicGameState{
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+		Input input = container.getInput();
+		Gauntlet bg = (Gauntlet)game;
+		if (input.isKeyDown(Input.KEY_RIGHT)) {
+			bg.warrior.eastCheck(game);
+			if (bg.warrior.notPossible == 0) {
+				north = 0;
+				south = 0;
+				west = 0;
+				east = 1;
+			}
+		}
+		if (input.isKeyDown(Input.KEY_LEFT)) {
+			bg.warrior.westCheck(game);
+			if (bg.warrior.notPossible == 0) {
+				north = 0;
+				south = 0;
+				west = 1;
+				east = 0;
+			}
+		}
+		if (input.isKeyDown(Input.KEY_UP)) {
+			bg.warrior.northCheck(game);
+			if (bg.warrior.notPossible == 0) {
+				north = 1;
+				south = 0;
+				west = 0;
+				east = 0;
+			}
+		}
+		if (input.isKeyDown(Input.KEY_DOWN)) {
+			bg.warrior.southCheck(game);
+			if (bg.warrior.notPossible == 0) {
+				north = 0;
+				south = 1;
+				west = 0;
+				east = 0;
+			}
+		}
+		if(north==1) {
+			bg.warrior.northCheck(game);
+		}
+		if(south==1) {
+			bg.warrior.southCheck(game);
+		}
+		if(west==1) {
+			bg.warrior.westCheck(game);
+		}
+		if(east==1) {
+			bg.warrior.eastCheck(game);
+		}
+		bg.warrior.notPossible = 0;
+		bg.warrior.update(delta);
 		
 	}
 

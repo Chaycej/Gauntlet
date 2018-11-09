@@ -46,7 +46,7 @@ public class Gauntlet extends StateBasedGame {
 		Entity.setCoarseGrainedCollisionBoundary(Entity.AABB);
 		map = new int[25][25];
 		mapM = new MapMatrix[25][25];
-		warrior = new Warrior(200, 200, 0f, 0f);
+		
 		
 	}
 
@@ -61,7 +61,7 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(HOST_GAME_RSC);
 		ResourceManager.loadImage(rangerS);
 		ResourceManager.loadImage(warriorS);
-		
+		warrior = new Warrior(200, 200, 0f, 0f);
 		
 		
 		 int rowB = 0;
