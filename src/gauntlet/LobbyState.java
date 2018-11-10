@@ -2,6 +2,7 @@ package gauntlet;
 
 import java.awt.Font;
 import java.io.IOException;
+import java.net.DatagramPacket;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.gui.*;
@@ -51,18 +52,18 @@ public class LobbyState extends BasicGameState{
 		Input input = container.getInput();
 
 		
-		// Start server
+		// Server
 		if (input.isKeyDown(input.KEY_SPACE)) {
 			if (bg.server == null) {
 				bg.server = new Server();
 				bg.server.run();
-				bg.clientThread = new GameThread();
-				bg.clientThread.run(container, game, delta);
+				GameThread clientThread = new GameThread(bg.server, container, game, delta);
+				clientThread.start();
 				bg.enterState(bg.GAMESTARTSTATE);
 			}
 		} 
 		
-		// Join a server
+		// Client
 		if (input.isKeyDown(input.KEY_ENTER)) {
 			if (bg.client == null) {
 				bg.client = new Client(tf.getText());

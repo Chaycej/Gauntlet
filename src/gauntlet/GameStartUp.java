@@ -46,6 +46,8 @@ public class GameStartUp extends BasicGameState{
 			x=16;
 		}
 		bg.warrior.render(g);
+		bg.warrior.setVelocity(new Vector(0f, 0f));
+		bg.ranger.render(g);
 	}
 
 	@Override
