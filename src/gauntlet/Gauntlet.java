@@ -2,10 +2,8 @@ package gauntlet;
 
 import jig.Entity;
 import jig.ResourceManager;
-
 import java.io.FileInputStream;
 import java.io.IOException;
-
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -20,8 +18,15 @@ public class Gauntlet extends StateBasedGame {
 	public static final String JOIN_GAME_RSC = "Gauntlet/resources/joinGame.png";
 	public static final String HOST_GAME_RSC = "Gauntlet/resources/hostGame.png";
 	
+	public static final String rangerN = "Gauntlet/resources/ranger_n.png";
 	public static final String rangerS = "Gauntlet/resources/ranger_s.png";
+	public static final String rangerE = "Gauntlet/resources/ranger_e.png";
+	public static final String rangerW = "Gauntlet/resources/ranger_w.png";
+	
+	public static final String warriorN = "Gauntlet/resources/warrior_n.png";
 	public static final String warriorS = "Gauntlet/resources/warrior_s.png";
+	public static final String warriorE = "Gauntlet/resources/warrior_e.png";
+	public static final String warriorW = "Gauntlet/resources/warrior_w.png";
 
 	public final int ScreenWidth;
 	public final int ScreenHeight;
@@ -32,13 +37,11 @@ public class Gauntlet extends StateBasedGame {
 	
 	int[][] map;
 	MapMatrix[][] mapM;
-	
 	Warrior warrior;
 	Ranger ranger;
 	Server server;
 	Client client;
 	GameThread clientThread;
-	
 	
 	public Gauntlet(String title, int width, int height) {
 		super(title);
@@ -48,8 +51,6 @@ public class Gauntlet extends StateBasedGame {
 		Entity.setCoarseGrainedCollisionBoundary(Entity.AABB);
 		map = new int[25][25];
 		mapM = new MapMatrix[25][25];
-		
-		
 	}
 
 	@Override
@@ -61,11 +62,19 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(pathTile);
 		ResourceManager.loadImage(JOIN_GAME_RSC);
 		ResourceManager.loadImage(HOST_GAME_RSC);
+		
+		ResourceManager.loadImage(rangerN);
 		ResourceManager.loadImage(rangerS);
+		ResourceManager.loadImage(rangerE);
+		ResourceManager.loadImage(rangerW);
+		
+		ResourceManager.loadImage(warriorN);
 		ResourceManager.loadImage(warriorS);
+		ResourceManager.loadImage(warriorE);
+		ResourceManager.loadImage(warriorW);
+		
 		warrior = new Warrior(200, 200, 0f, 0f);
 		ranger = new Ranger(280, 200, 0f, 0f);
-		
 		
 		 int rowB = 0;
 	        int colB = 0;
@@ -76,9 +85,6 @@ public class Gauntlet extends StateBasedGame {
 	                if (!Character.isDigit(numRead)){
 	                    continue;
 	                }
-	                //System.out.println("number is " + (char) numRead);
-	                //System.out.println("col " + colB);
-	                //System.out.println("row " + rowB);
 	                map[rowB][colB] = numRead;
 	                colB++;
 	                if (colB == 25) {
@@ -90,7 +96,6 @@ public class Gauntlet extends StateBasedGame {
 	        } catch (IOException ioe) {
 	            System.out.println("Trouble reading from the file: " + ioe.getMessage());
 	        }
-		
 	}
 	
 	public static void main(String[] args) {

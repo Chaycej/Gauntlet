@@ -7,13 +7,11 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-
 public class Client {
 	
-	private static final int PORT = 3303;
+	public static final int PORT = 3303;
 	public String serverIP;
 	public DatagramSocket socket;
-	
 	
 	// Creates a client socket
 	public Client(String serverIP) {
@@ -38,7 +36,7 @@ public class Client {
 		
 		String msg = "Join";
 		byte[] buf = msg.getBytes();
-		DatagramPacket joinPacket = new DatagramPacket(buf, buf.length, addr, this.PORT);
+		DatagramPacket joinPacket = new DatagramPacket(buf, buf.length, addr, Client.PORT);
 		
 		try {
 			this.socket.send(joinPacket);
@@ -50,5 +48,4 @@ public class Client {
 	public void closeClient() {
 		this.socket.close();
 	}
-
 }

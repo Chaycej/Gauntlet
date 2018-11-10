@@ -1,6 +1,7 @@
 package gauntlet;
 
 import org.newdawn.slick.state.StateBasedGame;
+
 import jig.Entity;
 import jig.ResourceManager;
 import jig.Vector;
@@ -24,7 +25,76 @@ class Warrior extends Entity {
 
 	public Vector getVelocity() {
 		return velocity;
+	}
 	
+	public int curRow() {
+		int row = (int) ((super.getY())/32);	
+		return row;
+	}
+	
+	public int curCol() {
+		int col = (int) (super.getX()/32);
+		return col;
+	}
+	
+	public void checkNorth(StateBasedGame game) {
+		Gauntlet gg = (Gauntlet)game;
+		removeImage(ResourceManager.getImage(Gauntlet.warriorS));
+		removeImage(ResourceManager.getImage(Gauntlet.warriorE));
+		removeImage(ResourceManager.getImage(Gauntlet.warriorW));
+		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorN));
+		int col = curCol();
+		int row = curRow();
+		if (gg.map[row-1][col]!=1) {
+			gg.warrior.setVelocity(new Vector(0, -0.1f));
+		} else {
+			gg.warrior.setVelocity(new Vector(0, 0f));
+		}
+	}
+	
+	public void checkSouth(StateBasedGame game) {
+		Gauntlet gg = (Gauntlet)game;
+		removeImage(ResourceManager.getImage(Gauntlet.warriorN));
+		removeImage(ResourceManager.getImage(Gauntlet.warriorE));
+		removeImage(ResourceManager.getImage(Gauntlet.warriorW));
+		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorS));
+		int col = curCol();
+		int row = curRow();
+		if (gg.map[row+1][col]!=1) {
+			gg.warrior.setVelocity(new Vector(0, 0.1f));
+		} else {
+			gg.warrior.setVelocity(new Vector(0, 0f));
+		}
+	}
+	
+	public void checkEast(StateBasedGame game) {
+		Gauntlet gg = (Gauntlet)game;
+		removeImage(ResourceManager.getImage(Gauntlet.warriorN));
+		removeImage(ResourceManager.getImage(Gauntlet.warriorS));
+		removeImage(ResourceManager.getImage(Gauntlet.warriorW));
+		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorE));
+		int col = curCol();
+		int row = curRow();
+		if (gg.map[row][col+1]!=1) {
+			gg.warrior.setVelocity(new Vector(0.1f, 0));
+		} else {
+			gg.warrior.setVelocity(new Vector(0, 0f));
+		}
+	}
+	
+	public void checkWest(StateBasedGame game) {
+		Gauntlet gg = (Gauntlet)game;
+		removeImage(ResourceManager.getImage(Gauntlet.warriorN));
+		removeImage(ResourceManager.getImage(Gauntlet.warriorS));
+		removeImage(ResourceManager.getImage(Gauntlet.warriorE));
+		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorW));
+		int col = curCol();
+		int row = curRow();
+		if (gg.map[row][col+1]!=1) {
+			gg.warrior.setVelocity(new Vector(-0.1f, 0));
+		} else {
+			gg.warrior.setVelocity(new Vector(0, 0f));
+		}
 	}
 	
 	public void update(final int delta) {

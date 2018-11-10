@@ -1,6 +1,9 @@
 package gauntlet;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -11,63 +14,92 @@ import jig.ResourceManager;
 import jig.Vector;
 
 public class GameStartUp extends BasicGameState{
-	int north = 0;
-	int south = 0;
-	int west = 0;
-	int east = 0;
 	
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		container.setSoundOn(true);
-		
 		Gauntlet gg = (Gauntlet)game;
 		gg.warrior.setPosition(200,200);
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-		Gauntlet bg = (Gauntlet)game;
+		Gauntlet gg = (Gauntlet)game;
 		
 		int x = 16;
 		int y = 16;
 		for (int row=0; row<25; row++ ) {
 			for (int col=0; col<25; col++) {
-				if ( bg.map[row][col] == 48) {		//equals a 0 is a path
-					bg.mapM[row][col]= new MapMatrix(x,y, 0f, 0f);
-					bg.mapM[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.pathTile));
+				if ( gg.map[row][col] == 48) {		//equals a 0 is a path
+					gg.mapM[row][col]= new MapMatrix(x,y, 0f, 0f);
+					gg.mapM[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.pathTile));
 				} else {							//equals a 1 is a wall
-					bg.mapM[row][col]= new MapMatrix(x,y, 0f, 0f);
-					bg.mapM[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.wallTile));
+					gg.mapM[row][col]= new MapMatrix(x,y, 0f, 0f);
+					gg.mapM[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.wallTile));
 				}
 				x = x+32;
-				bg.mapM[row][col].render(g);
+				gg.mapM[row][col].render(g);
 			}
 			y = y+32;
 			x=16;
 		}
-		bg.warrior.render(g);
-		bg.warrior.setVelocity(new Vector(0f, 0f));
-		bg.ranger.render(g);
+		
+		gg.warrior.render(g);
+		gg.warrior.setVelocity(new Vector(0f,0f));
+		gg.ranger.render(g);
+		gg.ranger.setVelocity(new Vector(0f,0f));
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 		Input input = container.getInput();
-		Gauntlet bg = (Gauntlet)game;
-		if (input.isKeyDown(Input.KEY_RIGHT)) {
-			bg.warrior.setVelocity(new Vector(0.1f, 0));
-		}
-		if (input.isKeyDown(Input.KEY_LEFT)) {
-			bg.warrior.setVelocity(new Vector(-0.1f, 0));
-		}
-		if (input.isKeyDown(Input.KEY_UP)) {
-			bg.warrior.setVelocity(new Vector(0, -0.1f));
-		}
-		if (input.isKeyDown(Input.KEY_DOWN)) {
-			bg.warrior.setVelocity(new Vector(0, 0.1f));
+		Gauntlet gg = (Gauntlet)game;
+		
+		InetAddress addr = null;
+		try {
+			addr = InetAddress.getByName(gg.client.serverIP);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
 		}
 		
-		bg.warrior.update(delta);
+		if (input.isKeyDown(Input.KEY_UP)) {
+			gg.warrior.checkNorth(game);
+		}
+		if (input.isKeyDown(Input.KEY_DOWN)) {
+			gg.warrior.checkSouth(game);
+			
+			String msg = "Down";
+			byte[] buf = msg.getBytes();
+			DatagramPacket joinPacket = new DatagramPacket(buf, buf.length, addr, Client.PORT);
+			
+			try {
+				gg.client.socket.send(joinPacket);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if (input.isKeyDown(Input.KEY_RIGHT)) {
+			gg.warrior.checkEast(game);
+		}
+		if (input.isKeyDown(Input.KEY_LEFT)) {
+			gg.warrior.checkWest(game);
+		}
+	
+		if (input.isKeyDown(Input.KEY_W)) {
+			gg.ranger.checkNorth(game);
+		
+		}
+		if (input.isKeyDown(Input.KEY_S)) {
+			gg.ranger.checkSouth(game);
+		}
+		if (input.isKeyDown(Input.KEY_D)) {
+			gg.ranger.checkEast(game);
+		}
+		if (input.isKeyDown(Input.KEY_A)) {
+			gg.ranger.checkWest(game);
+		}
+		gg.warrior.update(delta);
+		gg.ranger.update(delta);
 	}
 
 	@Override
