@@ -1,12 +1,10 @@
 package gauntlet;
-import java.net.Socket;
+
 import java.net.UnknownHostException;
-import java.net.ServerSocket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.DatagramPacket;
 import java.io.IOException;
-
 
 public class GameSocket extends Thread {
 	
@@ -28,7 +26,6 @@ public class GameSocket extends Thread {
 	}
 	
 	public void runServer() {
-		
 		while (true) {
 			System.out.println("started server");
 			try {
@@ -40,12 +37,10 @@ public class GameSocket extends Thread {
 	            System.out.println("Received packet from: " + address + ": " +port);
 	            break;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
-		
-		
 	}
 	
 	public void createClient(String serverIP) {
@@ -65,7 +60,6 @@ public class GameSocket extends Thread {
 			e.printStackTrace();
 		}
 		
-		
 		DatagramPacket packet = new DatagramPacket(buf, buf.length, server, PORT);
 		try {
 			clientSocket.send(packet);
@@ -76,5 +70,4 @@ public class GameSocket extends Thread {
 		
 		System.out.println("Connected to server!");
 	}
-
 }

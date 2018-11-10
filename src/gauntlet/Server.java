@@ -14,11 +14,10 @@ public class Server {
 	// Opens a server UDP socket
 	public Server() {
 		try {
-			this.socket = new DatagramSocket(this.PORT);
+			this.socket = new DatagramSocket(Server.PORT);
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
-		
 		System.out.println("DEBUG: Started server");
 	}
 	
@@ -32,8 +31,7 @@ public class Server {
 			DatagramPacket packet = new DatagramPacket(buf, buf.length);
 			try {
 				this.socket.receive(packet);
-				System.out.println("Received join message from: " + packet.getAddress().toString()
-						+ ": " + packet.getPort());
+				System.out.println("Received join message from: " + packet.getAddress().toString() + ": " + packet.getPort());
 				break;
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -45,6 +43,4 @@ public class Server {
 	public void closeServer() {
 		this.socket.close();
 	}
-	
-	
 }
