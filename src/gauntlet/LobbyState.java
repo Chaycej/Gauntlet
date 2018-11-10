@@ -57,24 +57,8 @@ public class LobbyState extends BasicGameState{
 			if (bg.server == null) {
 				bg.server = new Server();
 				bg.server.run();
-				new GameThread() {
-					public void run() {
-						System.out.println("Created client thread");
-						while (true) {
-							
-							byte[] buf = new byte[256];
-							DatagramPacket pack = new DatagramPacket(buf, buf.length);
-							try {
-								bg.server.socket.receive(pack);
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							System.out.println("Received message from client");
-							System.out.println(pack.getData());
-						}
-					}
-				}.start();
+				GameThread clientThread = new GameThread(bg.server, container, game, delta);
+				clientThread.start();
 				bg.enterState(bg.GAMESTARTSTATE);
 			}
 		} 

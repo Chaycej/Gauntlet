@@ -22,12 +22,6 @@ public class GameStartUp extends BasicGameState{
 		
 		Gauntlet gg = (Gauntlet)game;
 		gg.warrior.setPosition(200,200);
-		
-		new GameThread() {
-			public void run() {
-				System.out.println("Created client thread");
-			}
-		}.start();
 	}
 
 	@Override
