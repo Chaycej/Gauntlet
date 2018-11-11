@@ -12,9 +12,9 @@ import org.newdawn.slick.state.StateBasedGame;
 public class Gauntlet extends StateBasedGame {
 	public static final int LOBBYSTATE = 0;
 	public static final int GAMESTARTSTATE = 1;
-	
-	public final int row = 25;
-	public final int col = 25;
+
+	public final static int row = 25;
+	public final static int col = 25;
 	public final static int windowWidth = 800;
 	public final static int windowHeight = 800;
 	
