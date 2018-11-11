@@ -33,5 +33,4 @@ public class GameState {
 	public int getColumn() {
 		return this.col;
 	}
-
 }

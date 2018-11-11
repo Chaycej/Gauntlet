@@ -23,7 +23,7 @@ public class LobbyState extends BasicGameState{
 	    	try {
 	    		uc.loadGlyphs();
 	    } catch (SlickException e) {};
-		tf = new TextField(container, uc, 275, 300, 175, 50, new ComponentListener() {
+		tf = new TextField(container, uc, 312, 375, 175, 50, new ComponentListener() {
 			public void componentActivated(AbstractComponent source) {
 	            tf.setFocus(true);
 	         }
@@ -35,9 +35,9 @@ public class LobbyState extends BasicGameState{
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		//Gauntlet gg = (Gauntlet)game;
-		g.drawString("Press space to start a server", 250, 100);
-		g.drawString("OR", 250, 140);
-		g.drawString("Type in a server ip address and press enter", 250, 200);
+		g.drawString("Press space to start a server", 270, 200);
+		g.drawString("OR", 375, 250);
+		g.drawString("Type in a server ip address and press enter", 200, 300);
 		tf.render(container, g);
 	}
 
@@ -73,4 +73,3 @@ public class LobbyState extends BasicGameState{
 		return Gauntlet.LOBBYSTATE;
 	}
 }
-

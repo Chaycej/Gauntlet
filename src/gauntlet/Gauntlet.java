@@ -13,6 +13,16 @@ public class Gauntlet extends StateBasedGame {
 	public static final int LOBBYSTATE = 0;
 	public static final int GAMESTARTSTATE = 1;
 	
+	public final int row = 25;
+	public final int col = 25;
+	public final static int windowWidth = 800;
+	public final static int windowHeight = 800;
+	
+	public final int  warriorX= 200;
+	public final int  warriorY= 200;
+	public final int  rangerX= 280;
+	public final int  rangerY= 200;
+	
 	public static final String pathTile = "Gauntlet/resources/WalkingTile.png";
 	public static final String wallTile = "Gauntlet/resources/WallTile.png";
 	public static final String JOIN_GAME_RSC = "Gauntlet/resources/joinGame.png";
@@ -36,7 +46,7 @@ public class Gauntlet extends StateBasedGame {
 	public GameSocket socket;
 	
 	int[][] map;
-	MapMatrix[][] mapM;
+	MapMatrix[][] mapMatrix;
 	Warrior warrior;
 	Ranger ranger;
 	Server server;
@@ -49,8 +59,8 @@ public class Gauntlet extends StateBasedGame {
 		ScreenWidth = width;
 
 		Entity.setCoarseGrainedCollisionBoundary(Entity.AABB);
-		map = new int[25][25];
-		mapM = new MapMatrix[25][25];
+		map = new int[row][col];
+		mapMatrix = new MapMatrix[row][col];
 	}
 
 	@Override
@@ -73,35 +83,35 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(warriorE);
 		ResourceManager.loadImage(warriorW);
 		
-		warrior = new Warrior(200, 200, 0f, 0f);
-		ranger = new Ranger(280, 200, 0f, 0f);
+		warrior = new Warrior(warriorX, warriorY, 0f, 0f);
+		ranger = new Ranger(rangerX, rangerY, 0f, 0f);
 		
-		 int rowB = 0;
-	        int colB = 0;
-	        try {
-	            FileInputStream inputStream = new FileInputStream("../Gauntlet/src/gauntlet/map.txt");
-	            while (inputStream.available() > 0) {
-	                int numRead = inputStream.read();
-	                if (!Character.isDigit(numRead)){
-	                    continue;
-	                }
-	                map[rowB][colB] = numRead;
-	                colB++;
-	                if (colB == 25) {
-	                    colB = 0;
-	                    rowB++;
-	                }
-	            }
-	            inputStream.close();
-	        } catch (IOException ioe) {
-	            System.out.println("Trouble reading from the file: " + ioe.getMessage());
-	        }
+		int rowB = 0;
+        int colB = 0;
+        try {
+            FileInputStream inputStream = new FileInputStream("../Gauntlet/src/gauntlet/map.txt");
+            while (inputStream.available() > 0) {
+                int numRead = inputStream.read();
+                if (!Character.isDigit(numRead)){
+                    continue;
+                }
+                map[rowB][colB] = numRead;
+                colB++;
+                if (colB == col) {
+                    colB = 0;
+                    rowB++;
+                }
+            }
+            inputStream.close();
+        } catch (IOException ioe) {
+            System.out.println("Trouble reading from the file: " + ioe.getMessage());
+        }
 	}
 	
 	public static void main(String[] args) {
 		try {
-			app = new AppGameContainer(new Gauntlet("Gauntlet", 800, 800));		//(x,y)
-			app.setDisplayMode(800, 800, false);
+			app = new AppGameContainer(new Gauntlet("Gauntlet", windowWidth, windowHeight));		//(x,y)
+			app.setDisplayMode(windowWidth, windowHeight, false);
 			app.setVSync(true);
 			app.start();
 		} catch (SlickException e) {

@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
-
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class GameThread extends Thread {
@@ -30,9 +27,8 @@ public class GameThread extends Thread {
 		String msg = "3yes";
 		byte[] response = msg.getBytes();
 		try {
-			this.server.socket.send(new DatagramPacket(response, response.length, clientAddr, this.server.PORT));
+			this.server.socket.send(new DatagramPacket(response, response.length, clientAddr, Server.PORT));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -47,7 +43,6 @@ public class GameThread extends Thread {
 				this.server.socket.receive(pack);
 				clientAddr = pack.getAddress();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -56,7 +51,6 @@ public class GameThread extends Thread {
 				cmd = new String(pack.getData(), "UTF-8");
 				cmd = cmd.substring(1,  cmd.charAt(0) - '0'+1);
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -91,7 +85,6 @@ public class GameThread extends Thread {
 					this.sendValidMove(clientAddr);
 				}
 			}
-			
 		}
 	}
 }

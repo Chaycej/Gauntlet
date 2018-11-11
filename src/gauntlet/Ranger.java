@@ -1,7 +1,5 @@
 package gauntlet;
 
-import org.newdawn.slick.state.StateBasedGame;
-
 import jig.Entity;
 import jig.ResourceManager;
 import jig.Vector;
@@ -9,8 +7,6 @@ import jig.Vector;
 class Ranger extends Entity {
 	public Vector velocity;
 	private int countdown;
-	int notPossible = 0;
-	public int guardGotHit =-1;
 	
 	public Ranger(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
@@ -27,74 +23,42 @@ class Ranger extends Entity {
 		return velocity;
 	}
 	
-	public int curRow() {
+	public int getRow() {
 		int row = (int) ((super.getY())/32);	
 		return row;
 	}
 	
-	public int curCol() {
+	public int getColumn() {
 		int col = (int) (super.getX()/32);
 		return col;
 	}
 	
-	public void checkNorth(StateBasedGame game) {
-		Gauntlet gg = (Gauntlet)game;
+	public void northAnimation() {
 		removeImage(ResourceManager.getImage(Gauntlet.rangerS));
 		removeImage(ResourceManager.getImage(Gauntlet.rangerE));
 		removeImage(ResourceManager.getImage(Gauntlet.rangerW));
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.rangerN));
-		int col = curCol();
-		int row = curRow();
-		if (gg.map[row-1][col]!=1) {
-			gg.ranger.setVelocity(new Vector(0, -0.1f));
-		} else {
-			gg.ranger.setVelocity(new Vector(0, 0f));
-		}
 	}	
 	
-	public void checkSouth(StateBasedGame game) {
-		Gauntlet gg = (Gauntlet)game;
+	public void southAnimation() {
 		removeImage(ResourceManager.getImage(Gauntlet.rangerN));
 		removeImage(ResourceManager.getImage(Gauntlet.rangerE));
 		removeImage(ResourceManager.getImage(Gauntlet.rangerW));
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.rangerS));
-		int col = curCol();
-		int row = curRow();
-		if (gg.map[row+1][col]!=1) {
-			gg.ranger.setVelocity(new Vector(0, 0.1f));
-		} else {
-			gg.ranger.setVelocity(new Vector(0, 0f));
-		}
 	}
 	
-	public void checkEast(StateBasedGame game) {
-		Gauntlet gg = (Gauntlet)game;
+	public void eastAnimation() {
 		removeImage(ResourceManager.getImage(Gauntlet.rangerN));
 		removeImage(ResourceManager.getImage(Gauntlet.rangerS));
 		removeImage(ResourceManager.getImage(Gauntlet.rangerW));
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.rangerE));
-		int col = curCol();
-		int row = curRow();
-		if (gg.map[row][col+1]!=1) {
-			gg.ranger.setVelocity(new Vector(0.1f, 0));
-		} else {
-			gg.ranger.setVelocity(new Vector(0, 0f));
-		}
 	}
 	
-	public void checkWest(StateBasedGame game) {
-		Gauntlet gg = (Gauntlet)game;
+	public void westAnimation() {
 		removeImage(ResourceManager.getImage(Gauntlet.rangerN));
 		removeImage(ResourceManager.getImage(Gauntlet.rangerS));
 		removeImage(ResourceManager.getImage(Gauntlet.rangerE));
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.rangerW));
-		int col = curCol();
-		int row = curRow();
-		if (gg.map[row][col+1]!=1) {
-			gg.ranger.setVelocity(new Vector(-0.1f, 0));
-		} else {
-			gg.ranger.setVelocity(new Vector(0, 0f));
-		}
 	}
 	
 	public void update(final int delta) {
