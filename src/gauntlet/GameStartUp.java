@@ -15,37 +15,40 @@ import jig.ResourceManager;
 import jig.Vector;
 
 public class GameStartUp extends BasicGameState{
-	
+
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		container.setSoundOn(true);
 		Gauntlet gg = (Gauntlet)game;
-		gg.warrior.setPosition(200,200);
-		gg.ranger.setPosition(280, 200);
+		gg.warrior.setPosition(gg.warriorX,gg.warriorY);
+		gg.ranger.setPosition(gg.rangerX, gg.warriorY);
 	}
 
-	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
+	public void renderMap(GameContainer container, StateBasedGame game, Graphics g) {
 		Gauntlet gg = (Gauntlet)game;
-		
 		int x = 16;
 		int y = 16;
-		for (int row=0; row<25; row++ ) {
-			for (int col=0; col<25; col++) {
+		for (int row=0; row<gg.row; row++ ) {
+			for (int col=0; col<gg.col; col++) {
 				if ( gg.map[row][col] == 48) {		//equals a 0 is a path
-					gg.mapM[row][col]= new MapMatrix(x,y, 0f, 0f);
-					gg.mapM[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.pathTile));
+					gg.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
+					gg.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.pathTile));
 				} else {							//equals a 1 is a wall
-					gg.mapM[row][col]= new MapMatrix(x,y, 0f, 0f);
-					gg.mapM[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.wallTile));
+					gg.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
+					gg.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.wallTile));
 				}
 				x = x+32;
-				gg.mapM[row][col].render(g);
+				gg.mapMatrix[row][col].render(g);
 			}
 			y = y+32;
 			x=16;
 		}
-		
+	}
+	
+	@Override
+	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
+		Gauntlet gg = (Gauntlet)game;
+		renderMap(container, game, g);
 		gg.warrior.render(g);
 		gg.warrior.setVelocity(new Vector(0f,0f));
 		gg.ranger.render(g);
@@ -56,7 +59,7 @@ public class GameStartUp extends BasicGameState{
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 		Input input = container.getInput();
 		Gauntlet gg = (Gauntlet)game;
-		
+
 		// Client controls
 		if (gg.client != null) {
 			InetAddress addr = null;
@@ -65,89 +68,165 @@ public class GameStartUp extends BasicGameState{
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			}
-			
+			//checks up movement
 			if (input.isKeyDown(Input.KEY_UP)) {
+				gg.warrior.northAnimation();
 				if (gg.warrior.getRow() > 0) {
 					sendCommand("2up", gg, addr);
 					String response = readResponse(gg);
-					
+
 					if (response.equals("yes")) {
-						gg.warrior.checkNorth(game);
+						gg.warrior.setVelocity(new Vector(0, -0.1f));
+					} 
+					if (response.equals("no")) {
+						gg.warrior.setVelocity(new Vector(0, 0f));
 					}
+				} else {
+					gg.warrior.setVelocity(new Vector(0, 0f));
 				}
 			}
+			//checks down movement
 			if (input.isKeyDown(Input.KEY_DOWN)) {
-				if (gg.warrior.getRow() < 24) {
+				gg.warrior.southAnimation();
+				if (gg.warrior.getRow() < gg.row-1) {
 					sendCommand("4down", gg, addr);
 					String response = readResponse(gg);
-					
 					if (response.equals("yes")) {
-						gg.warrior.checkSouth(game);
+						gg.warrior.setVelocity(new Vector(0, 0.1f));
+					} 
+					if (response.equals("no")) {
+						gg.warrior.setVelocity(new Vector(0, 0f));
 					}
-				}
+				} else {
+					gg.warrior.setVelocity(new Vector(0, 0f));
+				} 
 			}
+			//checks right movement
 			if (input.isKeyDown(Input.KEY_RIGHT)) {
-				if (gg.warrior.getColumn() < 24) {
+				gg.warrior.eastAnimation();
+				if (gg.warrior.getColumn() < gg.col-1) {
 					sendCommand("5right", gg, addr);
 					String response = readResponse(gg);
-					
 					if (response.equals("yes")) {
-						gg.warrior.checkEast(game);
+						gg.warrior.setVelocity(new Vector(0.1f, 0));
+					} 
+					if (response.equals("no")) {
+						gg.warrior.setVelocity(new Vector(0, 0f));
 					}
+				} else {
+					gg.warrior.setVelocity(new Vector(0, 0f));
 				}
 			}
+			//checks left movement
 			if (input.isKeyDown(Input.KEY_LEFT)) {
+				gg.warrior.westAnimation();
 				if (gg.warrior.getColumn() > 0) {
 					sendCommand("4left", gg, addr);
 					String response = readResponse(gg);
-					
 					if (response.equals("yes")) {
-						gg.warrior.checkWest(game);
+						gg.warrior.setVelocity(new Vector(-0.1f, 0));
+					} 
+					if (response.equals("no")) {
+						gg.warrior.setVelocity(new Vector(0, 0f));
 					}
+				} else {
+					gg.warrior.setVelocity(new Vector(0, 0f));
 				}
 			}
-		
+
 			gg.warrior.update(delta);
 		}
-		
-//		if (input.isKeyDown(Input.KEY_W)) {
-//			gg.ranger.checkNorth(game);
-//		
-//		}
-//		if (input.isKeyDown(Input.KEY_S)) {
-//			gg.ranger.checkSouth(game);
-//		}
-//		if (input.isKeyDown(Input.KEY_D)) {
-//			gg.ranger.checkEast(game);
-//		}
-//		if (input.isKeyDown(Input.KEY_A)) {
-//			gg.ranger.checkWest(game);
-//		}
-//		gg.ranger.update(delta);
+//		 	//server controls
+//			//checks up movement
+//			if (input.isKeyDown(Input.KEY_W)) {
+//				gg.ranger.northAnimation();
+//				if (gg.ranger.getRow() > 0) {
+//					sendCommand("2up", gg, addr);
+//					String response = readResponse(gg);
+//
+//					if (response.equals("yes")) {
+//						gg.ranger.setVelocity(new Vector(0, -0.1f));
+//					} 
+//					if (response.equals("no")) {
+//						gg.ranger.setVelocity(new Vector(0, 0f));
+//					}
+//				} else {
+//					gg.ranger.setVelocity(new Vector(0, 0f));
+//				}
+//			}
+//			//checks down movement
+//			if (input.isKeyDown(Input.KEY_S)) {
+//				gg.ranger.southAnimation();
+//				if (gg.ranger.getRow() < gg.row-1) {
+//					sendCommand("4down", gg, addr);
+//					String response = readResponse(gg);
+//					if (response.equals("yes")) {
+//						gg.ranger.setVelocity(new Vector(0, 0.1f));
+//					} 
+//					if (response.equals("no")) {
+//						gg.ranger.setVelocity(new Vector(0, 0f));
+//					}
+//				} else {
+//					gg.ranger.setVelocity(new Vector(0, 0f));
+//				}
+//			}
+//			//checks right movement
+//			if (input.isKeyDown(Input.KEY_D)) {
+//				gg.ranger.eastAnimation();
+//				if (gg.ranger.getColumn() < gg.col-1) {
+//					sendCommand("5right", gg, addr);
+//					String response = readResponse(gg);
+//					if (response.equals("yes")) {
+//						gg.ranger.setVelocity(new Vector(0.1f, 0));
+//					} 
+//					if (response.equals("no")) {
+//						gg.ranger.setVelocity(new Vector(0, 0f));
+//					}
+//				} else {
+//					gg.ranger.setVelocity(new Vector(0, 0f));
+//				}
+//			}
+//			//checks left movement
+//			if (input.isKeyDown(Input.KEY_A)) {
+//				gg.ranger.westAnimation();
+//				if (gg.ranger.getColumn() > 0) {
+//					sendCommand("4left", gg, addr);
+//					String response = readResponse(gg);
+//					if (response.equals("yes")) {
+//						gg.ranger.setVelocity(new Vector(-0.1f, 0));
+//					} 
+//					if (response.equals("no")) {
+//						gg.ranger.setVelocity(new Vector(0, 0f));
+//					}
+//				} else {
+//					gg.ranger.setVelocity(new Vector(0, 0f));
+//				}
+//			}
+//			gg.ranger.update(delta);
 
 	}
-	
+
 	public void sendCommand(String command, Gauntlet gg, InetAddress serverAddr) {
 		byte[] buf = command.getBytes();
 		DatagramPacket joinPacket = new DatagramPacket(buf, buf.length, serverAddr, Client.PORT);
-		
+
 		try {
 			gg.client.socket.send(joinPacket);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public String readResponse(Gauntlet gg) {
 		byte[] buf = new byte[256];
 		DatagramPacket packet = new DatagramPacket(buf, buf.length);
-		
+
 		try {
 			gg.client.socket.receive(packet);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		String cmd = null;
 		try {
 			cmd = new String(packet.getData(), "UTF-8");
@@ -155,7 +234,7 @@ public class GameStartUp extends BasicGameState{
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		
+
 		return cmd;
 	}
 

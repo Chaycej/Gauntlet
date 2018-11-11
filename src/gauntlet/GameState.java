@@ -22,5 +22,4 @@ public class GameState {
 	public int getColumn() {
 		return this.y/32;
 	}
-
 }

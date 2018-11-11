@@ -4,22 +4,19 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
-
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class GameThread extends Thread {
-	
+
 	Server server;
 	GameState gameState;
 	GameContainer container;
 	StateBasedGame game;
 	int delta;
-	
+
 	InetAddress clientAddr;
-	
+
 	public GameThread(Server server, GameState gameState, GameContainer container, StateBasedGame game, int delta) {
 		this.server = server;
 		this.gameState = gameState;
@@ -27,17 +24,17 @@ public class GameThread extends Thread {
 		this.game = game;
 		this.delta = delta;
 	}
-	
+
 	public void sendValidMove(InetAddress clientAddr) {
 		String msg = "yes";
 		byte[] response = msg.getBytes();
 		try {
-			this.server.socket.send(new DatagramPacket(response, response.length, clientAddr, this.server.PORT));
+			this.server.socket.send(new DatagramPacket(response, response.length, clientAddr, Server.PORT));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public String readClientMove() {
 		byte[] buf = new byte[256];
 		DatagramPacket pack = new DatagramPacket(buf, buf.length);
@@ -47,7 +44,7 @@ public class GameThread extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		String cmd = null;
 		try {
 			cmd = new String(pack.getData(), "UTF-8");
@@ -57,16 +54,16 @@ public class GameThread extends Thread {
 		}
 		return cmd;
 	}
-	
+
 	/*
 	 * readClientPosition
 	 * 
 	 * Reads the client's updated x,y coordinates
 	 */
 	public int[] readClientPosition() {
-		
+
 		int[] newPosition = new int[2];
-		
+
 		byte[] buf = new byte[256];
 		DatagramPacket pack = new DatagramPacket(buf, buf.length);
 		try {
@@ -75,7 +72,7 @@ public class GameThread extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		String cmd = null;
 		try {
 			cmd = new String(pack.getData(), "UTF-8");
@@ -83,9 +80,9 @@ public class GameThread extends Thread {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		
+
 		newPosition[0] = Integer.valueOf(cmd);
-		
+
 		byte[] buf2 = new byte[256];
 		pack = new DatagramPacket(buf2, buf2.length);
 		try {
@@ -94,7 +91,7 @@ public class GameThread extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		cmd = null;
 		try {
 			cmd = new String(pack.getData(), "UTF-8");
@@ -102,16 +99,15 @@ public class GameThread extends Thread {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		
+
 		newPosition[1] = Integer.valueOf(cmd);
 		return newPosition;
 	}
-	
+
 	public void run() {
 		while (true) {
-			
 			String cmd = this.readClientMove();
-			
+
 			// Client attempting to move down
 			if (cmd.equals("down")) {
 				if (gameState.getRow() < 24) {
@@ -120,7 +116,7 @@ public class GameThread extends Thread {
 					this.gameState.updatePosition(position[0], position[1]);
 				}
 			} 
-			
+
 			// Client attempting to move up
 			else if (cmd.equals("up")) {
 				if (gameState.getRow() > 0) {
@@ -129,7 +125,7 @@ public class GameThread extends Thread {
 					this.gameState.updatePosition(position[0], position[1]);
 				}
 			} 
-			
+
 			// Client attempting to move left
 			else if (cmd.equals("left")) {
 				if (gameState.getColumn() > 0) {
@@ -138,7 +134,7 @@ public class GameThread extends Thread {
 					this.gameState.updatePosition(position[0], position[1]);
 				}
 			} 
-			
+
 			// Client attempting to move right
 			else if (cmd.equals("right")) {
 				if (gameState.getColumn() < 24) {
@@ -147,7 +143,7 @@ public class GameThread extends Thread {
 					this.gameState.updatePosition(position[0], position[1]);
 				}
 			}
-			
+
 		}
 	}
 }
