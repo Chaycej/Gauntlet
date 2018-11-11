@@ -51,7 +51,8 @@ public class LobbyState extends BasicGameState{
 			if (gg.server == null) {
 				gg.server = new Server();
 				gg.server.run();
-				gg.clientThread = new GameThread(gg.server,container, game, delta);
+				GameState gameState = new GameState((int)280/32, (int)200/32);
+				gg.clientThread = new GameThread(gg.server, gameState, container, game, delta);
 				gg.clientThread.start();
 				gg.enterState(Gauntlet.GAMESTARTSTATE);
 			}

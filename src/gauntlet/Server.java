@@ -7,7 +7,7 @@ import java.net.SocketException;
 
 public class Server {
 	
-	private static final int PORT = 3303;
+	public static final int PORT = 3303;
 	
 	public DatagramSocket socket;
 	

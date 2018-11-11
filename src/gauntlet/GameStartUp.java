@@ -1,6 +1,7 @@
 package gauntlet;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -20,6 +21,7 @@ public class GameStartUp extends BasicGameState{
 		container.setSoundOn(true);
 		Gauntlet gg = (Gauntlet)game;
 		gg.warrior.setPosition(200,200);
+		gg.ranger.setPosition(280, 200);
 	}
 
 	@Override
@@ -55,51 +57,106 @@ public class GameStartUp extends BasicGameState{
 		Input input = container.getInput();
 		Gauntlet gg = (Gauntlet)game;
 		
-		InetAddress addr = null;
+		// Client controls
+		if (gg.client != null) {
+			InetAddress addr = null;
+			try {
+				addr = InetAddress.getByName(gg.client.serverIP);
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
+			
+			if (input.isKeyDown(Input.KEY_UP)) {
+				if (gg.warrior.getRow() > 0) {
+					sendCommand("2up", gg, addr);
+					String response = readResponse(gg);
+					
+					if (response.equals("yes")) {
+						gg.warrior.checkNorth(game);
+					}
+				}
+			}
+			if (input.isKeyDown(Input.KEY_DOWN)) {
+				if (gg.warrior.getRow() < 24) {
+					sendCommand("4down", gg, addr);
+					String response = readResponse(gg);
+					
+					if (response.equals("yes")) {
+						gg.warrior.checkSouth(game);
+					}
+				}
+			}
+			if (input.isKeyDown(Input.KEY_RIGHT)) {
+				if (gg.warrior.getColumn() < 24) {
+					sendCommand("5right", gg, addr);
+					String response = readResponse(gg);
+					
+					if (response.equals("yes")) {
+						gg.warrior.checkEast(game);
+					}
+				}
+			}
+			if (input.isKeyDown(Input.KEY_LEFT)) {
+				if (gg.warrior.getColumn() > 0) {
+					sendCommand("4left", gg, addr);
+					String response = readResponse(gg);
+					
+					if (response.equals("yes")) {
+						gg.warrior.checkWest(game);
+					}
+				}
+			}
+		
+			gg.warrior.update(delta);
+		}
+		
+//		if (input.isKeyDown(Input.KEY_W)) {
+//			gg.ranger.checkNorth(game);
+//		
+//		}
+//		if (input.isKeyDown(Input.KEY_S)) {
+//			gg.ranger.checkSouth(game);
+//		}
+//		if (input.isKeyDown(Input.KEY_D)) {
+//			gg.ranger.checkEast(game);
+//		}
+//		if (input.isKeyDown(Input.KEY_A)) {
+//			gg.ranger.checkWest(game);
+//		}
+//		gg.ranger.update(delta);
+
+	}
+	
+	public void sendCommand(String command, Gauntlet gg, InetAddress serverAddr) {
+		byte[] buf = command.getBytes();
+		DatagramPacket joinPacket = new DatagramPacket(buf, buf.length, serverAddr, Client.PORT);
+		
 		try {
-			addr = InetAddress.getByName(gg.client.serverIP);
-		} catch (UnknownHostException e) {
+			gg.client.socket.send(joinPacket);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public String readResponse(Gauntlet gg) {
+		byte[] buf = new byte[256];
+		DatagramPacket packet = new DatagramPacket(buf, buf.length);
+		
+		try {
+			gg.client.socket.receive(packet);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		if (input.isKeyDown(Input.KEY_UP)) {
-			gg.warrior.checkNorth(game);
+		String cmd = null;
+		try {
+			cmd = new String(packet.getData(), "UTF-8");
+			cmd = cmd.substring(1, cmd.charAt(0) - '0'+1);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		}
-		if (input.isKeyDown(Input.KEY_DOWN)) {
-			gg.warrior.checkSouth(game);
-			
-			String msg = "Down";
-			byte[] buf = msg.getBytes();
-			DatagramPacket joinPacket = new DatagramPacket(buf, buf.length, addr, Client.PORT);
-			
-			try {
-				gg.client.socket.send(joinPacket);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		if (input.isKeyDown(Input.KEY_RIGHT)) {
-			gg.warrior.checkEast(game);
-		}
-		if (input.isKeyDown(Input.KEY_LEFT)) {
-			gg.warrior.checkWest(game);
-		}
-	
-		if (input.isKeyDown(Input.KEY_W)) {
-			gg.ranger.checkNorth(game);
 		
-		}
-		if (input.isKeyDown(Input.KEY_S)) {
-			gg.ranger.checkSouth(game);
-		}
-		if (input.isKeyDown(Input.KEY_D)) {
-			gg.ranger.checkEast(game);
-		}
-		if (input.isKeyDown(Input.KEY_A)) {
-			gg.ranger.checkWest(game);
-		}
-		gg.warrior.update(delta);
-		gg.ranger.update(delta);
+		return cmd;
 	}
 
 	@Override
