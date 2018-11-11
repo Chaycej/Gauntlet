@@ -27,12 +27,12 @@ class Warrior extends Entity {
 		return velocity;
 	}
 	
-	public int curRow() {
+	public int getRow() {
 		int row = (int) ((super.getY())/32);	
 		return row;
 	}
 	
-	public int curCol() {
+	public int getColumn() {
 		int col = (int) (super.getX()/32);
 		return col;
 	}
@@ -43,8 +43,8 @@ class Warrior extends Entity {
 		removeImage(ResourceManager.getImage(Gauntlet.warriorE));
 		removeImage(ResourceManager.getImage(Gauntlet.warriorW));
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorN));
-		int col = curCol();
-		int row = curRow();
+		int col = getColumn();
+		int row = getRow();
 		if (gg.map[row-1][col]!=1) {
 			gg.warrior.setVelocity(new Vector(0, -0.1f));
 		} else {
@@ -58,8 +58,8 @@ class Warrior extends Entity {
 		removeImage(ResourceManager.getImage(Gauntlet.warriorE));
 		removeImage(ResourceManager.getImage(Gauntlet.warriorW));
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorS));
-		int col = curCol();
-		int row = curRow();
+		int col = getColumn();
+		int row = getRow();
 		if (gg.map[row+1][col]!=1) {
 			gg.warrior.setVelocity(new Vector(0, 0.1f));
 		} else {
@@ -73,8 +73,8 @@ class Warrior extends Entity {
 		removeImage(ResourceManager.getImage(Gauntlet.warriorS));
 		removeImage(ResourceManager.getImage(Gauntlet.warriorW));
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorE));
-		int col = curCol();
-		int row = curRow();
+		int col = getColumn();
+		int row = getRow();
 		if (gg.map[row][col+1]!=1) {
 			gg.warrior.setVelocity(new Vector(0.1f, 0));
 		} else {
@@ -88,8 +88,8 @@ class Warrior extends Entity {
 		removeImage(ResourceManager.getImage(Gauntlet.warriorS));
 		removeImage(ResourceManager.getImage(Gauntlet.warriorE));
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorW));
-		int col = curCol();
-		int row = curRow();
+		int col = getColumn();
+		int row = getRow();
 		if (gg.map[row][col+1]!=1) {
 			gg.warrior.setVelocity(new Vector(-0.1f, 0));
 		} else {
