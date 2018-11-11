@@ -18,6 +18,8 @@ public class GameThread extends Thread {
 	StateBasedGame game;
 	int delta;
 	
+	InetAddress clientAddr;
+	
 	public GameThread(Server server, GameState gameState, GameContainer container, StateBasedGame game, int delta) {
 		this.server = server;
 		this.gameState = gameState;
@@ -27,68 +29,122 @@ public class GameThread extends Thread {
 	}
 	
 	public void sendValidMove(InetAddress clientAddr) {
-		String msg = "3yes";
+		String msg = "yes";
 		byte[] response = msg.getBytes();
 		try {
 			this.server.socket.send(new DatagramPacket(response, response.length, clientAddr, this.server.PORT));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public String readClientMove() {
+		byte[] buf = new byte[256];
+		DatagramPacket pack = new DatagramPacket(buf, buf.length);
+		try {
+			this.server.socket.receive(pack);
+			this.clientAddr = pack.getAddress();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		String cmd = null;
+		try {
+			cmd = new String(pack.getData(), "UTF-8");
+			cmd = cmd.substring(1,  cmd.charAt(0) - '0'+1);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return cmd;
+	}
+	
+	/*
+	 * readClientPosition
+	 * 
+	 * Reads the client's updated x,y coordinates
+	 */
+	public int[] readClientPosition() {
+		
+		int[] newPosition = new int[2];
+		
+		byte[] buf = new byte[256];
+		DatagramPacket pack = new DatagramPacket(buf, buf.length);
+		try {
+			this.server.socket.receive(pack);
+			this.clientAddr = pack.getAddress();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		String cmd = null;
+		try {
+			cmd = new String(pack.getData(), "UTF-8");
+			cmd = cmd.substring(1,  cmd.charAt(0) - '0'+1);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		newPosition[0] = Integer.valueOf(cmd);
+		
+		byte[] buf2 = new byte[256];
+		pack = new DatagramPacket(buf2, buf2.length);
+		try {
+			this.server.socket.receive(pack);
+			this.clientAddr = pack.getAddress();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		cmd = null;
+		try {
+			cmd = new String(pack.getData(), "UTF-8");
+			cmd = cmd.substring(1,  cmd.charAt(0) - '0'+1);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		newPosition[1] = Integer.valueOf(cmd);
+		return newPosition;
 	}
 	
 	public void run() {
 		while (true) {
 			
-			byte[] buf = new byte[256];
-			InetAddress clientAddr = null;
-			DatagramPacket pack = new DatagramPacket(buf, buf.length);
-			try {
-				this.server.socket.receive(pack);
-				clientAddr = pack.getAddress();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			String cmd = null;
-			try {
-				cmd = new String(pack.getData(), "UTF-8");
-				cmd = cmd.substring(1,  cmd.charAt(0) - '0'+1);
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			String cmd = this.readClientMove();
 			
 			// Client attempting to move down
 			if (cmd.equals("down")) {
-				if (gameState.getRow() < 25) {
-					gameState.moveDown();
-					this.sendValidMove(clientAddr);
+				if (gameState.getRow() < 24) {
+					this.sendValidMove(this.clientAddr);
+					int[] position = readClientPosition();
+					this.gameState.updatePosition(position[0], position[1]);
 				}
 			} 
 			
 			// Client attempting to move up
 			else if (cmd.equals("up")) {
 				if (gameState.getRow() > 0) {
-					gameState.moveUp();
-					this.sendValidMove(clientAddr);
+					this.sendValidMove(this.clientAddr);
+					int[] position = readClientPosition();
+					this.gameState.updatePosition(position[0], position[1]);
 				}
 			} 
 			
 			// Client attempting to move left
 			else if (cmd.equals("left")) {
 				if (gameState.getColumn() > 0) {
-					gameState.moveLeft();
-					this.sendValidMove(clientAddr);
+					this.sendValidMove(this.clientAddr);
+					int[] position = readClientPosition();
+					this.gameState.updatePosition(position[0], position[1]);
 				}
 			} 
 			
 			// Client attempting to move right
 			else if (cmd.equals("right")) {
-				if (gameState.getColumn() < 25) {
-					gameState.moveRight();
-					this.sendValidMove(clientAddr);
+				if (gameState.getColumn() < 24) {
+					this.sendValidMove(this.clientAddr);
+					int[] position = readClientPosition();
+					this.gameState.updatePosition(position[0], position[1]);
 				}
 			}
 			

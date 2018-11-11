@@ -2,36 +2,25 @@ package gauntlet;
 
 public class GameState {
 	
-	private int row;
-	private int col;
+	private int x;
+	private int y;
 	
-	public GameState(int row, int col) {
-		this.row = row;
-		this.col = col;
+	public GameState(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 	
-	public void moveUp() {
-		this.row--;
-	}
-	
-	public void moveDown() {
-		this.row++;
-	}
-	
-	public void moveLeft() {
-		this.col--;
-	}
-	
-	public void moveRight() {
-		this.col++;
+	public void updatePosition(int newx, int newy) {
+		this.x = newx;
+		this.y = newy;
 	}
 	
 	public int getRow() {
-		return this.row;
+		return this.x/32;
 	}
 	
 	public int getColumn() {
-		return this.col;
+		return this.y/32;
 	}
 
 }
