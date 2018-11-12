@@ -80,11 +80,11 @@ public class Server {
 	 * 
 	 * Acknowledges the client's next move and sends a command allowing the client to move.
 	 */
-	public void sendValidMove(InetAddress clientAddr) {
+	public void sendValidMove() {
 		String msg = YES_CMD;
 		byte[] response = msg.getBytes();
 		try {
-			this.socket.send(new DatagramPacket(response, response.length, clientAddr, PORT));
+			this.socket.send(new DatagramPacket(response, response.length, this.clientAddr, PORT));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
