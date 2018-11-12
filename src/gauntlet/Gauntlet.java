@@ -65,7 +65,7 @@ public class Gauntlet extends StateBasedGame {
 
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
-		addState(new LobbyState());
+		//addState(new LobbyState());
 		addState(new GameStartUp());
 		
 		ResourceManager.loadImage(wallTile);
