@@ -91,10 +91,11 @@ public class GameStartUp extends BasicGameState{
 		
 		//checks up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
+			gg.client.sendCommand("3pos");
 			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
 			gg.warrior.northAnimation();
 			if (gg.warrior.getRow() > 0) {
-				gg.client.sendCommand("2up", gg, gg.client.serverAddress);
+				gg.client.sendCommand("2up");
 				String response = gg.client.readServerResponse(gg);
 
 				if (response.equals("yes")) {
@@ -108,10 +109,11 @@ public class GameStartUp extends BasicGameState{
 		
 		//checks down movement
 		if (input.isKeyDown(Input.KEY_DOWN)) {
+			gg.client.sendCommand("3pos");
 			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
 			gg.warrior.southAnimation();
 			if (gg.warrior.getRow() < gg.row-1) {
-				gg.client.sendCommand("4down", gg, gg.client.serverAddress);
+				gg.client.sendCommand("4down");
 				String response = gg.client.readServerResponse(gg);
 				if (response.equals("yes")) {
 					gg.warrior.setVelocity(new Vector(0, 0.1f));
@@ -123,10 +125,11 @@ public class GameStartUp extends BasicGameState{
 		
 		//checks right movement
 		if (input.isKeyDown(Input.KEY_RIGHT)) {
+			gg.client.sendCommand("3pos");
 			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
 			gg.warrior.eastAnimation();
 			if (gg.warrior.getColumn() < gg.col-1) {
-				gg.client.sendCommand("5right", gg, gg.client.serverAddress);
+				gg.client.sendCommand("5right");
 				String response = gg.client.readServerResponse(gg);
 				System.out.println("Client got response: " + response);
 				if (response.equals("yes")) {
@@ -139,10 +142,11 @@ public class GameStartUp extends BasicGameState{
 		
 		//checks left movement
 		if (input.isKeyDown(Input.KEY_LEFT)) {
+			gg.client.sendCommand("3pos");
 			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
 			gg.warrior.westAnimation();
 			if (gg.warrior.getColumn() > 0) {
-				gg.client.sendCommand("4left", gg, gg.client.serverAddress);
+				gg.client.sendCommand("4left");
 				String response = gg.client.readServerResponse(gg);
 				if (response.equals("yes")) {
 					gg.warrior.setVelocity(new Vector(-0.1f, 0));

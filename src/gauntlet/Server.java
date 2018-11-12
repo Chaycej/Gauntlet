@@ -30,8 +30,8 @@ import java.net.SocketException;
  */
 public class Server {
 	
-	public static final String YES_CMD = "yes";
-	public static final String NO_CMD  = "no";
+	public static final String YES_CMD = "3yes";
+	public static final String NO_CMD  = "2no";
 	public static final int PORT = 3303;
 	
 	public DatagramSocket socket;
@@ -106,13 +106,16 @@ public class Server {
 	}
 	
 	/*
-	 * readClientMove
+	 * readClientCommand
 	 * 
-	 * Reads the next move the client is attempting to take and returns it.
-	 * Valid moves are: (up, left, down, right).
+	 * Reads a client command. All commands contain the length of the string command
+	 * as the first byte, and the command as the rest of the bytes.
+	 * 
+	 * Example:
+	 * 	"4down"
 	 * 
 	 */
-	public String readClientMove() {
+	public String readClientCommand() {
 		byte[] buf = new byte[256];
 		DatagramPacket pack = new DatagramPacket(buf, buf.length);
 		try {

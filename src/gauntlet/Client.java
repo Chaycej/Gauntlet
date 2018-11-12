@@ -91,9 +91,9 @@ public class Client {
 	 * 
 	 * Sends a command the server asking to move/attack.
 	 */
-	public void sendCommand(String command, Gauntlet gg, InetAddress serverAddr) {
+	public void sendCommand(String command) {
 		byte[] buf = command.getBytes();
-		DatagramPacket joinPacket = new DatagramPacket(buf, buf.length, serverAddr, PORT);
+		DatagramPacket joinPacket = new DatagramPacket(buf, buf.length, this.serverAddress, PORT);
 
 		try {
 			this.socket.send(joinPacket);
