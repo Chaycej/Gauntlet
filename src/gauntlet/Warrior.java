@@ -8,10 +8,15 @@ class Warrior extends Entity {
 	public Vector velocity;
 	private int countdown;
 	
+	public int prevX;
+	public int prevY;
+	
 	public Warrior(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorS));
-		velocity = new Vector(vx, vy);
+		this.velocity = new Vector(vx, vy);
+		this.prevX = 0;
+		this.prevY = 0;
 		countdown = 0;
 	}
 	
