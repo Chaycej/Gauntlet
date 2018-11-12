@@ -83,14 +83,15 @@ public class GameStartUp extends BasicGameState{
 		Input input = container.getInput();
 		Gauntlet gg = (Gauntlet)game;
 		
-		if ((int)gg.warrior.getX() != gg.warrior.prevX || (int)gg.warrior.getY() != gg.warrior.prevY) {
-			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
-			gg.warrior.prevX = (int)gg.warrior.getX();
-			gg.warrior.prevY = (int)gg.warrior.getY();
-		}	
+//		if ((int)gg.warrior.getX() != gg.warrior.prevX || (int)gg.warrior.getY() != gg.warrior.prevY) {
+//			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
+//			gg.warrior.prevX = (int)gg.warrior.getX();
+//			gg.warrior.prevY = (int)gg.warrior.getY();
+//		}	
 		
 		//checks up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
+			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
 			gg.warrior.northAnimation();
 			if (gg.warrior.getRow() > 0) {
 				gg.client.sendCommand("2up", gg, gg.client.serverAddress);
@@ -107,6 +108,7 @@ public class GameStartUp extends BasicGameState{
 		
 		//checks down movement
 		if (input.isKeyDown(Input.KEY_DOWN)) {
+			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
 			gg.warrior.southAnimation();
 			if (gg.warrior.getRow() < gg.row-1) {
 				gg.client.sendCommand("4down", gg, gg.client.serverAddress);
@@ -121,6 +123,7 @@ public class GameStartUp extends BasicGameState{
 		
 		//checks right movement
 		if (input.isKeyDown(Input.KEY_RIGHT)) {
+			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
 			gg.warrior.eastAnimation();
 			if (gg.warrior.getColumn() < gg.col-1) {
 				gg.client.sendCommand("5right", gg, gg.client.serverAddress);
@@ -135,6 +138,7 @@ public class GameStartUp extends BasicGameState{
 		
 		//checks left movement
 		if (input.isKeyDown(Input.KEY_LEFT)) {
+			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
 			gg.warrior.westAnimation();
 			if (gg.warrior.getColumn() > 0) {
 				gg.client.sendCommand("4left", gg, gg.client.serverAddress);

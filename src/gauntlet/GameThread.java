@@ -33,28 +33,28 @@ public class GameThread extends Thread {
 			// Client attempting to move down
 			if (cmd.equals("down")) {
 				if (gameState.getRow() < 24) {
-					this.server.sendValidMove(this.clientAddr);
+					this.server.sendValidMove();
 				}
 			} 
 
 			// Client attempting to move up
 			else if (cmd.equals("up")) {
 				if (gameState.getRow() > 0) {
-					this.server.sendValidMove(this.clientAddr);
+					this.server.sendValidMove();
 				}
 			} 
 
 			// Client attempting to move left
 			else if (cmd.equals("left")) {
 				if (gameState.getColumn() > 0) {
-					this.server.sendValidMove(this.clientAddr);
+					this.server.sendValidMove();
 				}
 			} 
 
 			// Client attempting to move right
 			else if (cmd.equals("right")) {
 				if (gameState.getColumn() < 24) {
-					this.server.sendValidMove(this.clientAddr);
+					this.server.sendValidMove();
 				}
 			}
 
