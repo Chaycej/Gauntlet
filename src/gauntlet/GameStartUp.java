@@ -54,6 +54,7 @@ public class GameStartUp extends BasicGameState{
 		gg.warrior.setVelocity(new Vector(0f,0f));
 		gg.ranger.render(g);
 		gg.ranger.setVelocity(new Vector(0f,0f));
+		gg.skeleton.render(g);
 	}
 
 	@Override
@@ -66,6 +67,7 @@ public class GameStartUp extends BasicGameState{
 		} else {
 			handleServer(container, game, delta);
 		}
+		gg.skeleton.moveGhost(gg, delta);
 	}
 	
 	/*

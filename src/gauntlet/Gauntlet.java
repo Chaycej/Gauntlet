@@ -23,7 +23,7 @@ public class Gauntlet extends StateBasedGame {
 	public final int  rangerX= 280;
 	public final int  rangerY= 200;
 	public final int  skeletonX= 500;
-	public final int  skeletonY= 700;
+	public final int  skeletonY= 300;
 	
 	public static final String pathTile = "Gauntlet/resources/WalkingTile.png";
 	public static final String wallTile = "Gauntlet/resources/WallTile.png";
