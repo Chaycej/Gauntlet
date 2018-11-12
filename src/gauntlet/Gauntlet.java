@@ -22,6 +22,8 @@ public class Gauntlet extends StateBasedGame {
 	public final int  warriorY= 200;
 	public final int  rangerX= 280;
 	public final int  rangerY= 200;
+	public final int  skeletonX= 500;
+	public final int  skeletonY= 700;
 	
 	public static final String pathTile = "Gauntlet/resources/WalkingTile.png";
 	public static final String wallTile = "Gauntlet/resources/WallTile.png";
@@ -37,6 +39,11 @@ public class Gauntlet extends StateBasedGame {
 	public static final String warriorS = "Gauntlet/resources/warrior_s.png";
 	public static final String warriorE = "Gauntlet/resources/warrior_e.png";
 	public static final String warriorW = "Gauntlet/resources/warrior_w.png";
+	
+	public static final String skeletonN = "Gauntlet/resources/skeletonN.png";
+	public static final String skeletonS = "Gauntlet/resources/skeletonS.png";
+	public static final String skeletonE = "Gauntlet/resources/skeletonE.png";
+	public static final String skeletonW = "Gauntlet/resources/skeletonW.png";
 
 	public final int ScreenWidth;
 	public final int ScreenHeight;
@@ -49,6 +56,7 @@ public class Gauntlet extends StateBasedGame {
 	MapMatrix[][] mapMatrix;
 	Warrior warrior;
 	Ranger ranger;
+	Skeleton skeleton;
 	Server server;
 	Client client;
 	GameThread clientThread;
@@ -83,8 +91,14 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(warriorE);
 		ResourceManager.loadImage(warriorW);
 		
+		ResourceManager.loadImage(skeletonN);
+		ResourceManager.loadImage(skeletonS);
+		ResourceManager.loadImage(skeletonE);
+		ResourceManager.loadImage(skeletonW);
+		
 		warrior = new Warrior(warriorX, warriorY, 0f, 0f);
 		ranger = new Ranger(rangerX, rangerY, 0f, 0f);
+		skeleton = new Skeleton(skeletonX, skeletonY, 0f, 0f);
 		
 		int rowB = 0;
         int colB = 0;

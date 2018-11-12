@@ -22,6 +22,7 @@ public class GameStartUp extends BasicGameState{
 		Gauntlet gg = (Gauntlet)game;
 		gg.warrior.setPosition(gg.warriorX,gg.warriorY);
 		gg.ranger.setPosition(gg.rangerX, gg.warriorY);
+		gg.skeleton.setPosition(gg.skeletonX, gg.skeletonY);
 	}
 
 	public void renderMap(GameContainer container, StateBasedGame game, Graphics g) {
