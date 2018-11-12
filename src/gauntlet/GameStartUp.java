@@ -67,9 +67,23 @@ public class GameStartUp extends BasicGameState{
 		}
 	}
 	
+	/*
+	 * handleClient
+	 * 
+	 * Handles client by sending the server client commands based on the client's next move.
+	 * The general client protocol is as follows:
+	 *		
+	 *		client movement:
+	 *			1. Send current (x,y) posiiton to server.
+	 *			2. Send direction command to server. 
+	 *			3. Wait for server's response.
+	 *			4. Move client to requested direction.
+	 */
 	public void handleClient(GameContainer container, StateBasedGame game, int delta) {
 		Input input = container.getInput();
 		Gauntlet gg = (Gauntlet)game;
+		
+		gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
 		
 		//checks up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
