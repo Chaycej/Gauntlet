@@ -83,19 +83,13 @@ public class GameStartUp extends BasicGameState{
 		Input input = container.getInput();
 		Gauntlet gg = (Gauntlet)game;
 		
-//		if ((int)gg.warrior.getX() != gg.warrior.prevX || (int)gg.warrior.getY() != gg.warrior.prevY) {
-//			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
-//			gg.warrior.prevX = (int)gg.warrior.getX();
-//			gg.warrior.prevY = (int)gg.warrior.getY();
-//		}	
-		
 		//checks up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
-			gg.client.sendCommand("3pos");
+			gg.client.sendCommand("3pos\n");
 			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
 			gg.warrior.northAnimation();
 			if (gg.warrior.getRow() > 0) {
-				gg.client.sendCommand("2up");
+				gg.client.sendCommand("2up\n");
 				String response = gg.client.readServerResponse(gg);
 
 				if (response.equals("yes")) {
@@ -109,11 +103,11 @@ public class GameStartUp extends BasicGameState{
 		
 		//checks down movement
 		if (input.isKeyDown(Input.KEY_DOWN)) {
-			gg.client.sendCommand("3pos");
+			gg.client.sendCommand("3pos\n");
 			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
 			gg.warrior.southAnimation();
 			if (gg.warrior.getRow() < gg.row-1) {
-				gg.client.sendCommand("4down");
+				gg.client.sendCommand("4down\n");
 				String response = gg.client.readServerResponse(gg);
 				if (response.equals("yes")) {
 					gg.warrior.setVelocity(new Vector(0, 0.1f));
@@ -125,11 +119,11 @@ public class GameStartUp extends BasicGameState{
 		
 		//checks right movement
 		if (input.isKeyDown(Input.KEY_RIGHT)) {
-			gg.client.sendCommand("3pos");
+			gg.client.sendCommand("3pos\n");
 			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
 			gg.warrior.eastAnimation();
 			if (gg.warrior.getColumn() < gg.col-1) {
-				gg.client.sendCommand("5right");
+				gg.client.sendCommand("5right\n");
 				String response = gg.client.readServerResponse(gg);
 				System.out.println("Client got response: " + response);
 				if (response.equals("yes")) {
@@ -142,11 +136,11 @@ public class GameStartUp extends BasicGameState{
 		
 		//checks left movement
 		if (input.isKeyDown(Input.KEY_LEFT)) {
-			gg.client.sendCommand("3pos");
+			gg.client.sendCommand("3pos\n");
 			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
 			gg.warrior.westAnimation();
 			if (gg.warrior.getColumn() > 0) {
-				gg.client.sendCommand("4left");
+				gg.client.sendCommand("4left\n");
 				String response = gg.client.readServerResponse(gg);
 				if (response.equals("yes")) {
 					gg.warrior.setVelocity(new Vector(-0.1f, 0));

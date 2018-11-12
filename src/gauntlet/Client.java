@@ -36,7 +36,7 @@ public class Client {
 	 * Attempts to join the server using the server's address.
 	 */
 	public void joinServer() {
-		String msg = "Join";
+		String msg = "Join\n";
 		
 		try {
 			this.toServer.writeBytes(msg);
