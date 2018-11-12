@@ -25,11 +25,14 @@ public class GameThread extends Thread {
 	public void run() {
 		while (true) {
 			
-			int[] position = this.server.readClientPosition();
-			this.gameState.updatePosition(position[0], position[1]);
 			
-			String cmd = this.server.readClientMove();
+			String cmd = this.server.readClientCommand();
 			System.out.println("Cmd is " + cmd);
+			
+			if (cmd.equals("pos")) {
+				int[] position = this.server.readClientPosition();
+				this.gameState.updatePosition(position[0], position[1]);
+			}
 
 			// Client attempting to move down
 			if (cmd.equals("down")) {
