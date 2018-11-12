@@ -60,182 +60,177 @@ public class GameStartUp extends BasicGameState{
 		Input input = container.getInput();
 		Gauntlet gg = (Gauntlet)game;
 
-		// Client controls
 		if (gg.client != null) {
-			InetAddress addr = null;
-			try {
-				addr = InetAddress.getByName(gg.client.serverIP);
-			} catch (UnknownHostException e) {
-				e.printStackTrace();
-			}
-			//checks up movement
-			if (input.isKeyDown(Input.KEY_UP)) {
-				gg.warrior.northAnimation();
-				if (gg.warrior.getRow() > 0) {
-					sendCommand("2up", gg, addr);
-					String response = readResponse(gg);
+			handleClient(container, game, delta);
+		} else {
+			handleServer(container, game, delta);
+		}
+	}
+	
+	/*
+	 * handleClient
+	 * 
+	 * Handles client by sending the server client commands based on the client's next move.
+	 * The general client protocol is as follows:
+	 *		
+	 *		client movement:
+	 *			1. Send current (x,y) posiiton to server.
+	 *			2. Send direction command to server. 
+	 *			3. Wait for server's response.
+	 *			4. Move client to requested direction.
+	 */
+	public void handleClient(GameContainer container, StateBasedGame game, int delta) {
+		Input input = container.getInput();
+		Gauntlet gg = (Gauntlet)game;
+		
+//		if ((int)gg.warrior.getX() != gg.warrior.prevX || (int)gg.warrior.getY() != gg.warrior.prevY) {
+//			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
+//			gg.warrior.prevX = (int)gg.warrior.getX();
+//			gg.warrior.prevY = (int)gg.warrior.getY();
+//		}	
+		
+		//checks up movement
+		if (input.isKeyDown(Input.KEY_UP)) {
+			gg.client.sendCommand("3pos");
+			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
+			gg.warrior.northAnimation();
+			if (gg.warrior.getRow() > 0) {
+				gg.client.sendCommand("2up");
+				String response = gg.client.readServerResponse(gg);
 
-					if (response.equals("yes")) {
-						gg.warrior.setVelocity(new Vector(0, -0.1f));
-					} 
-					if (response.equals("no")) {
-						gg.warrior.setVelocity(new Vector(0, 0f));
-					}
-				} else {
-					gg.warrior.setVelocity(new Vector(0, 0f));
+				if (response.equals("yes")) {
+					gg.warrior.setVelocity(new Vector(0, -0.1f));
 				}
+			} else {
+				gg.warrior.setVelocity(new Vector(0, 0f));
 			}
-			//checks down movement
-			if (input.isKeyDown(Input.KEY_DOWN)) {
-				gg.warrior.southAnimation();
-				if (gg.warrior.getRow() < gg.row-1) {
-					sendCommand("4down", gg, addr);
-					String response = readResponse(gg);
-					if (response.equals("yes")) {
-						gg.warrior.setVelocity(new Vector(0, 0.1f));
-					} 
-					if (response.equals("no")) {
-						gg.warrior.setVelocity(new Vector(0, 0f));
-					}
-				} else {
-					gg.warrior.setVelocity(new Vector(0, 0f));
+			
+		}
+		
+		//checks down movement
+		if (input.isKeyDown(Input.KEY_DOWN)) {
+			gg.client.sendCommand("3pos");
+			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
+			gg.warrior.southAnimation();
+			if (gg.warrior.getRow() < gg.row-1) {
+				gg.client.sendCommand("4down");
+				String response = gg.client.readServerResponse(gg);
+				if (response.equals("yes")) {
+					gg.warrior.setVelocity(new Vector(0, 0.1f));
+				}
+			} else {
+				gg.warrior.setVelocity(new Vector(0, 0f));
+			} 
+		}
+		
+		//checks right movement
+		if (input.isKeyDown(Input.KEY_RIGHT)) {
+			gg.client.sendCommand("3pos");
+			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
+			gg.warrior.eastAnimation();
+			if (gg.warrior.getColumn() < gg.col-1) {
+				gg.client.sendCommand("5right");
+				String response = gg.client.readServerResponse(gg);
+				System.out.println("Client got response: " + response);
+				if (response.equals("yes")) {
+					gg.warrior.setVelocity(new Vector(0.1f, 0));
+				}
+			} else {
+				gg.warrior.setVelocity(new Vector(0, 0f));
+			}
+		}
+		
+		//checks left movement
+		if (input.isKeyDown(Input.KEY_LEFT)) {
+			gg.client.sendCommand("3pos");
+			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
+			gg.warrior.westAnimation();
+			if (gg.warrior.getColumn() > 0) {
+				gg.client.sendCommand("4left");
+				String response = gg.client.readServerResponse(gg);
+				if (response.equals("yes")) {
+					gg.warrior.setVelocity(new Vector(-0.1f, 0));
 				} 
+			} else {
+				gg.warrior.setVelocity(new Vector(0, 0f));
 			}
-			//checks right movement
-			if (input.isKeyDown(Input.KEY_RIGHT)) {
-				gg.warrior.eastAnimation();
-				if (gg.warrior.getColumn() < gg.col-1) {
-					sendCommand("5right", gg, addr);
-					String response = readResponse(gg);
-					if (response.equals("yes")) {
-						gg.warrior.setVelocity(new Vector(0.1f, 0));
-					} 
-					if (response.equals("no")) {
-						gg.warrior.setVelocity(new Vector(0, 0f));
-					}
-				} else {
-					gg.warrior.setVelocity(new Vector(0, 0f));
-				}
-			}
-			//checks left movement
-			if (input.isKeyDown(Input.KEY_LEFT)) {
-				gg.warrior.westAnimation();
-				if (gg.warrior.getColumn() > 0) {
-					sendCommand("4left", gg, addr);
-					String response = readResponse(gg);
-					if (response.equals("yes")) {
-						gg.warrior.setVelocity(new Vector(-0.1f, 0));
-					} 
-					if (response.equals("no")) {
-						gg.warrior.setVelocity(new Vector(0, 0f));
-					}
-				} else {
-					gg.warrior.setVelocity(new Vector(0, 0f));
-				}
-			}
-
-			gg.warrior.update(delta);
 		}
-//		 	//server controls
-//			//checks up movement
-//			if (input.isKeyDown(Input.KEY_W)) {
-//				gg.ranger.northAnimation();
-//				if (gg.ranger.getRow() > 0) {
-//					sendCommand("2up", gg, addr);
-//					String response = readResponse(gg);
+
+		gg.warrior.update(delta);
+	}
+	
+	public void handleServer(GameContainer container, StateBasedGame game, int delta) {
+		
+		Input input = container.getInput();
+		Gauntlet gg = (Gauntlet)game;
+		
+//		//checks up movement
+//		if (input.isKeyDown(Input.KEY_W)) {
+//			gg.ranger.northAnimation();
+//			if (gg.ranger.getRow() > 0) {
+//				sendCommand("2up", gg, addr);
+//				String response = gg.server.readResponse(gg);
 //
-//					if (response.equals("yes")) {
-//						gg.ranger.setVelocity(new Vector(0, -0.1f));
-//					} 
-//					if (response.equals("no")) {
-//						gg.ranger.setVelocity(new Vector(0, 0f));
-//					}
-//				} else {
+//				if (response.equals("yes")) {
+//					gg.ranger.setVelocity(new Vector(0, -0.1f));
+//				} 
+//				if (response.equals("no")) {
 //					gg.ranger.setVelocity(new Vector(0, 0f));
 //				}
+//			} else {
+//				gg.ranger.setVelocity(new Vector(0, 0f));
 //			}
-//			//checks down movement
-//			if (input.isKeyDown(Input.KEY_S)) {
-//				gg.ranger.southAnimation();
-//				if (gg.ranger.getRow() < gg.row-1) {
-//					sendCommand("4down", gg, addr);
-//					String response = readResponse(gg);
-//					if (response.equals("yes")) {
-//						gg.ranger.setVelocity(new Vector(0, 0.1f));
-//					} 
-//					if (response.equals("no")) {
-//						gg.ranger.setVelocity(new Vector(0, 0f));
-//					}
-//				} else {
+//		}
+//		//checks down movement
+//		if (input.isKeyDown(Input.KEY_S)) {
+//			gg.ranger.southAnimation();
+//			if (gg.ranger.getRow() < gg.row-1) {
+//				sendCommand("4down", gg, addr);
+//				String response = readResponse(gg);
+//				if (response.equals("yes")) {
+//					gg.ranger.setVelocity(new Vector(0, 0.1f));
+//				} 
+//				if (response.equals("no")) {
 //					gg.ranger.setVelocity(new Vector(0, 0f));
 //				}
+//			} else {
+//				gg.ranger.setVelocity(new Vector(0, 0f));
 //			}
-//			//checks right movement
-//			if (input.isKeyDown(Input.KEY_D)) {
-//				gg.ranger.eastAnimation();
-//				if (gg.ranger.getColumn() < gg.col-1) {
-//					sendCommand("5right", gg, addr);
-//					String response = readResponse(gg);
-//					if (response.equals("yes")) {
-//						gg.ranger.setVelocity(new Vector(0.1f, 0));
-//					} 
-//					if (response.equals("no")) {
-//						gg.ranger.setVelocity(new Vector(0, 0f));
-//					}
-//				} else {
+//		}
+//		//checks right movement
+//		if (input.isKeyDown(Input.KEY_D)) {
+//			gg.ranger.eastAnimation();
+//			if (gg.ranger.getColumn() < gg.col-1) {
+//				sendCommand("5right", gg, addr);
+//				String response = readResponse(gg);
+//				if (response.equals("yes")) {
+//					gg.ranger.setVelocity(new Vector(0.1f, 0));
+//				} 
+//				if (response.equals("no")) {
 //					gg.ranger.setVelocity(new Vector(0, 0f));
 //				}
+//			} else {
+//				gg.ranger.setVelocity(new Vector(0, 0f));
 //			}
-//			//checks left movement
-//			if (input.isKeyDown(Input.KEY_A)) {
-//				gg.ranger.westAnimation();
-//				if (gg.ranger.getColumn() > 0) {
-//					sendCommand("4left", gg, addr);
-//					String response = readResponse(gg);
-//					if (response.equals("yes")) {
-//						gg.ranger.setVelocity(new Vector(-0.1f, 0));
-//					} 
-//					if (response.equals("no")) {
-//						gg.ranger.setVelocity(new Vector(0, 0f));
-//					}
-//				} else {
+//		}
+//		//checks left movement
+//		if (input.isKeyDown(Input.KEY_A)) {
+//			gg.ranger.westAnimation();
+//			if (gg.ranger.getColumn() > 0) {
+//				sendCommand("4left", gg, addr);
+//				String response = readResponse(gg);
+//				if (response.equals("yes")) {
+//					gg.ranger.setVelocity(new Vector(-0.1f, 0));
+//				} 
+//				if (response.equals("no")) {
 //					gg.ranger.setVelocity(new Vector(0, 0f));
 //				}
+//			} else {
+//				gg.ranger.setVelocity(new Vector(0, 0f));
 //			}
-//			gg.ranger.update(delta);
+//		}
+//		gg.ranger.update(delta);
 
-	}
-
-	public void sendCommand(String command, Gauntlet gg, InetAddress serverAddr) {
-		byte[] buf = command.getBytes();
-		DatagramPacket joinPacket = new DatagramPacket(buf, buf.length, serverAddr, Client.PORT);
-
-		try {
-			gg.client.socket.send(joinPacket);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public String readResponse(Gauntlet gg) {
-		byte[] buf = new byte[256];
-		DatagramPacket packet = new DatagramPacket(buf, buf.length);
-
-		try {
-			gg.client.socket.receive(packet);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		String cmd = null;
-		try {
-			cmd = new String(packet.getData(), "UTF-8");
-			cmd = cmd.substring(1, cmd.charAt(0) - '0'+1);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-
-		return cmd;
 	}
 
 	@Override
