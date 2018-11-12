@@ -83,7 +83,11 @@ public class GameStartUp extends BasicGameState{
 		Input input = container.getInput();
 		Gauntlet gg = (Gauntlet)game;
 		
-		gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
+		if ((int)gg.warrior.getX() != gg.warrior.prevX || (int)gg.warrior.getY() != gg.warrior.prevY) {
+			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
+			gg.warrior.prevX = (int)gg.warrior.getX();
+			gg.warrior.prevY = (int)gg.warrior.getY();
+		}	
 		
 		//checks up movement
 		if (input.isKeyDown(Input.KEY_UP)) {

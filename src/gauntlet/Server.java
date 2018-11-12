@@ -144,6 +144,7 @@ public class Server {
 
 		int[] newPosition = new int[2];
 
+		// Read new client x coordinate
 		byte[] buf = new byte[256];
 		DatagramPacket pack = new DatagramPacket(buf, buf.length);
 		try {
@@ -153,17 +154,19 @@ public class Server {
 			e.printStackTrace();
 		}
 
-		// Read new client x coordinate
 		String cmd = null;
 		try {
 			cmd = new String(pack.getData(), "UTF-8");
 			cmd = cmd.substring(1,  cmd.charAt(0) - '0'+1);
+			System.out.println("X packet is " + cmd);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 
 		newPosition[0] = Integer.valueOf(cmd);
+		System.out.println("Client x position is: " + newPosition[0]);
 
+		// Read new client y coordinate
 		byte[] buf2 = new byte[256];
 		pack = new DatagramPacket(buf2, buf2.length);
 		try {
@@ -173,16 +176,17 @@ public class Server {
 			e.printStackTrace();
 		}
 
-		// Read new client y coordinate
 		cmd = null;
 		try {
 			cmd = new String(pack.getData(), "UTF-8");
 			cmd = cmd.substring(1,  cmd.charAt(0) - '0'+1);
+			System.out.println("Y packet is " + cmd);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 
 		newPosition[1] = Integer.valueOf(cmd);
+		System.out.println("Client y position is: " + newPosition[1]);
 		return newPosition;
 	}
 	
