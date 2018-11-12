@@ -1,19 +1,19 @@
 package gauntlet;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
+import java.net.Socket;
 import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 public class Client {
 	
 	public static final int PORT = 3303;
 	public InetAddress serverAddress;
-	public DatagramSocket socket;
+	public Socket socket;
+	public BufferedReader fromServer;
+	public DataOutputStream toServer;
 	
 	/*
 	 * Client
@@ -21,16 +21,11 @@ public class Client {
 	 * Creates a client by opening a UDP socket on port 3303.
 	 */
 	public Client(String serverIP) {
-		
 		try {
-			this.serverAddress = InetAddress.getByName(serverIP);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			this.socket = new DatagramSocket(PORT);
-		} catch (SocketException e) {
+			this.socket = new Socket(serverIP, PORT);
+			this.fromServer = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+			this.toServer = new DataOutputStream(this.socket.getOutputStream());
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -42,11 +37,9 @@ public class Client {
 	 */
 	public void joinServer() {
 		String msg = "Join";
-		byte[] buf = msg.getBytes();
-		DatagramPacket joinPacket = new DatagramPacket(buf, buf.length, this.serverAddress, PORT);
 		
 		try {
-			this.socket.send(joinPacket);
+			this.toServer.writeBytes(msg);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -64,10 +57,8 @@ public class Client {
 		StringBuilder sb = new StringBuilder();
 		sb.append(xLength);
 		sb.append(x);
-		byte[] xbuf = sb.toString().getBytes();
-		DatagramPacket xPos = new DatagramPacket(xbuf, xbuf.length, this.serverAddress, PORT);
 		try {
-			this.socket.send(xPos);
+			this.toServer.writeBytes(sb.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -77,10 +68,8 @@ public class Client {
 		sb = new StringBuilder();
 		sb.append(yLength);
 		sb.append(y);
-		byte[] ybuf = sb.toString().getBytes();
-		DatagramPacket yPos = new DatagramPacket(ybuf, ybuf.length, this.serverAddress, PORT);
 		try {
-			this.socket.send(yPos);
+			this.toServer.writeBytes(sb.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -92,11 +81,8 @@ public class Client {
 	 * Sends a command the server asking to move/attack.
 	 */
 	public void sendCommand(String command) {
-		byte[] buf = command.getBytes();
-		DatagramPacket joinPacket = new DatagramPacket(buf, buf.length, this.serverAddress, PORT);
-
 		try {
-			this.socket.send(joinPacket);
+			this.toServer.writeBytes(command);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -109,23 +95,15 @@ public class Client {
 	 * return the response.
 	 */
 	public String readServerResponse(Gauntlet gg) {
-		byte[] buf = new byte[256];
-		DatagramPacket packet = new DatagramPacket(buf, buf.length);
-
+		
+		String cmd = null;
 		try {
-			gg.client.socket.receive(packet);
+			cmd = this.fromServer.readLine();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		String cmd = null;
-		try {
-			cmd = new String(packet.getData(), "UTF-8");
-			cmd = cmd.substring(1, cmd.charAt(0) - '0'+1);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-
+		
+		cmd = cmd.substring(1, cmd.charAt(0) - '0'+1);
 		return cmd;
 	}
 	
@@ -135,6 +113,10 @@ public class Client {
 	 * Kills the client by closing the UDP socket.
 	 */
 	public void closeClient() {
-		this.socket.close();
+		try {
+			this.toServer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
