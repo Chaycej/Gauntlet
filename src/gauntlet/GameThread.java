@@ -29,6 +29,7 @@ public class GameThread extends Thread {
 			this.gameState.updatePosition(position[0], position[1]);
 			
 			String cmd = this.server.readClientMove();
+			System.out.println("Cmd is " + cmd);
 
 			// Client attempting to move down
 			if (cmd.equals("down")) {
@@ -55,6 +56,7 @@ public class GameThread extends Thread {
 			else if (cmd.equals("right")) {
 				if (gameState.getColumn() < 24) {
 					this.server.sendValidMove();
+					System.out.println("Send valid move!");
 				}
 			}
 

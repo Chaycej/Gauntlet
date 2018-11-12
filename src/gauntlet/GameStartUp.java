@@ -128,6 +128,7 @@ public class GameStartUp extends BasicGameState{
 			if (gg.warrior.getColumn() < gg.col-1) {
 				gg.client.sendCommand("5right", gg, gg.client.serverAddress);
 				String response = gg.client.readServerResponse(gg);
+				System.out.println("Client got response: " + response);
 				if (response.equals("yes")) {
 					gg.warrior.setVelocity(new Vector(0.1f, 0));
 				}
