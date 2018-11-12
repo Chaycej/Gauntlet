@@ -57,6 +57,7 @@ public class Client {
 		StringBuilder sb = new StringBuilder();
 		sb.append(xLength);
 		sb.append(x);
+		sb.append('\n');
 		try {
 			this.toServer.writeBytes(sb.toString());
 		} catch (IOException e) {
@@ -68,6 +69,7 @@ public class Client {
 		sb = new StringBuilder();
 		sb.append(yLength);
 		sb.append(y);
+		sb.append('\n');
 		try {
 			this.toServer.writeBytes(sb.toString());
 		} catch (IOException e) {

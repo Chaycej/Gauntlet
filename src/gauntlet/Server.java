@@ -127,7 +127,7 @@ public class Server {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		cmd = cmd.substring(1, cmd.charAt(0) - '0'+1);
 		return cmd;
 	}
 	
