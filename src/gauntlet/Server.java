@@ -33,8 +33,8 @@ import java.net.SocketException;
  */
 public class Server {
 	
-	public static final String YES_CMD = "3yes\n";
-	public static final String NO_CMD  = "2no\n";
+	public static final String YES_CMD = "1y\n";
+	public static final String NO_CMD  = "1n\n";
 	public static final int PORT = 3303;
 	
 	public ServerSocket socket;
@@ -68,9 +68,7 @@ public class Server {
 		// Listen for client connection
 		while (true) {
 			try {
-				System.out.println("Listening for client");
 				this.clientSocket = this.socket.accept();
-				System.out.println("Client connected");
 				this.clientStream = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
 				this.serverStream = new DataOutputStream(this.clientSocket.getOutputStream());
 				

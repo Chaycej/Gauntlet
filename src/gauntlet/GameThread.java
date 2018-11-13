@@ -29,13 +29,13 @@ public class GameThread extends Thread {
 			String cmd = this.server.readClientCommand();
 			System.out.println("Cmd is " + cmd);
 			
-			if (cmd.equals("pos")) {
+			if (cmd.equals("p")) {
 				int[] position = this.server.readClientPosition();
 				this.gameState.updatePosition(position[0], position[1]);
 			}
 
 			// Client attempting to move down
-			if (cmd.equals("down")) {
+			if (cmd.equals("do")) {
 				if (gameState.getRow() < 24) {
 					this.server.sendValidMove();
 				}
@@ -49,14 +49,14 @@ public class GameThread extends Thread {
 			} 
 
 			// Client attempting to move left
-			else if (cmd.equals("left")) {
+			else if (cmd.equals("le")) {
 				if (gameState.getColumn() > 0) {
 					this.server.sendValidMove();
 				}
 			} 
 
 			// Client attempting to move right
-			else if (cmd.equals("right")) {
+			else if (cmd.equals("ri")) {
 				if (gameState.getColumn() < 24) {
 					this.server.sendValidMove();
 					System.out.println("Send valid move!");
