@@ -100,7 +100,7 @@ public class GameStartUp extends BasicGameState{
 		}
 		
 		//checks down movement
-		if (input.isKeyDown(Input.KEY_DOWN)) {
+		else if (input.isKeyDown(Input.KEY_DOWN)) {
 			if (gg.warrior.getRow() < gg.maxRow-1) {
 				gg.client.sendMovement(Client.DOWN_CMD, gg);
 				String response = gg.client.readServerResponse(gg);
@@ -115,7 +115,7 @@ public class GameStartUp extends BasicGameState{
 		}
 		
 		//checks right movement
-		if (input.isKeyDown(Input.KEY_RIGHT)) {
+		else if (input.isKeyDown(Input.KEY_RIGHT)) {
 			if (gg.warrior.getColumn() < gg.maxColumn-1) {
 				gg.client.sendMovement(Client.RIGHT_CMD, gg);
 				String response = gg.client.readServerResponse(gg);
@@ -130,7 +130,7 @@ public class GameStartUp extends BasicGameState{
 		}
 		
 		//checks left movement
-		if (input.isKeyDown(Input.KEY_LEFT)) {
+		else if (input.isKeyDown(Input.KEY_LEFT)) {
 			if (gg.warrior.getColumn() > 0) {
 				gg.client.sendMovement(Client.LEFT_CMD, gg);
 				String response = gg.client.readServerResponse(gg);
