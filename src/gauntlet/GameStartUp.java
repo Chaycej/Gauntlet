@@ -28,8 +28,8 @@ public class GameStartUp extends BasicGameState{
 		Gauntlet gg = (Gauntlet)game;
 		int x = 16;
 		int y = 16;
-		for (int row=0; row<gg.row; row++ ) {
-			for (int col=0; col<gg.col; col++) {
+		for (int row=0; row<gg.maxRow; row++ ) {
+			for (int col=0; col<gg.maxColumn; col++) {
 				if ( gg.map[row][col] == 48) {		//equals a 0 is a path
 					gg.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
 					gg.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.pathTile));
@@ -83,16 +83,16 @@ public class GameStartUp extends BasicGameState{
 		Input input = container.getInput();
 		Gauntlet gg = (Gauntlet)game;
 		
+		StringBuilder cmdBuilder = new StringBuilder();
+		
 		//checks up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
-			gg.client.sendCommand("1p\n");
-			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
-			gg.warrior.northAnimation();
 			if (gg.warrior.getRow() > 0) {
-				gg.client.sendCommand("2up\n");
+				gg.client.sendMovement(Client.UP_CMD, gg);
 				String response = gg.client.readServerResponse(gg);
 
 				if (response.equals("y")) {
+					gg.warrior.northAnimation();
 					gg.warrior.setVelocity(new Vector(0, -0.1f));
 				}
 			} else {
@@ -103,13 +103,11 @@ public class GameStartUp extends BasicGameState{
 		
 		//checks down movement
 		if (input.isKeyDown(Input.KEY_DOWN)) {
-			gg.client.sendCommand("1p\n");
-			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
-			gg.warrior.southAnimation();
-			if (gg.warrior.getRow() < gg.row-1) {
-				gg.client.sendCommand("2do\n");
+			if (gg.warrior.getRow() < gg.maxRow-1) {
+				gg.client.sendMovement(Client.DOWN_CMD, gg);
 				String response = gg.client.readServerResponse(gg);
 				if (response.equals("y")) {
+					gg.warrior.southAnimation();
 					gg.warrior.setVelocity(new Vector(0, 0.1f));
 				}
 			} else {
@@ -119,14 +117,11 @@ public class GameStartUp extends BasicGameState{
 		
 		//checks right movement
 		if (input.isKeyDown(Input.KEY_RIGHT)) {
-			gg.client.sendCommand("1p\n");
-			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
-			gg.warrior.eastAnimation();
-			if (gg.warrior.getColumn() < gg.col-1) {
-				gg.client.sendCommand("2ri\n");
+			if (gg.warrior.getColumn() < gg.maxColumn-1) {
+				gg.client.sendMovement(Client.RIGHT_CMD, gg);
 				String response = gg.client.readServerResponse(gg);
-				System.out.println("Client got response: " + response);
 				if (response.equals("y")) {
+					gg.warrior.eastAnimation();
 					gg.warrior.setVelocity(new Vector(0.1f, 0));
 				}
 			} else {
@@ -136,13 +131,11 @@ public class GameStartUp extends BasicGameState{
 		
 		//checks left movement
 		if (input.isKeyDown(Input.KEY_LEFT)) {
-			gg.client.sendCommand("1p\n");
-			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
-			gg.warrior.westAnimation();
 			if (gg.warrior.getColumn() > 0) {
-				gg.client.sendCommand("2le\n");
+				gg.client.sendMovement(Client.LEFT_CMD, gg);
 				String response = gg.client.readServerResponse(gg);
 				if (response.equals("y")) {
+					gg.warrior.westAnimation();
 					gg.warrior.setVelocity(new Vector(-0.1f, 0));
 				} 
 			} else {

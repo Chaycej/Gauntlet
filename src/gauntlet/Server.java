@@ -109,38 +109,17 @@ public class Server {
 	}
 	
 	/*
-	 * readClientCommand
+	 * readClientState
 	 * 
-	 * Reads a client command. All commands contain the length of the string command
-	 * as the first byte, and the command as the rest of the bytes.
+	 * Reads a client state. Client packets follow the format
+	 * "1p<x pos length><x pos><y pos length><y pos><direciton command length><direction command>		
 	 * 
 	 * Example:
-	 * 	"4down"
+	 * 	"1p320032002up"
 	 * 
 	 */
-	public String readClientCommand() {
-		String cmd = null;
-		try {
-			cmd = this.clientStream.readLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		cmd = cmd.substring(1, cmd.charAt(0) - '0'+1);
-		return cmd;
-	}
-	
-	/*
-	 * readClientPosition
-	 * 
-	 * Reads the client's updated x,y coordinates and returns them as an array.
-	 * 
-	 * [0] -> x coordinate
-	 * [1] -> y coordinate
-	 */
-	public int[] readClientPosition() {
-
-		int[] newPosition = new int[2];
-
+	public GameState readClientState() {
+		
 		String cmd = null;
 		try {
 			cmd = this.clientStream.readLine();
@@ -148,22 +127,22 @@ public class Server {
 			e.printStackTrace();
 		}
 		
-		cmd = cmd.substring(1, cmd.charAt(0) - '0'+1);
-		newPosition[0] = Integer.valueOf(cmd);
-		System.out.println("Client x position is: " + newPosition[0]);
-
-		// Read new client y coordinate
-		cmd = null;
-		try {
-			cmd = this.clientStream.readLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		cmd = cmd.substring(1, cmd.charAt(0) - '0'+1);
-		newPosition[1] = Integer.valueOf(cmd);
-		System.out.println("Client y position is: " + newPosition[1]);
-		return newPosition;
+		System.out.println(cmd);
+		
+		// Read x,y position
+		int index = cmd.charAt(0) - '0' + 1;
+		int xLength = cmd.charAt(index) - '0';
+		int xPos = Integer.parseInt(cmd.substring(index+1, index + xLength + 1));
+		index += xLength + 1;
+		System.out.println("X position is " + xPos);
+		int yLength = cmd.charAt(index) - '0';
+		System.out.println("y length is " + yLength);
+		int yPos = Integer.parseInt(cmd.substring(index+1, index + yLength + 1));
+		index += yLength + 1;
+		
+		String direction = cmd.substring(index+1, index + cmd.charAt(index) - '0' + 1);
+		
+		return new GameState(direction, xPos, yPos);
 	}
 	
 	/*

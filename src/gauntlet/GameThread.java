@@ -26,37 +26,34 @@ public class GameThread extends Thread {
 		while (true) {
 			
 			
-			String cmd = this.server.readClientCommand();
-			System.out.println("Cmd is " + cmd);
-			
-			if (cmd.equals("p")) {
-				int[] position = this.server.readClientPosition();
-				this.gameState.updatePosition(position[0], position[1]);
-			}
-
+			System.out.println("Waiting for client state");
+			GameState state = this.server.readClientState();
+			String direction = state.getDirection();
+			System.out.println("Direction is " + direction);
+			System.out.println("x: " + state.getX() + " y: " + state.getY());
 			// Client attempting to move down
-			if (cmd.equals("do")) {
+			if (direction.equals("do")) {
 				if (gameState.getRow() < 24) {
 					this.server.sendValidMove();
 				}
 			} 
 
 			// Client attempting to move up
-			else if (cmd.equals("up")) {
+			else if (direction.equals("up")) {
 				if (gameState.getRow() > 0) {
 					this.server.sendValidMove();
 				}
 			} 
 
 			// Client attempting to move left
-			else if (cmd.equals("le")) {
+			else if (direction.equals("le")) {
 				if (gameState.getColumn() > 0) {
 					this.server.sendValidMove();
 				}
 			} 
 
 			// Client attempting to move right
-			else if (cmd.equals("ri")) {
+			else if (direction.equals("ri")) {
 				if (gameState.getColumn() < 24) {
 					this.server.sendValidMove();
 					System.out.println("Send valid move!");
