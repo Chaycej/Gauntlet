@@ -12,6 +12,7 @@ public class Skeleton extends Entity {
 	private double[][] path;
 	public boolean isDead;
 	public int moves;
+	int direction;
 	
 	public Skeleton(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
@@ -23,6 +24,7 @@ public class Skeleton extends Entity {
 		path = new double[25][25];
 		isDead = false;
 		moves = 0;
+		direction = 0;
 	}
 	
 	public void setVelocity(final Vector v) {
@@ -96,7 +98,7 @@ public class Skeleton extends Entity {
 			this.path[row-1][col] = 10 + getDestinationDistance(row-1, col, destRow, destCol);
 			
 			// Set adjacent walls to poor pathfinding score
-			if (gg.map[row-1][col] == 0) {
+			if (gg.map[row-1][col] == 1) {
 				this.path[row-1][col] += 1000;
 			}
 		}
@@ -105,7 +107,7 @@ public class Skeleton extends Entity {
 			this.path[row+1][col] = 10 + getDestinationDistance(row+1, col, destRow, destCol);
 			
 			// Set adjacent walls to poor pathfinding score
-			if (gg.map[row+1][col] == 0) {
+			if (gg.map[row+1][col] == 1) {
 				this.path[row+1][col] += 1000;
 			}
 		}
@@ -114,7 +116,7 @@ public class Skeleton extends Entity {
 			this.path[row][col-1] = 10 + getDestinationDistance(row, col-1, destRow, destCol);
 			
 			// Set adjacent walls to poor pathfinding score
-			if (gg.map[row][col-1] == 0) {
+			if (gg.map[row][col-1] == 1) {
 				this.path[row][col-1] += 1000;
 			}
 		}
@@ -123,7 +125,7 @@ public class Skeleton extends Entity {
 			this.path[row][col+1] = 10 + getDestinationDistance(row, col+1, destRow, destCol);
 			
 			// Set adjacent walls to poor pathfinding score
-			if (gg.map[row][col+1] == 0) {
+			if (gg.map[row][col+1] == 1) {
 				this.path[row][col+1] += 1000;
 			}
 		}
@@ -219,21 +221,27 @@ public class Skeleton extends Entity {
 		int col = getColumn();
 		// characters have stopped or are not moving
 		if (this.getVelocity().getX() == 0 && this.getVelocity().getY() == 0) {
+			System.out.println("Came in because its not moving");
 			buildPath( gg, gg.warrior.getRow(), gg.warrior.getColumn());
-			int direction;
+			
 			direction = this.isDead == true ? getMaxPath(row, col) : getMinPath(row, col);
+			System.out.println("direction is  "+ direction);
 			if (this.isDead) {
 				this.moves += 1;
 			}
+			//going left
 			if (direction == 2) {
 				this.setVelocity(new Vector(-0.12f, 0f));
 			}
-			if (direction == 3) {
-				this.setVelocity(new Vector(0f, 0.12f));
-			}
+			//going right
 			if (direction == 4) {
 				this.setVelocity(new Vector(0.12f, 0f));
 			}
+			//going down
+			if (direction == 3) {
+				this.setVelocity(new Vector(0f, 0.12f));
+			}
+			//going up
 			if (direction == 1) {
 				this.setVelocity(new Vector(0f, -0.12f));
 			}
@@ -241,29 +249,29 @@ public class Skeleton extends Entity {
 		}
 		// Moving down
 		if (this.getVelocity().getY() > 0) {
-			row = (int)(this.getY() - 17)/34;
-			if (gg.map[row+1][col] == 0) {
+			row = (int)(gg.skeleton.getY())/32;
+			if (gg.map[row+1][col] == 1) {
 				this.setVelocity(new Vector(0f, 0f));
 			}
 		}	
 		// Moving up
 		if (this.getVelocity().getY() < 0) {
-			row = (int)(this.getY() + 17)/34;
-			if (gg.map[row-1][col] == 0) {
+			row = (int)(gg.skeleton.getY())/32;
+			if (gg.map[row-1][col] == 1) {
 				this.setVelocity(new Vector(0f, 0f));
 			}
 		}	
 		// Moving right
 		if (this.getVelocity().getX() > 0) {
-			col = (int)(this.getX() - 17)/34;
-			if (gg.map[row][col+1] == 0) {
+			col = (int)(gg.skeleton.getX())/32;
+			if (gg.map[row][col+1] == 1) {
 				this.setVelocity(new Vector(0f, 0f));
 			}
 		}
 		// Moving left
 		if (this.getVelocity().getX() < 0) {
-			col = (int)(this.getX()+ 17)/34;
-			if (gg.map[row][col-1] == 0) {
+			col = (int)(gg.skeleton.getX());
+			if (gg.map[row][col-1] == 1) {
 				this.setVelocity(new Vector(0f, 0f));
 			}
 		}

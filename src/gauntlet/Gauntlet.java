@@ -22,28 +22,28 @@ public class Gauntlet extends StateBasedGame {
 	public final int  warriorY= 200;
 	public final int  rangerX= 280;
 	public final int  rangerY= 200;
-	public final int  skeletonX= 500;
-	public final int  skeletonY= 300;
+	public final int  skeletonX= 400;
+	public final int  skeletonY= 200;
 	
-	public static final String pathTile = "Gauntlet/resources/WalkingTile.png";
-	public static final String wallTile = "Gauntlet/resources/WallTile.png";
-	public static final String JOIN_GAME_RSC = "Gauntlet/resources/joinGame.png";
-	public static final String HOST_GAME_RSC = "Gauntlet/resources/hostGame.png";
+	public static final String pathTile = "gauntlet/resources/WalkingTile.png";
+	public static final String wallTile = "gauntlet/resources/WallTile.png";
+	public static final String JOIN_GAME_RSC = "gauntlet/resources/joinGame.png";
+	public static final String HOST_GAME_RSC = "gauntlet/resources/hostGame.png";
 	
-	public static final String rangerN = "Gauntlet/resources/ranger_n.png";
-	public static final String rangerS = "Gauntlet/resources/ranger_s.png";
-	public static final String rangerE = "Gauntlet/resources/ranger_e.png";
-	public static final String rangerW = "Gauntlet/resources/ranger_w.png";
+	public static final String rangerN = "gauntlet/resources/ranger_n.png";
+	public static final String rangerS = "gauntlet/resources/ranger_s.png";
+	public static final String rangerE = "gauntlet/resources/ranger_e.png";
+	public static final String rangerW = "gauntlet/resources/ranger_w.png";
 	
-	public static final String warriorN = "Gauntlet/resources/warrior_n.png";
-	public static final String warriorS = "Gauntlet/resources/warrior_s.png";
-	public static final String warriorE = "Gauntlet/resources/warrior_e.png";
-	public static final String warriorW = "Gauntlet/resources/warrior_w.png";
+	public static final String warriorN = "gauntlet/resources/warrior_n.png";
+	public static final String warriorS = "gauntlet/resources/warrior_s.png";
+	public static final String warriorE = "gauntlet/resources/warrior_e.png";
+	public static final String warriorW = "gauntlet/resources/warrior_w.png";
 	
-	public static final String skeletonN = "Gauntlet/resources/skeletonN.png";
-	public static final String skeletonS = "Gauntlet/resources/skeletonS.png";
-	public static final String skeletonE = "Gauntlet/resources/skeletonE.png";
-	public static final String skeletonW = "Gauntlet/resources/skeletonW.png";
+	public static final String skeletonN = "gauntlet/resources/skeletonN.png";
+	public static final String skeletonS = "gauntlet/resources/skeletonS.png";
+	public static final String skeletonE = "gauntlet/resources/skeletonE.png";
+	public static final String skeletonW = "gauntlet/resources/skeletonW.png";
 
 	public final int ScreenWidth;
 	public final int ScreenHeight;
