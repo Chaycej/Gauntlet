@@ -43,8 +43,6 @@ public class Gauntlet extends StateBasedGame {
 	
 	public static AppGameContainer app;
 	
-	public GameSocket socket;
-	
 	int[][] map;
 	MapMatrix[][] mapMatrix;
 	Warrior warrior;

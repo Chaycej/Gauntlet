@@ -134,9 +134,7 @@ public class Server {
 		int xLength = cmd.charAt(index) - '0';
 		int xPos = Integer.parseInt(cmd.substring(index+1, index + xLength + 1));
 		index += xLength + 1;
-		System.out.println("X position is " + xPos);
 		int yLength = cmd.charAt(index) - '0';
-		System.out.println("y length is " + yLength);
 		int yPos = Integer.parseInt(cmd.substring(index+1, index + yLength + 1));
 		index += yLength + 1;
 		

@@ -74,8 +74,6 @@ public class Client {
 	 * return the response.
 	 */
 	public String readServerResponse(Gauntlet gg) {
-		
-		System.out.println("Listening for server response");
 		String cmd = null;
 		try {
 			cmd = this.fromServer.readLine();
