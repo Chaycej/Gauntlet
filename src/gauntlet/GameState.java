@@ -1,40 +1,61 @@
 package gauntlet;
 
+import java.util.concurrent.atomic.*;
+
 public class GameState {
 	
-	private String direction;
-	private int x;
-	private int y;
+	private String warriorDirection;
+	private AtomicInteger warriorX;
+	private AtomicInteger warriorY;
+	private AtomicInteger rangerX;
+	private AtomicInteger rangerY;
 	
-	public GameState(String direction, int x, int y) {
-		this.direction = direction;
-		this.x = x;
-		this.y = y;
+	public GameState() {
+		this.warriorX = new AtomicInteger();
+		this.warriorY = new AtomicInteger();
+		this.rangerX = new AtomicInteger();
+		this.rangerY = new AtomicInteger();
 	}
 	
-	public void updatePosition(int newx, int newy) {
-		this.x = newx;
-		this.y = newy;
+	public void setWarriorPosition(int newx, int newy) {
+		this.warriorX.set(newx);
+		this.warriorY.set(newy);
 	}
 	
-	public String getDirection() {
-		return this.direction;
+	public void setRangerPosition(int newx, int newy) {
+		this.rangerX.set(newx);
+		this.rangerY.set(newy);
 	}
 	
-	
-	public int getX() {
-		return this.x;
+	public void setWarriorDirection(String direction) {
+		this.warriorDirection = direction;
 	}
 	
-	public int getY() {
-		return this.y;
+	public String getWarriorDirection() {
+		return this.warriorDirection;
 	}
 	
-	public int getRow() {
-		return this.y/32;
+	public int getWarriorX() {
+		return this.warriorX.intValue();
 	}
 	
-	public int getColumn() {
-		return this.x/32;
+	public int getWarriorY() {
+		return this.warriorY.intValue();
+	}
+	
+	public int getWarriorRow() {
+		return this.warriorY.intValue()/32;
+	}
+	
+	public int getWarriorColumn() {
+		return this.warriorX.intValue()/32;
+	}
+	
+	public int getRangerX() {
+		return this.rangerX.intValue();
+	}
+	
+	public int getRangerY() {
+		return this.rangerY.intValue();
 	}
 }

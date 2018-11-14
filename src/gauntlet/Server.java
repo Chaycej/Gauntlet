@@ -41,6 +41,7 @@ public class Server {
 	public Socket clientSocket;
 	public BufferedReader clientStream;
 	public DataOutputStream serverStream;
+	public Gauntlet gauntlet;
 	InetAddress clientAddr;
 	
 	/*
@@ -48,12 +49,13 @@ public class Server {
 	 * 
 	 * Initializes a server object and opens a UDP socket on port 3303.
 	 */
-	public Server() {
+	public Server(Gauntlet gauntlet) {
 		try {
 			this.socket = new ServerSocket(PORT);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		this.gauntlet = gauntlet;
 		System.out.println("DEBUG: Started server");
 	}
 	
@@ -73,8 +75,7 @@ public class Server {
 				this.serverStream = new DataOutputStream(this.clientSocket.getOutputStream());
 				
 				String clientMsg = clientStream.readLine();
-				System.out.println(clientMsg);
-				
+				System.out.println("Client joined game");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -127,8 +128,6 @@ public class Server {
 			e.printStackTrace();
 		}
 		
-		System.out.println(cmd);
-		
 		// Read x,y position
 		int index = cmd.charAt(0) - '0' + 1;
 		int xLength = cmd.charAt(index) - '0';
@@ -140,7 +139,10 @@ public class Server {
 		
 		String direction = cmd.substring(index+1, index + cmd.charAt(index) - '0' + 1);
 		
-		return new GameState(direction, xPos, yPos);
+		GameState gameState = new GameState();
+		gameState.setWarriorDirection(direction);
+		gameState.setWarriorPosition(xPos, yPos);
+		return gameState;
 	}
 	
 	/*
