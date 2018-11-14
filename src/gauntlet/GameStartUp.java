@@ -74,7 +74,7 @@ public class GameStartUp extends BasicGameState{
 	 * The general client protocol is as follows:
 	 *		
 	 *		client movement:
-	 *			1. Send current (x,y) posiiton to server.
+	 *			1. Send current (x,y) position to server.
 	 *			2. Send direction command to server. 
 	 *			3. Wait for server's response.
 	 *			4. Move client to requested direction.
@@ -82,8 +82,6 @@ public class GameStartUp extends BasicGameState{
 	public void handleClient(GameContainer container, StateBasedGame game, int delta) {
 		Input input = container.getInput();
 		Gauntlet gg = (Gauntlet)game;
-		
-		StringBuilder cmdBuilder = new StringBuilder();
 		
 		//checks up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
@@ -98,7 +96,7 @@ public class GameStartUp extends BasicGameState{
 			} else {
 				gg.warrior.setVelocity(new Vector(0, 0f));
 			}
-			
+			gg.warrior.update(delta);
 		}
 		
 		//checks down movement
@@ -112,7 +110,8 @@ public class GameStartUp extends BasicGameState{
 				}
 			} else {
 				gg.warrior.setVelocity(new Vector(0, 0f));
-			} 
+			}
+			gg.warrior.update(delta);
 		}
 		
 		//checks right movement
@@ -127,6 +126,7 @@ public class GameStartUp extends BasicGameState{
 			} else {
 				gg.warrior.setVelocity(new Vector(0, 0f));
 			}
+			gg.warrior.update(delta);
 		}
 		
 		//checks left movement
@@ -141,9 +141,8 @@ public class GameStartUp extends BasicGameState{
 			} else {
 				gg.warrior.setVelocity(new Vector(0, 0f));
 			}
+			gg.warrior.update(delta);
 		}
-
-		gg.warrior.update(delta);
 	}
 	
 	public void handleServer(GameContainer container, StateBasedGame game, int delta) {

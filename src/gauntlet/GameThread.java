@@ -42,6 +42,7 @@ public class GameThread extends Thread {
 			else if (direction.equals("up")) {
 				if (gameState.getRow() > 0) {
 					this.server.sendValidMove();
+					System.out.println("Sent valid move!");
 				}
 			} 
 
@@ -49,6 +50,7 @@ public class GameThread extends Thread {
 			else if (direction.equals("le")) {
 				if (gameState.getColumn() > 0) {
 					this.server.sendValidMove();
+					System.out.println("Sent valid move!");
 				}
 			} 
 
@@ -56,7 +58,7 @@ public class GameThread extends Thread {
 			else if (direction.equals("ri")) {
 				if (gameState.getColumn() < 24) {
 					this.server.sendValidMove();
-					System.out.println("Send valid move!");
+					System.out.println("Sent valid move!");
 				}
 			}
 
