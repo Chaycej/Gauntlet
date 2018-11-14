@@ -1,8 +1,6 @@
 package gauntlet;
 
 import java.awt.Font;
-import java.io.IOException;
-
 import org.newdawn.slick.*;
 import org.newdawn.slick.gui.*;
 import org.newdawn.slick.font.effects.ColorEffect;
@@ -10,9 +8,9 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class LobbyState extends BasicGameState{
-
 	TextField tf;
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		container.setSoundOn(true);
@@ -25,7 +23,7 @@ public class LobbyState extends BasicGameState{
 	    	try {
 	    		uc.loadGlyphs();
 	    } catch (SlickException e) {};
-		tf = new TextField(container, uc, 275, 300, 175, 50, new ComponentListener() {
+		tf = new TextField(container, uc, 312, 375, 175, 50, new ComponentListener() {
 			public void componentActivated(AbstractComponent source) {
 	            tf.setFocus(true);
 	         }
@@ -36,37 +34,38 @@ public class LobbyState extends BasicGameState{
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-		Gauntlet bg = (Gauntlet)game;
-		
-		g.drawString("Press space to start a server", 250, 100);
-		g.drawString("OR", 250, 140);
-		g.drawString("Type in a server ip address and press enter", 250, 200);
+		//Gauntlet gg = (Gauntlet)game;
+		g.drawString("Press space to start a server", 270, 200);
+		g.drawString("OR", 375, 250);
+		g.drawString("Type in a server ip address and press enter", 200, 300);
 		tf.render(container, g);
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-		
-		Gauntlet bg = (Gauntlet) game;
+		Gauntlet gg = (Gauntlet) game;
 		Input input = container.getInput();
 
-		
 		// Start server
-		if (input.isKeyDown(input.KEY_SPACE)) {
-			if (bg.server == null) {
-				bg.server = new Server();
-				bg.server.run();
+		if (input.isKeyDown(Input.KEY_SPACE)) {
+			if (gg.server == null) {
+				gg.server = new Server();
+				gg.server.run();
+				GameState gameState = new GameState("", (int)280/32, (int)200/32);
+				gg.clientThread = new GameThread(gg.server, gameState, container, game, delta);
+				gg.clientThread.start();
+				gg.enterState(Gauntlet.GAMESTARTSTATE);
 			}
 		} 
 		
 		// Join a server
-		if (input.isKeyDown(input.KEY_ENTER)) {
-			if (bg.client == null) {
-				bg.client = new Client(tf.getText());
-				bg.client.joinServer();
+		if (input.isKeyDown(Input.KEY_ENTER)) {
+			if (gg.client == null) {
+				gg.client = new Client(tf.getText());
+				gg.client.joinServer();
+				gg.enterState(Gauntlet.GAMESTARTSTATE);
 			}
 		}
-		
 	}
 
 	@Override
