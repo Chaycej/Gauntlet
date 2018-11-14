@@ -31,10 +31,10 @@ public class GameState {
 	}
 	
 	public int getRow() {
-		return this.x/32;
+		return this.y/32;
 	}
 	
 	public int getColumn() {
-		return this.y/32;
+		return this.x/32;
 	}
 }

@@ -27,20 +27,21 @@ public class GameThread extends Thread {
 			
 			
 			System.out.println("Waiting for client state");
-			GameState state = this.server.readClientState();
-			String direction = state.getDirection();
+			this.gameState = this.server.readClientState();
+			String direction = this.gameState.getDirection();
 			System.out.println("Direction is " + direction);
-			System.out.println("x: " + state.getX() + " y: " + state.getY());
+			System.out.println("x: " + this.gameState.getX() + " y: " + this.gameState.getY());
 			// Client attempting to move down
 			if (direction.equals("do")) {
-				if (gameState.getRow() < 24) {
+				if (this.gameState.getRow() < 24) {
 					this.server.sendValidMove();
+					System.out.println("Send valid move!");
 				}
 			} 
 
 			// Client attempting to move up
 			else if (direction.equals("up")) {
-				if (gameState.getRow() > 0) {
+				if (this.gameState.getRow() > 0) {
 					this.server.sendValidMove();
 					System.out.println("Sent valid move!");
 				}
@@ -48,7 +49,7 @@ public class GameThread extends Thread {
 
 			// Client attempting to move left
 			else if (direction.equals("le")) {
-				if (gameState.getColumn() > 0) {
+				if (this.gameState.getColumn() > 0) {
 					this.server.sendValidMove();
 					System.out.println("Sent valid move!");
 				}
@@ -56,7 +57,7 @@ public class GameThread extends Thread {
 
 			// Client attempting to move right
 			else if (direction.equals("ri")) {
-				if (gameState.getColumn() < 24) {
+				if (this.gameState.getColumn() < 24) {
 					this.server.sendValidMove();
 					System.out.println("Sent valid move!");
 				}
