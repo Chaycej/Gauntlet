@@ -150,73 +150,39 @@ public class GameStartUp extends BasicGameState{
 		Input input = container.getInput();
 		Gauntlet gg = (Gauntlet)game;
 		
-//		//checks up movement
-//		if (input.isKeyDown(Input.KEY_W)) {
-//			gg.ranger.northAnimation();
-//			if (gg.ranger.getRow() > 0) {
-//				sendCommand("2up", gg, addr);
-//				String response = gg.server.readResponse(gg);
-//
-//				if (response.equals("yes")) {
-//					gg.ranger.setVelocity(new Vector(0, -0.1f));
-//				} 
-//				if (response.equals("no")) {
-//					gg.ranger.setVelocity(new Vector(0, 0f));
-//				}
-//			} else {
-//				gg.ranger.setVelocity(new Vector(0, 0f));
-//			}
-//		}
-//		//checks down movement
-//		if (input.isKeyDown(Input.KEY_S)) {
-//			gg.ranger.southAnimation();
-//			if (gg.ranger.getRow() < gg.row-1) {
-//				sendCommand("4down", gg, addr);
-//				String response = readResponse(gg);
-//				if (response.equals("yes")) {
-//					gg.ranger.setVelocity(new Vector(0, 0.1f));
-//				} 
-//				if (response.equals("no")) {
-//					gg.ranger.setVelocity(new Vector(0, 0f));
-//				}
-//			} else {
-//				gg.ranger.setVelocity(new Vector(0, 0f));
-//			}
-//		}
-//		//checks right movement
-//		if (input.isKeyDown(Input.KEY_D)) {
-//			gg.ranger.eastAnimation();
-//			if (gg.ranger.getColumn() < gg.col-1) {
-//				sendCommand("5right", gg, addr);
-//				String response = readResponse(gg);
-//				if (response.equals("yes")) {
-//					gg.ranger.setVelocity(new Vector(0.1f, 0));
-//				} 
-//				if (response.equals("no")) {
-//					gg.ranger.setVelocity(new Vector(0, 0f));
-//				}
-//			} else {
-//				gg.ranger.setVelocity(new Vector(0, 0f));
-//			}
-//		}
-//		//checks left movement
-//		if (input.isKeyDown(Input.KEY_A)) {
-//			gg.ranger.westAnimation();
-//			if (gg.ranger.getColumn() > 0) {
-//				sendCommand("4left", gg, addr);
-//				String response = readResponse(gg);
-//				if (response.equals("yes")) {
-//					gg.ranger.setVelocity(new Vector(-0.1f, 0));
-//				} 
-//				if (response.equals("no")) {
-//					gg.ranger.setVelocity(new Vector(0, 0f));
-//				}
-//			} else {
-//				gg.ranger.setVelocity(new Vector(0, 0f));
-//			}
-//		}
-//		gg.ranger.update(delta);
-
+		//checks up movement
+		if (input.isKeyDown(Input.KEY_W)) {
+			if (gg.ranger.getRow() > 0) {
+				gg.ranger.northAnimation();
+				gg.ranger.setVelocity(new Vector(0, -0.1f));
+			} 
+		}
+		
+		//checks down movement
+		else if (input.isKeyDown(Input.KEY_S)) {
+			if (gg.ranger.getRow() < gg.maxRow-1) {
+				gg.ranger.southAnimation();
+				gg.ranger.setVelocity(new Vector(0, 0.1f));
+			}
+		}
+		
+		//checks right movement
+		else if (input.isKeyDown(Input.KEY_D)) {
+			if (gg.ranger.getColumn() < gg.maxColumn) {
+				gg.ranger.eastAnimation();
+				gg.ranger.setVelocity(new Vector(0.1f, 0));
+			}
+		}
+		
+		//checks left movement
+		else if (input.isKeyDown(Input.KEY_A)) {
+			if (gg.ranger.getColumn() > 0) {
+				gg.ranger.westAnimation();
+				gg.ranger.setVelocity(new Vector(-0.1f, 0));
+			}
+		}
+		
+		gg.ranger.update(delta);
 	}
 
 	@Override

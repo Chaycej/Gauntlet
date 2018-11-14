@@ -26,31 +26,32 @@ public class GameThread extends Thread {
 		while (true) {
 			
 			this.gameState = this.server.readClientState();
-			String direction = this.gameState.getDirection();
+			String direction = this.gameState.getWarriorDirection();
+			
 			// Client attempting to move down
 			if (direction.equals("do")) {
-				if (this.gameState.getRow() < 24) {
+				if (this.gameState.getWarriorRow() < 24) {
 					this.server.sendValidMove();
 				}
 			} 
 
 			// Client attempting to move up
 			else if (direction.equals("up")) {
-				if (this.gameState.getRow() > 0) {
+				if (this.gameState.getWarriorRow() > 0) {
 					this.server.sendValidMove();
 				}
 			} 
 
 			// Client attempting to move left
 			else if (direction.equals("le")) {
-				if (this.gameState.getColumn() > 0) {
+				if (this.gameState.getWarriorColumn() > 0) {
 					this.server.sendValidMove();
 				}
 			} 
 
 			// Client attempting to move right
 			else if (direction.equals("ri")) {
-				if (this.gameState.getColumn() < 24) {
+				if (this.gameState.getWarriorColumn() < 24) {
 					this.server.sendValidMove();
 				}
 			}

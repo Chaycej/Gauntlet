@@ -50,6 +50,7 @@ public class Gauntlet extends StateBasedGame {
 	Server server;
 	Client client;
 	GameThread clientThread;
+	GameState gameState;
 	
 	public Gauntlet(String title, int width, int height) {
 		super(title);
@@ -59,6 +60,7 @@ public class Gauntlet extends StateBasedGame {
 		Entity.setCoarseGrainedCollisionBoundary(Entity.AABB);
 		map = new int[maxRow][maxColumn];
 		mapMatrix = new MapMatrix[maxRow][maxColumn];
+		gameState = new GameState();
 	}
 
 	@Override

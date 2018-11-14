@@ -34,7 +34,6 @@ public class LobbyState extends BasicGameState{
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-		//Gauntlet gg = (Gauntlet)game;
 		g.drawString("Press space to start a server", 270, 200);
 		g.drawString("OR", 375, 250);
 		g.drawString("Type in a server ip address and press enter", 200, 300);
@@ -49,10 +48,9 @@ public class LobbyState extends BasicGameState{
 		// Start server
 		if (input.isKeyDown(Input.KEY_SPACE)) {
 			if (gg.server == null) {
-				gg.server = new Server();
+				gg.server = new Server(gg);
 				gg.server.run();
-				GameState gameState = new GameState("", (int)280/32, (int)200/32);
-				gg.clientThread = new GameThread(gg.server, gameState, container, game, delta);
+				gg.clientThread = new GameThread(gg.server, gg.gameState, container, game, delta);
 				gg.clientThread.start();
 				gg.enterState(Gauntlet.GAMESTARTSTATE);
 			}
