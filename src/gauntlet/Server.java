@@ -1,9 +1,12 @@
 package gauntlet;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
+import java.net.Socket;
+import java.net.ServerSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 
@@ -30,11 +33,14 @@ import java.net.SocketException;
  */
 public class Server {
 	
-	public static final String YES_CMD = "3yes";
-	public static final String NO_CMD  = "2no";
+	public static final String YES_CMD = "1y\n";
+	public static final String NO_CMD  = "1n\n";
 	public static final int PORT = 3303;
 	
-	public DatagramSocket socket;
+	public ServerSocket socket;
+	public Socket clientSocket;
+	public BufferedReader clientStream;
+	public DataOutputStream serverStream;
 	InetAddress clientAddr;
 	
 	/*
@@ -44,8 +50,8 @@ public class Server {
 	 */
 	public Server() {
 		try {
-			this.socket = new DatagramSocket(Server.PORT);
-		} catch (SocketException e) {
+			this.socket = new ServerSocket(PORT);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		System.out.println("DEBUG: Started server");
@@ -59,15 +65,16 @@ public class Server {
 	 */
 	public void run() {
 		
-		byte[] buf = new byte[256];
-		
 		// Listen for client connection
 		while (true) {
-			DatagramPacket packet = new DatagramPacket(buf, buf.length);
 			try {
-				this.socket.receive(packet);
-				System.out.println("Client joined the party: " + packet.getAddress().toString() + ": " + packet.getPort());
-				break;
+				this.clientSocket = this.socket.accept();
+				this.clientStream = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
+				this.serverStream = new DataOutputStream(this.clientSocket.getOutputStream());
+				
+				String clientMsg = clientStream.readLine();
+				System.out.println(clientMsg);
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -81,10 +88,8 @@ public class Server {
 	 * Acknowledges the client's next move and sends a command allowing the client to move.
 	 */
 	public void sendValidMove() {
-		String msg = YES_CMD;
-		byte[] response = msg.getBytes();
 		try {
-			this.socket.send(new DatagramPacket(response, response.length, this.clientAddr, PORT));
+			this.serverStream.writeBytes(YES_CMD);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -96,101 +101,46 @@ public class Server {
 	 * Sends an invalid move command to the client.
 	 */
 	public void sendInvalidMove(InetAddress clientAddr) {
-		String msg = NO_CMD;
-		byte[] response = msg.getBytes();
 		try {
-			this.socket.send(new DatagramPacket(response, response.length, clientAddr, PORT));
+			this.serverStream.writeBytes(NO_CMD);
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	/*
-	 * readClientCommand
+	 * readClientState
 	 * 
-	 * Reads a client command. All commands contain the length of the string command
-	 * as the first byte, and the command as the rest of the bytes.
+	 * Reads a client state. Client packets follow the format
+	 * "1p<x pos length><x pos><y pos length><y pos><direciton command length><direction command>		
 	 * 
 	 * Example:
-	 * 	"4down"
+	 * 	"1p320032002up"
 	 * 
 	 */
-	public String readClientCommand() {
-		byte[] buf = new byte[256];
-		DatagramPacket pack = new DatagramPacket(buf, buf.length);
-		try {
-			this.socket.receive(pack);
-			this.clientAddr = pack.getAddress();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+	public GameState readClientState() {
+		
 		String cmd = null;
 		try {
-			cmd = new String(pack.getData(), "UTF-8");
-			cmd = cmd.substring(1,  cmd.charAt(0) - '0'+1);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		return cmd;
-	}
-	
-	/*
-	 * readClientPosition
-	 * 
-	 * Reads the client's updated x,y coordinates and returns them as an array.
-	 * 
-	 * [0] -> x coordinate
-	 * [1] -> y coordinate
-	 */
-	public int[] readClientPosition() {
-
-		int[] newPosition = new int[2];
-
-		// Read new client x coordinate
-		byte[] buf = new byte[256];
-		DatagramPacket pack = new DatagramPacket(buf, buf.length);
-		try {
-			this.socket.receive(pack);
-			this.clientAddr = pack.getAddress();
+			cmd = this.clientStream.readLine();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		String cmd = null;
-		try {
-			cmd = new String(pack.getData(), "UTF-8");
-			cmd = cmd.substring(1,  cmd.charAt(0) - '0'+1);
-			System.out.println("X packet is " + cmd);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-
-		newPosition[0] = Integer.valueOf(cmd);
-		System.out.println("Client x position is: " + newPosition[0]);
-
-		// Read new client y coordinate
-		byte[] buf2 = new byte[256];
-		pack = new DatagramPacket(buf2, buf2.length);
-		try {
-			this.socket.receive(pack);
-			this.clientAddr = pack.getAddress();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		cmd = null;
-		try {
-			cmd = new String(pack.getData(), "UTF-8");
-			cmd = cmd.substring(1,  cmd.charAt(0) - '0'+1);
-			System.out.println("Y packet is " + cmd);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-
-		newPosition[1] = Integer.valueOf(cmd);
-		System.out.println("Client y position is: " + newPosition[1]);
-		return newPosition;
+		
+		System.out.println(cmd);
+		
+		// Read x,y position
+		int index = cmd.charAt(0) - '0' + 1;
+		int xLength = cmd.charAt(index) - '0';
+		int xPos = Integer.parseInt(cmd.substring(index+1, index + xLength + 1));
+		index += xLength + 1;
+		int yLength = cmd.charAt(index) - '0';
+		int yPos = Integer.parseInt(cmd.substring(index+1, index + yLength + 1));
+		index += yLength + 1;
+		
+		String direction = cmd.substring(index+1, index + cmd.charAt(index) - '0' + 1);
+		
+		return new GameState(direction, xPos, yPos);
 	}
 	
 	/*
@@ -199,6 +149,10 @@ public class Server {
 	 * Kills the server and closes the connection between the client.
 	 */
 	public void closeServer() {
-		this.socket.close();
+		try {
+			this.clientSocket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
