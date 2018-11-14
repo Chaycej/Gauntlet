@@ -103,7 +103,7 @@ public class Skeleton extends Entity {
 			}
 		}
 		//south tile 
-		if (row < gg.col) {
+		if (row < gg.maxColumn) {
 			this.path[row+1][col] = 10 + getDestinationDistance(row+1, col, destRow, destCol);
 			
 			// Set adjacent walls to poor pathfinding score

@@ -29,8 +29,8 @@ public class GameStartUp extends BasicGameState{
 		Gauntlet gg = (Gauntlet)game;
 		int x = 16;
 		int y = 16;
-		for (int row=0; row<gg.row; row++ ) {
-			for (int col=0; col<gg.col; col++) {
+		for (int row=0; row<gg.maxRow; row++ ) {
+			for (int col=0; col<gg.maxColumn; col++) {
 				if ( gg.map[row][col] == 48) {		//equals a 0 is a path
 					gg.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
 					gg.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.pathTile));
@@ -77,7 +77,7 @@ public class GameStartUp extends BasicGameState{
 	 * The general client protocol is as follows:
 	 *		
 	 *		client movement:
-	 *			1. Send current (x,y) posiiton to server.
+	 *			1. Send current (x,y) position to server.
 	 *			2. Send direction command to server. 
 	 *			3. Wait for server's response.
 	 *			4. Move client to requested direction.
@@ -86,80 +86,66 @@ public class GameStartUp extends BasicGameState{
 		Input input = container.getInput();
 		Gauntlet gg = (Gauntlet)game;
 		
-//		if ((int)gg.warrior.getX() != gg.warrior.prevX || (int)gg.warrior.getY() != gg.warrior.prevY) {
-//			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
-//			gg.warrior.prevX = (int)gg.warrior.getX();
-//			gg.warrior.prevY = (int)gg.warrior.getY();
-//		}	
-		
 		//checks up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
-			gg.client.sendCommand("3pos");
-			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
-			gg.warrior.northAnimation();
 			if (gg.warrior.getRow() > 0) {
-				gg.client.sendCommand("2up");
+				gg.client.sendMovement(Client.UP_CMD, gg);
 				String response = gg.client.readServerResponse(gg);
 
-				if (response.equals("yes")) {
+				if (response.equals("y")) {
+					gg.warrior.northAnimation();
 					gg.warrior.setVelocity(new Vector(0, -0.1f));
 				}
 			} else {
 				gg.warrior.setVelocity(new Vector(0, 0f));
 			}
-			
+			gg.warrior.update(delta);
 		}
 		
 		//checks down movement
-		if (input.isKeyDown(Input.KEY_DOWN)) {
-			gg.client.sendCommand("3pos");
-			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
-			gg.warrior.southAnimation();
-			if (gg.warrior.getRow() < gg.row-1) {
-				gg.client.sendCommand("4down");
+		else if (input.isKeyDown(Input.KEY_DOWN)) {
+			if (gg.warrior.getRow() < gg.maxRow-1) {
+				gg.client.sendMovement(Client.DOWN_CMD, gg);
 				String response = gg.client.readServerResponse(gg);
-				if (response.equals("yes")) {
+				if (response.equals("y")) {
+					gg.warrior.southAnimation();
 					gg.warrior.setVelocity(new Vector(0, 0.1f));
 				}
 			} else {
 				gg.warrior.setVelocity(new Vector(0, 0f));
-			} 
+			}
+			gg.warrior.update(delta);
 		}
 		
 		//checks right movement
-		if (input.isKeyDown(Input.KEY_RIGHT)) {
-			gg.client.sendCommand("3pos");
-			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
-			gg.warrior.eastAnimation();
-			if (gg.warrior.getColumn() < gg.col-1) {
-				gg.client.sendCommand("5right");
+		else if (input.isKeyDown(Input.KEY_RIGHT)) {
+			if (gg.warrior.getColumn() < gg.maxColumn-1) {
+				gg.client.sendMovement(Client.RIGHT_CMD, gg);
 				String response = gg.client.readServerResponse(gg);
-				System.out.println("Client got response: " + response);
-				if (response.equals("yes")) {
+				if (response.equals("y")) {
+					gg.warrior.eastAnimation();
 					gg.warrior.setVelocity(new Vector(0.1f, 0));
 				}
 			} else {
 				gg.warrior.setVelocity(new Vector(0, 0f));
 			}
+			gg.warrior.update(delta);
 		}
 		
 		//checks left movement
-		if (input.isKeyDown(Input.KEY_LEFT)) {
-			gg.client.sendCommand("3pos");
-			gg.client.sendPosition((int)gg.warrior.getX(), (int)gg.warrior.getY());
-			gg.warrior.westAnimation();
+		else if (input.isKeyDown(Input.KEY_LEFT)) {
 			if (gg.warrior.getColumn() > 0) {
-				gg.client.sendCommand("4left");
+				gg.client.sendMovement(Client.LEFT_CMD, gg);
 				String response = gg.client.readServerResponse(gg);
-				if (response.equals("yes")) {
+				if (response.equals("y")) {
+					gg.warrior.westAnimation();
 					gg.warrior.setVelocity(new Vector(-0.1f, 0));
 				} 
 			} else {
 				gg.warrior.setVelocity(new Vector(0, 0f));
 			}
+			gg.warrior.update(delta);
 		}
-
-		gg.warrior.update(delta);
 	}
 	
 	public void handleServer(GameContainer container, StateBasedGame game, int delta) {

@@ -13,8 +13,8 @@ public class Gauntlet extends StateBasedGame {
 	public static final int LOBBYSTATE = 0;
 	public static final int GAMESTARTSTATE = 1;
 
-	public final static int row = 25;
-	public final static int col = 25;
+	public final static int maxRow = 25;
+	public final static int maxColumn = 25;
 	public final static int windowWidth = 800;
 	public final static int windowHeight = 800;
 	
@@ -50,8 +50,6 @@ public class Gauntlet extends StateBasedGame {
 	
 	public static AppGameContainer app;
 	
-	public GameSocket socket;
-	
 	int[][] map;
 	MapMatrix[][] mapMatrix;
 	Warrior warrior;
@@ -67,8 +65,8 @@ public class Gauntlet extends StateBasedGame {
 		ScreenWidth = width;
 
 		Entity.setCoarseGrainedCollisionBoundary(Entity.AABB);
-		map = new int[row][col];
-		mapMatrix = new MapMatrix[row][col];
+		map = new int[maxRow][maxColumn];
+		mapMatrix = new MapMatrix[maxRow][maxColumn];
 	}
 
 	@Override
@@ -111,7 +109,7 @@ public class Gauntlet extends StateBasedGame {
                 }
                 map[rowB][colB] = numRead;
                 colB++;
-                if (colB == col) {
+                if (colB == maxColumn) {
                     colB = 0;
                     rowB++;
                 }
