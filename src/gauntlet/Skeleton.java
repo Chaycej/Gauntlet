@@ -19,7 +19,6 @@ public class Skeleton extends Entity {
 	
 	public Skeleton(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
-		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.skeletonS));
 		velocity = new Vector(vx, vy);
 		countdown = 0;
 		velocity = new Vector(vx, vy);
@@ -233,18 +232,22 @@ public class Skeleton extends Entity {
 		
 		// Moving left
 		if (direction == 2) {
+			eastAnimation();
 			this.setVelocity(new Vector(-0.12f, 0f));
 		}
 		//going right
 		if (direction == 4) {
+			westAnimation();
 			this.setVelocity(new Vector(0.12f, 0f));
 		}
 		//going down
 		if (direction == 3) {
+			southAnimation();
 			this.setVelocity(new Vector(0f, 0.12f));
 		}
 		//going up
 		if (direction == 1) {
+			northAnimation();
 			this.setVelocity(new Vector(0f, -0.12f));
 		}
 	
@@ -282,11 +285,6 @@ public class Skeleton extends Entity {
 //			//}
 //		}
 		this.update(delta);
-	}
-	
-	public void turnGhostDead() {
-		this.isDead = true;
-		this.moves = 0;
 	}
 	
 	public void update(final int delta) {
