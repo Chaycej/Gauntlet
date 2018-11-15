@@ -150,10 +150,13 @@ public class GameStartUp extends BasicGameState{
 		Input input = container.getInput();
 		Gauntlet gg = (Gauntlet)game;
 		
+		String direction = null;
+		
 		//checks up movement
 		if (input.isKeyDown(Input.KEY_W)) {
 			if (gg.ranger.getRow() > 0) {
 				gg.ranger.northAnimation();
+				direction = "up";
 				gg.ranger.setVelocity(new Vector(0, -0.1f));
 			} 
 		}
@@ -162,6 +165,7 @@ public class GameStartUp extends BasicGameState{
 		else if (input.isKeyDown(Input.KEY_S)) {
 			if (gg.ranger.getRow() < gg.maxRow-1) {
 				gg.ranger.southAnimation();
+				direction = "do";
 				gg.ranger.setVelocity(new Vector(0, 0.1f));
 			}
 		}
@@ -170,6 +174,7 @@ public class GameStartUp extends BasicGameState{
 		else if (input.isKeyDown(Input.KEY_D)) {
 			if (gg.ranger.getColumn() < gg.maxColumn) {
 				gg.ranger.eastAnimation();
+				direction = "ri";
 				gg.ranger.setVelocity(new Vector(0.1f, 0));
 			}
 		}
@@ -178,10 +183,16 @@ public class GameStartUp extends BasicGameState{
 		else if (input.isKeyDown(Input.KEY_A)) {
 			if (gg.ranger.getColumn() > 0) {
 				gg.ranger.westAnimation();
+				direction = "le";
 				gg.ranger.setVelocity(new Vector(-0.1f, 0));
 			}
 		}
 		
+		gg.warrior.setPosition((float)gg.gameState.getWarriorX(), (float)gg.gameState.getWarriorY());
+		
+		gg.gameState.setRangerDirection(direction);
+		gg.gameState.setRangerPosition((int)gg.ranger.getX(), (int)gg.ranger.getY());
+		//gg.server.sendGameState(gg.gameState);
 		gg.ranger.update(delta);
 	}
 

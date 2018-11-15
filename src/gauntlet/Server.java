@@ -3,6 +3,7 @@ package gauntlet;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
@@ -109,6 +110,15 @@ public class Server {
 		}
 	}
 	
+	public void sendGameState(GameState gameState) {
+		try {
+			ObjectOutputStream output = new ObjectOutputStream(this.clientSocket.getOutputStream());
+			output.writeObject(gameState);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/*
 	 * readClientState
 	 * 
@@ -118,8 +128,13 @@ public class Server {
 	 * Example:
 	 * 	"1p320032002up"
 	 * 
+	 * The global game state is updated by setting the new client's state
+	 * 
+	 * Note: Server state is never edited in the GameState object in this method.
+	 * 			Server state is initialized later on in the server game loop.
+	 * 
 	 */
-	public GameState readClientState() {
+	public void readClientState(GameState gameState) {
 		
 		String cmd = null;
 		try {
@@ -139,10 +154,8 @@ public class Server {
 		
 		String direction = cmd.substring(index+1, index + cmd.charAt(index) - '0' + 1);
 		
-		GameState gameState = new GameState();
-		gameState.setWarriorDirection(direction);
 		gameState.setWarriorPosition(xPos, yPos);
-		return gameState;
+		gameState.setWarriorDirection(direction);
 	}
 	
 	/*
