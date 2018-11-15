@@ -31,7 +31,7 @@ public class GameStartUp extends BasicGameState{
 		int y = 16;
 		for (int row=0; row<gg.maxRow; row++ ) {
 			for (int col=0; col<gg.maxColumn; col++) {
-				if ( gg.map[row][col] == 48) {		//equals a 0 is a path
+				if ( gg.map[row][col] == 0) {		//equals a 0 is a path
 					gg.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
 					gg.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.pathTile));
 				} else {							//equals a 1 is a wall
@@ -63,6 +63,7 @@ public class GameStartUp extends BasicGameState{
 		Gauntlet gg = (Gauntlet)game;
 
 		if (gg.client != null) {
+			System.out.println("client not null");
 			handleClient(container, game, delta);
 		} else {
 			handleServer(container, game, delta);

@@ -22,8 +22,8 @@ public class Gauntlet extends StateBasedGame {
 	public final int  warriorY= 200;
 	public final int  rangerX= 280;
 	public final int  rangerY= 200;
-	public final int  skeletonX= 400;
-	public final int  skeletonY= 200;
+	public final int  skeletonX= 700;
+	public final int  skeletonY= 700;
 	
 	public static final String pathTile = "gauntlet/resources/WalkingTile.png";
 	public static final String wallTile = "gauntlet/resources/WallTile.png";
@@ -71,7 +71,7 @@ public class Gauntlet extends StateBasedGame {
 
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
-		//addState(new LobbyState());
+		addState(new LobbyState());
 		addState(new GameStartUp());
 		
 		ResourceManager.loadImage(wallTile);
@@ -118,6 +118,15 @@ public class Gauntlet extends StateBasedGame {
         } catch (IOException ioe) {
             System.out.println("Trouble reading from the file: " + ioe.getMessage());
         }
+		for (int row=0; row<maxRow; row++ ) {
+			for (int col=0; col<maxColumn; col++) {
+				if ( map[row][col] == 48) {		//equals a 0 is a path
+					map[row][col] = 0;
+				} else {
+					map[row][col] = 1;
+				}
+			}
+		}
 	}
 	
 	public static void main(String[] args) {
