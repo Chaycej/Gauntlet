@@ -4,6 +4,8 @@ import jig.Entity;
 import jig.ResourceManager;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -37,7 +39,12 @@ public class Gauntlet extends StateBasedGame {
 	public static final String warriorS = "gauntlet/resources/warrior_s.png";
 	public static final String warriorE = "gauntlet/resources/warrior_e.png";
 	public static final String warriorW = "gauntlet/resources/warrior_w.png";
-
+	public static final String projectile = "gauntlet/resources/Projectile.png";
+	public static final String arrowN = "gauntlet/resources/Arrow_N.png";
+	public static final String arrowE = "gauntlet/resources/Arrow_E.png";
+	public static final String arrowS = "gauntlet/resources/Arrow_S.png";
+	public static final String arrowW = "gauntlet/resources/Arrow_W.png";
+ 
 	public final int ScreenWidth;
 	public final int ScreenHeight;
 	
@@ -52,6 +59,7 @@ public class Gauntlet extends StateBasedGame {
 	Server server;
 	Client client;
 	GameThread clientThread;
+	ArrayList<Projectiles> wProjectiles;
 	
 	public Gauntlet(String title, int width, int height) {
 		super(title);
@@ -83,8 +91,16 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(warriorE);
 		ResourceManager.loadImage(warriorW);
 		
+		ResourceManager.loadImage(projectile);
+		ResourceManager.loadImage(arrowN);
+		ResourceManager.loadImage(arrowE);
+		ResourceManager.loadImage(arrowS);
+		ResourceManager.loadImage(arrowW);
+		
 		warrior = new Warrior(warriorX, warriorY, 0f, 0f);
 		ranger = new Ranger(rangerX, rangerY, 0f, 0f);
+		
+		wProjectiles = new ArrayList<Projectiles>();
 		
 		int rowB = 0;
         int colB = 0;

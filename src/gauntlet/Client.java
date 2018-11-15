@@ -18,6 +18,8 @@ public class Client {
 	public static final String RIGHT_CMD = "2ri\n";
 	public static final String LEFT_CMD = "2le\n";
 	
+	public static final String FIRE_CMD = "1fi\n";
+	
 	public static final int PORT = 3303;
 	public InetAddress serverAddress;
 	public Socket socket;

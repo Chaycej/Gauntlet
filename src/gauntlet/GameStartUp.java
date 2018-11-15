@@ -53,6 +53,10 @@ public class GameStartUp extends BasicGameState{
 		gg.warrior.setVelocity(new Vector(0f,0f));
 		gg.ranger.render(g);
 		gg.ranger.setVelocity(new Vector(0f,0f));
+		
+		for (int i = 0; i < gg.wProjectiles.size(); i++) {
+			gg.wProjectiles.get(i).render(g);
+		}
 	}
 
 	@Override
@@ -140,8 +144,28 @@ public class GameStartUp extends BasicGameState{
 				} 
 			} else {
 				gg.warrior.setVelocity(new Vector(0, 0f));
-			}
+			}	
 			gg.warrior.update(delta);
+		}
+		
+		//checks if projectile fired 
+		else if (input.isKeyPressed(Input.KEY_SPACE)) {
+			//float dirX = 0, dirY = 0;	
+			//gg.client.sendMovement(Client.POS_CMD, gg);
+			System.out.println("p launched");
+			gg.wProjectiles.add(new Projectiles(gg.warrior.getPosition().getX(),gg.warrior.getPosition().getY(),gg.warrior.getDirectionFacing()));
+		}
+		//gg.warrior.update(delta);
+		for (int i = 0; i < gg.wProjectiles.size(); i++) {
+			
+			gg.wProjectiles.get(i).update(delta);
+			if(gg.wProjectiles.get(i).getColumn() > gg.maxColumn 
+					|| gg.wProjectiles.get(i).getRow() > gg.maxRow 
+					|| gg.wProjectiles.get(i).getColumn() < 0
+					|| gg.wProjectiles.get(i).getRow() < 0) {
+				System.out.println("pro removed");
+				gg.wProjectiles.remove(i);
+			}
 		}
 	}
 	
