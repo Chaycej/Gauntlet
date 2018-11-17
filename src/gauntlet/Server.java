@@ -143,6 +143,9 @@ public class Server {
 			e.printStackTrace();
 		}
 		
+
+		System.out.println(cmd);
+
 		// Read x,y position
 		int index = cmd.charAt(0) - '0' + 1;
 		int xLength = cmd.charAt(index) - '0';
