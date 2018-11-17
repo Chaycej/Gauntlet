@@ -54,6 +54,10 @@ public class GameStartUp extends BasicGameState{
 		gg.warrior.setVelocity(new Vector(0f,0f));
 		gg.ranger.render(g);
 		gg.ranger.setVelocity(new Vector(0f,0f));
+		
+		for (int i = 0; i < gg.wProjectiles.size(); i++) {
+			gg.wProjectiles.get(i).render(g);
+		}
 	}
 
 	@Override
@@ -150,8 +154,23 @@ public class GameStartUp extends BasicGameState{
 				} 
 			} else {
 				gg.warrior.setVelocity(new Vector(0, 0f));
-			}
+			}	
 			gg.warrior.update(delta);
+		}
+		
+		else if (input.isKeyPressed(Input.KEY_SPACE)) {
+			gg.wProjectiles.add(new Projectiles(gg.warrior.getPosition().getX(),gg.warrior.getPosition().getY(),gg.warrior.getDirectionFacing()));
+		}
+		
+		for (int i = 0; i < gg.wProjectiles.size(); i++) {
+			
+			gg.wProjectiles.get(i).update(delta);
+			if(gg.wProjectiles.get(i).getColumn() > gg.maxColumn 
+					|| gg.wProjectiles.get(i).getRow() > gg.maxRow 
+					|| gg.wProjectiles.get(i).getColumn() < 0
+					|| gg.wProjectiles.get(i).getRow() < 0) {
+				gg.wProjectiles.remove(i);
+			}
 		}
 	}
 	
