@@ -2,9 +2,10 @@ package gauntlet;
 
 import java.util.concurrent.atomic.*;
 
-public class GameState {
+public class GameState implements java.io.Serializable {
 	
 	private String warriorDirection;
+	private String rangerDirection;
 	private AtomicInteger warriorX;
 	private AtomicInteger warriorY;
 	private AtomicInteger rangerX;
@@ -13,49 +14,95 @@ public class GameState {
 	public GameState() {
 		this.warriorX = new AtomicInteger();
 		this.warriorY = new AtomicInteger();
+		this.warriorDirection = "do";
 		this.rangerX = new AtomicInteger();
 		this.rangerY = new AtomicInteger();
+		this.rangerDirection = "do";
 	}
 	
-	public void setWarriorPosition(int newx, int newy) {
+	/*
+	 *  Sets the warrior's new position
+	 */
+	synchronized void setWarriorPosition(int newx, int newy) {
 		this.warriorX.set(newx);
 		this.warriorY.set(newy);
 	}
 	
-	public void setRangerPosition(int newx, int newy) {
+	/*
+	 *  Sets the ranger's new position
+	 */
+	synchronized void setRangerPosition(int newx, int newy) {
 		this.rangerX.set(newx);
 		this.rangerY.set(newy);
 	}
 	
-	public void setWarriorDirection(String direction) {
+	/*
+	 *  Sets the warrior's new direction
+	 */
+	synchronized void setWarriorDirection(String direction) {
 		this.warriorDirection = direction;
 	}
 	
-	public String getWarriorDirection() {
+	/*
+	 *  Returns the warrior's most recent direction
+	 */
+	synchronized String getWarriorDirection() {
 		return this.warriorDirection;
 	}
 	
-	public int getWarriorX() {
+	/*
+	 *  Sets the ranger's new direction
+	 */
+	synchronized void setRangerDirection(String direction) {
+		this.rangerDirection = direction;
+	}
+	
+	/*
+	 *  Returns the ranger's new direction
+	 */
+	synchronized String getRangerDirection() {
+		return this.rangerDirection;
+	}
+	
+	/*
+	 *  Gets the warrior's x position
+	 */
+	synchronized int getWarriorX() {
 		return this.warriorX.intValue();
 	}
 	
-	public int getWarriorY() {
+	/*
+	 * Gets the warrior's y position
+	 */
+	synchronized int getWarriorY() {
 		return this.warriorY.intValue();
 	}
 	
-	public int getWarriorRow() {
+	/*
+	 *  Gets the warrior's current row that it is occupying
+	 */
+	synchronized int getWarriorRow() {
 		return this.warriorY.intValue()/32;
 	}
 	
-	public int getWarriorColumn() {
+	/*
+	 *  Gets the warrior's current column that it is occupying
+	 */
+	synchronized int getWarriorColumn() {
 		return this.warriorX.intValue()/32;
 	}
 	
-	public int getRangerX() {
+	/*
+	 *  Gets the current ranger's x position
+	 */
+	synchronized int getRangerX() {
 		return this.rangerX.intValue();
 	}
 	
-	public int getRangerY() {
+	/*
+	 *  Gets the current ranger's y position
+	 */
+	synchronized int getRangerY() {
 		return this.rangerY.intValue();
 	}
 }

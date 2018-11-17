@@ -25,7 +25,7 @@ public class GameThread extends Thread {
 	public void run() {
 		while (true) {
 			
-			this.gameState = this.server.readClientState();
+			this.server.readClientState(this.gameState);
 			String direction = this.gameState.getWarriorDirection();
 			
 			// Client attempting to move down
@@ -55,7 +55,6 @@ public class GameThread extends Thread {
 					this.server.sendValidMove();
 				}
 			}
-
 		}
 	}
 }

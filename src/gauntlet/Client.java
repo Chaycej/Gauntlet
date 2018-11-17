@@ -18,6 +18,8 @@ public class Client {
 	public static final String RIGHT_CMD = "2ri\n";
 	public static final String LEFT_CMD = "2le\n";
 	
+	public static final String FIRE_CMD = "1fi\n";
+	
 	public static final int PORT = 3303;
 	public InetAddress serverAddress;
 	public Socket socket;
@@ -87,7 +89,7 @@ public class Client {
 	
 	public void sendMovement(String cmd, Gauntlet gauntlet) {
 		StringBuilder cmdBuilder = new StringBuilder();
-		cmdBuilder.append(this.POS_CMD);
+		cmdBuilder.append(POS_CMD);
 		int xPos = (int)gauntlet.warrior.getX();
 		int xLength = (int)Math.log10(xPos) + 1;
 		cmdBuilder.append(xLength);
