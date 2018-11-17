@@ -1,6 +1,7 @@
 package gauntlet;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -82,6 +83,15 @@ public class GameStartUp extends BasicGameState{
 	public void handleClient(GameContainer container, StateBasedGame game, int delta) {
 		Input input = container.getInput();
 		Gauntlet gg = (Gauntlet)game;
+		
+//		try {
+//			ObjectInputStream in = new ObjectInputStream(gg.client.socket.getInputStream());
+//			GameState gameState = (GameState)in.readObject();
+//			System.out.println("Got server game state");
+//			System.out.println("Server position is " + gameState.getRangerX() + " " + gameState.getRangerY());
+//		} catch (IOException | ClassNotFoundException e) {
+//			e.printStackTrace();
+//		}
 		
 		//checks up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
@@ -188,7 +198,20 @@ public class GameStartUp extends BasicGameState{
 			}
 		}
 		
+		// Update warrior position and direction
 		gg.warrior.setPosition((float)gg.gameState.getWarriorX(), (float)gg.gameState.getWarriorY());
+		switch(gg.gameState.getWarriorDirection()) {
+		case "up":
+			gg.warrior.northAnimation();
+		case "le":
+			gg.warrior.westAnimation();
+		case "ri":
+			gg.warrior.eastAnimation();
+		case "do":
+			gg.warrior.southAnimation();
+		default:
+			System.out.println("Unrecognized direction");
+		}
 		
 		gg.gameState.setRangerDirection(direction);
 		gg.gameState.setRangerPosition((int)gg.ranger.getX(), (int)gg.ranger.getY());

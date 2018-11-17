@@ -14,8 +14,10 @@ public class GameState implements java.io.Serializable {
 	public GameState() {
 		this.warriorX = new AtomicInteger();
 		this.warriorY = new AtomicInteger();
+		this.warriorDirection = "do";
 		this.rangerX = new AtomicInteger();
 		this.rangerY = new AtomicInteger();
+		this.rangerDirection = "do";
 	}
 	
 	/*

@@ -87,7 +87,7 @@ public class Client {
 	
 	public void sendMovement(String cmd, Gauntlet gauntlet) {
 		StringBuilder cmdBuilder = new StringBuilder();
-		cmdBuilder.append(this.POS_CMD);
+		cmdBuilder.append(POS_CMD);
 		int xPos = (int)gauntlet.warrior.getX();
 		int xLength = (int)Math.log10(xPos) + 1;
 		cmdBuilder.append(xLength);

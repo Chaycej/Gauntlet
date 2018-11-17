@@ -55,10 +55,6 @@ public class GameThread extends Thread {
 					this.server.sendValidMove();
 				}
 			}
-
-			
-			System.out.println("Ranger current x is: " + this.gameState.getRangerX());
-			System.out.println("Ranger current y is: " + this.gameState.getRangerY());
 		}
 	}
 }
