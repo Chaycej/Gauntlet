@@ -25,44 +25,36 @@ public class GameThread extends Thread {
 	public void run() {
 		while (true) {
 			
+			this.server.readClientState(this.gameState);
+			String direction = this.gameState.getWarriorDirection();
 			
-			String cmd = this.server.readClientCommand();
-			System.out.println("Cmd is " + cmd);
-			
-			if (cmd.equals("pos")) {
-				int[] position = this.server.readClientPosition();
-				this.gameState.updatePosition(position[0], position[1]);
-			}
-
 			// Client attempting to move down
-			if (cmd.equals("down")) {
-				if (gameState.getRow() < 24) {
+			if (direction.equals("do")) {
+				if (this.gameState.getWarriorRow() < 24) {
 					this.server.sendValidMove();
 				}
 			} 
 
 			// Client attempting to move up
-			else if (cmd.equals("up")) {
-				if (gameState.getRow() > 0) {
+			else if (direction.equals("up")) {
+				if (this.gameState.getWarriorRow() > 0) {
 					this.server.sendValidMove();
 				}
 			} 
 
 			// Client attempting to move left
-			else if (cmd.equals("left")) {
-				if (gameState.getColumn() > 0) {
+			else if (direction.equals("le")) {
+				if (this.gameState.getWarriorColumn() > 0) {
 					this.server.sendValidMove();
 				}
 			} 
 
 			// Client attempting to move right
-			else if (cmd.equals("right")) {
-				if (gameState.getColumn() < 24) {
+			else if (direction.equals("ri")) {
+				if (this.gameState.getWarriorColumn() < 24) {
 					this.server.sendValidMove();
-					System.out.println("Send valid move!");
 				}
 			}
-
 		}
 	}
 }

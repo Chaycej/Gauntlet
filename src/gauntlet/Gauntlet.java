@@ -4,6 +4,8 @@ import jig.Entity;
 import jig.ResourceManager;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -13,8 +15,8 @@ public class Gauntlet extends StateBasedGame {
 	public static final int LOBBYSTATE = 0;
 	public static final int GAMESTARTSTATE = 1;
 
-	public final static int row = 25;
-	public final static int col = 25;
+	public final static int maxRow = 25;
+	public final static int maxColumn = 25;
 	public final static int windowWidth = 800;
 	public final static int windowHeight = 800;
 	
@@ -23,27 +25,29 @@ public class Gauntlet extends StateBasedGame {
 	public final int  rangerX= 280;
 	public final int  rangerY= 200;
 	
-	public static final String pathTile = "Gauntlet/resources/WalkingTile.png";
-	public static final String wallTile = "Gauntlet/resources/WallTile.png";
-	public static final String JOIN_GAME_RSC = "Gauntlet/resources/joinGame.png";
-	public static final String HOST_GAME_RSC = "Gauntlet/resources/hostGame.png";
+	public static final String pathTile = "gauntlet/resources/WalkingTile.png";
+	public static final String wallTile = "gauntlet/resources/WallTile.png";
+	public static final String JOIN_GAME_RSC = "gauntlet/resources/joinGame.png";
+	public static final String HOST_GAME_RSC = "gauntlet/resources/hostGame.png";
 	
-	public static final String rangerN = "Gauntlet/resources/ranger_n.png";
-	public static final String rangerS = "Gauntlet/resources/ranger_s.png";
-	public static final String rangerE = "Gauntlet/resources/ranger_e.png";
-	public static final String rangerW = "Gauntlet/resources/ranger_w.png";
+	public static final String rangerN = "gauntlet/resources/ranger_n.png";
+	public static final String rangerS = "gauntlet/resources/ranger_s.png";
+	public static final String rangerE = "gauntlet/resources/ranger_e.png";
+	public static final String rangerW = "gauntlet/resources/ranger_w.png";
 	
-	public static final String warriorN = "Gauntlet/resources/warrior_n.png";
-	public static final String warriorS = "Gauntlet/resources/warrior_s.png";
-	public static final String warriorE = "Gauntlet/resources/warrior_e.png";
-	public static final String warriorW = "Gauntlet/resources/warrior_w.png";
-
+	public static final String warriorN = "gauntlet/resources/warrior_n.png";
+	public static final String warriorS = "gauntlet/resources/warrior_s.png";
+	public static final String warriorE = "gauntlet/resources/warrior_e.png";
+	public static final String warriorW = "gauntlet/resources/warrior_w.png";
+	public static final String arrowN = "gauntlet/resources/Arrow_N.png";
+	public static final String arrowE = "gauntlet/resources/Arrow_E.png";
+	public static final String arrowS = "gauntlet/resources/Arrow_S.png";
+	public static final String arrowW = "gauntlet/resources/Arrow_W.png";
+ 
 	public final int ScreenWidth;
 	public final int ScreenHeight;
 	
 	public static AppGameContainer app;
-	
-	public GameSocket socket;
 	
 	int[][] map;
 	MapMatrix[][] mapMatrix;
@@ -52,6 +56,9 @@ public class Gauntlet extends StateBasedGame {
 	Server server;
 	Client client;
 	GameThread clientThread;
+	GameState gameState;
+	ArrayList<Projectiles> wProjectiles;
+
 	
 	public Gauntlet(String title, int width, int height) {
 		super(title);
@@ -59,8 +66,9 @@ public class Gauntlet extends StateBasedGame {
 		ScreenWidth = width;
 
 		Entity.setCoarseGrainedCollisionBoundary(Entity.AABB);
-		map = new int[row][col];
-		mapMatrix = new MapMatrix[row][col];
+		map = new int[maxRow][maxColumn];
+		mapMatrix = new MapMatrix[maxRow][maxColumn];
+		gameState = new GameState();
 	}
 
 	@Override
@@ -83,8 +91,15 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(warriorE);
 		ResourceManager.loadImage(warriorW);
 		
+		ResourceManager.loadImage(arrowN);
+		ResourceManager.loadImage(arrowE);
+		ResourceManager.loadImage(arrowS);
+		ResourceManager.loadImage(arrowW);
+		
 		warrior = new Warrior(warriorX, warriorY, 0f, 0f);
 		ranger = new Ranger(rangerX, rangerY, 0f, 0f);
+		
+		wProjectiles = new ArrayList<Projectiles>();
 		
 		int rowB = 0;
         int colB = 0;
@@ -97,7 +112,7 @@ public class Gauntlet extends StateBasedGame {
                 }
                 map[rowB][colB] = numRead;
                 colB++;
-                if (colB == col) {
+                if (colB == maxColumn) {
                     colB = 0;
                     rowB++;
                 }
