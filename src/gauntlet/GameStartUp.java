@@ -48,24 +48,24 @@ public class GameStartUp extends BasicGameState{
 	
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-		Gauntlet gg = (Gauntlet)game;
+		Gauntlet gauntlet = (Gauntlet)game;
 		renderMap(container, game, g);
-		gg.warrior.render(g);
-		gg.warrior.setVelocity(new Vector(0f,0f));
-		gg.ranger.render(g);
-		gg.ranger.setVelocity(new Vector(0f,0f));
+		gauntlet.warrior.render(g);
+		gauntlet.warrior.setVelocity(new Vector(0f,0f));
+		gauntlet.ranger.render(g);
+		gauntlet.ranger.setVelocity(new Vector(0f,0f));
 		
-		for (int i = 0; i < gg.wProjectiles.size(); i++) {
-			gg.wProjectiles.get(i).render(g);
+		for (int i = 0; i < gauntlet.wProjectiles.size(); i++) {
+			gauntlet.wProjectiles.get(i).render(g);
 		}
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 		Input input = container.getInput();
-		Gauntlet gg = (Gauntlet)game;
+		Gauntlet gauntlet = (Gauntlet)game;
 
-		if (gg.client != null) {
+		if (gauntlet.client != null) {
 			handleClient(container, game, delta);
 		} else {
 			handleServer(container, game, delta);
@@ -137,7 +137,7 @@ public class GameStartUp extends BasicGameState{
 			}
 		}
 		
-		// Update client from new game state sent from server
+		// Render new game state
 		GameState newGameState = gauntlet.client.readGameState();
 		if (newGameState != null) {
 			
@@ -148,25 +148,21 @@ public class GameStartUp extends BasicGameState{
 			if (newGameState.getWarriorDirection() == GameState.Direction.UP) {
 				gauntlet.warrior.northAnimation();
 				if (newGameState.warriorIsMoving()) {
-					System.out.println("Moving up");
 					gauntlet.warrior.setVelocity(new Vector(0f, -0.1f));
 				}
 			} else if (newGameState.getWarriorDirection() == GameState.Direction.DOWN) {
 				gauntlet.warrior.southAnimation();
 				if (newGameState.warriorIsMoving()) {
-					System.out.println("Moving down");
 					gauntlet.warrior.setVelocity(new Vector(0f, 0.1f));
 				}
 			} else if (newGameState.getWarriorDirection() == GameState.Direction.LEFT) {
 				gauntlet.warrior.westAnimation();
 				if (newGameState.warriorIsMoving()) {
-					System.out.println("Moving left");
 					gauntlet.warrior.setVelocity(new Vector(-0.1f, 0f));
 				}
 			} else if (newGameState.getWarriorDirection() == GameState.Direction.RIGHT) {
 				gauntlet.warrior.eastAnimation();
 				if (newGameState.warriorIsMoving()) {
-					System.out.println("Moving right");
 					gauntlet.warrior.setVelocity(new Vector(0.1f, 0f));
 				}
 			

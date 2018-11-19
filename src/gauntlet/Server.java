@@ -119,6 +119,7 @@ public class Server {
 		try {
 			ObjectOutputStream output = new ObjectOutputStream(this.clientSocket.getOutputStream());
 			output.writeObject(gameState);
+			System.out.println("Sent game state");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

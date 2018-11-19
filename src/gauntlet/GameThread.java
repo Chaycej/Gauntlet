@@ -30,29 +30,37 @@ public class GameThread extends Thread {
 			
 			// Client attempting to move down
 			if (direction == GameState.Direction.DOWN) {
-				if (this.gameState.getWarriorRow() < 24) {
+				if (this.gameState.getWarriorY() < 24 * 32 - 29) {
 					this.gameState.setWarriorMovement(true);
+				} else {
+					this.gameState.setWarriorMovement(false);
 				}
 			} 
 
 			// Client attempting to move up
 			else if (direction == GameState.Direction.UP) {
-				if (this.gameState.getWarriorRow() > 0) {
+				if (this.gameState.getWarriorY() > 40) {
 					this.gameState.setWarriorMovement(true);
+				} else {
+					this.gameState.setWarriorMovement(false);
 				}
 			} 
 
 			// Client attempting to move left
 			else if (direction == GameState.Direction.LEFT) {
-				if (this.gameState.getWarriorColumn() > 0) {
-					this.gameState.setRangerMovement(true);
+				if (this.gameState.getWarriorX() > 40) {
+					this.gameState.setWarriorMovement(true);
+				} else {
+					this.gameState.setWarriorMovement(false);
 				}
 			} 
 
 			// Client attempting to move right
 			else if (direction == GameState.Direction.RIGHT) {
-				if (this.gameState.getWarriorColumn() < 24) {
+				if (this.gameState.getWarriorX() < 24 * 32 - 29) {
 					this.gameState.setWarriorMovement(true);
+				} else {
+					this.gameState.setWarriorMovement(false);
 				}
 			}
 		}
