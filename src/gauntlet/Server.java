@@ -11,6 +11,9 @@ import java.net.ServerSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.state.StateBasedGame;
+
 /*
  *  Server
  * 
@@ -66,7 +69,7 @@ public class Server {
 	 * Starts the server and listens for the client connection. Once a client connects
 	 * the server stops listening for new clients.
 	 */
-	public void run() {
+	public void run(GameContainer container, StateBasedGame game, int delta) {
 		
 		// Listen for client connection
 		while (true) {
@@ -77,6 +80,8 @@ public class Server {
 				
 				String clientMsg = clientStream.readLine();
 				System.out.println("Client joined game");
+				gauntlet.clientThread = new GameThread(this, gauntlet.gameState, container, game, delta);
+				gauntlet.clientThread.start();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -142,9 +147,6 @@ public class Server {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-
-		System.out.println(cmd);
 
 		// Read x,y position
 		int index = cmd.charAt(0) - '0' + 1;
@@ -158,7 +160,19 @@ public class Server {
 		String direction = cmd.substring(index+1, index + cmd.charAt(index) - '0' + 1);
 		
 		gameState.setWarriorPosition(xPos, yPos);
-		gameState.setWarriorDirection(direction);
+		
+		if (direction.equals("up")) {
+			gameState.setWarriorDirection(GameState.Direction.UP);
+		} else if (direction.equals("do")) {
+			gameState.setWarriorDirection(GameState.Direction.DOWN);
+		} else if (direction.equals("ri")) {
+			gameState.setWarriorDirection(GameState.Direction.RIGHT);
+		} else if (direction.equals("le")) {
+			gameState.setWarriorDirection(GameState.Direction.LEFT);
+		} else if (direction.equals("no")) {
+			gameState.setWarriorDirection(GameState.Direction.STOP);
+			gameState.setWarriorMovement(false);
+		}
 	}
 	
 	/*

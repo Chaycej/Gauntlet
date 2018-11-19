@@ -4,24 +4,32 @@ import java.util.concurrent.atomic.*;
 
 public class GameState implements java.io.Serializable {
 	
-	private String warriorDirection;
-	private String rangerDirection;
+	enum Direction {
+		UP, DOWN, RIGHT, LEFT, STOP;
+	}
+	
+	private Direction warriorDirection;
+	private boolean warriorIsMoving;
+	private Direction rangerDirection;
+	private boolean rangerIsMoving;
 	private AtomicInteger warriorX;
 	private AtomicInteger warriorY;
 	private AtomicInteger rangerX;
 	private AtomicInteger rangerY;
 	
 	public GameState() {
-		this.warriorX = new AtomicInteger();
-		this.warriorY = new AtomicInteger();
-		this.warriorDirection = "do";
-		this.rangerX = new AtomicInteger();
-		this.rangerY = new AtomicInteger();
-		this.rangerDirection = "do";
+		this.warriorX = new AtomicInteger(200);
+		this.warriorY = new AtomicInteger(200);
+		this.warriorDirection = Direction.DOWN;
+		this.warriorIsMoving = false;
+		this.rangerX = new AtomicInteger(280);
+		this.rangerY = new AtomicInteger(200);
+		this.rangerDirection = Direction.DOWN;
+		this.rangerIsMoving = false;
 	}
 	
 	/*
-	 *  Sets the warrior's new position
+	 *  Sets the warrior's new position.
 	 */
 	synchronized void setWarriorPosition(int newx, int newy) {
 		this.warriorX.set(newx);
@@ -29,7 +37,7 @@ public class GameState implements java.io.Serializable {
 	}
 	
 	/*
-	 *  Sets the ranger's new position
+	 *  Sets the ranger's new position.
 	 */
 	synchronized void setRangerPosition(int newx, int newy) {
 		this.rangerX.set(newx);
@@ -37,31 +45,59 @@ public class GameState implements java.io.Serializable {
 	}
 	
 	/*
-	 *  Sets the warrior's new direction
+	 *  Sets the warrior's new direction.
 	 */
-	synchronized void setWarriorDirection(String direction) {
+	synchronized void setWarriorDirection(Direction direction) {
 		this.warriorDirection = direction;
 	}
 	
 	/*
-	 *  Returns the warrior's most recent direction
+	 *  Returns the warrior's most recent direction.
 	 */
-	synchronized String getWarriorDirection() {
+	synchronized Direction getWarriorDirection() {
 		return this.warriorDirection;
 	}
 	
 	/*
-	 *  Sets the ranger's new direction
+	 *  Returns true if the warrior is moving.
 	 */
-	synchronized void setRangerDirection(String direction) {
+	public boolean warriorIsMoving() {
+		return this.warriorIsMoving;
+	}
+	
+	/*
+	 *  Sets the warrior's movement
+	 */
+	public void setWarriorMovement(boolean bool) {
+		this.warriorIsMoving = bool;
+	}
+	
+	/*
+	 *  Sets the ranger's new direction.
+	 */
+	synchronized void setRangerDirection(Direction direction) {
 		this.rangerDirection = direction;
 	}
 	
 	/*
-	 *  Returns the ranger's new direction
+	 *  Returns the ranger's new direction.
 	 */
-	synchronized String getRangerDirection() {
+	synchronized Direction getRangerDirection() {
 		return this.rangerDirection;
+	}
+	
+	/*
+	 *  Returns true if the ranger is moving.
+	 */
+	public boolean rangerIsMoving() {
+		return this.rangerIsMoving;
+	}
+	
+	/*
+	 *  Sets the ranger's movement
+	 */
+	public void setRangerMovement(boolean bool) {
+		this.rangerIsMoving = bool;
 	}
 	
 	/*
