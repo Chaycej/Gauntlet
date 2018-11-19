@@ -3,6 +3,7 @@ package gauntlet;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.InetAddress;
@@ -17,6 +18,8 @@ public class Client {
 	public static final String DOWN_CMD = "2do\n";
 	public static final String RIGHT_CMD = "2ri\n";
 	public static final String LEFT_CMD = "2le\n";
+	
+	public static final String FIRE_CMD = "1fi\n";
 	
 	public static final int PORT = 3303;
 	public InetAddress serverAddress;
@@ -85,9 +88,20 @@ public class Client {
 		return cmd;
 	}
 	
+	public GameState readGameState() {
+		try {
+			ObjectInputStream in = new ObjectInputStream(this.socket.getInputStream());
+			GameState gameState = (GameState)in.readObject();
+			return gameState;
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public void sendMovement(String cmd, Gauntlet gauntlet) {
 		StringBuilder cmdBuilder = new StringBuilder();
-		cmdBuilder.append(this.POS_CMD);
+		cmdBuilder.append(POS_CMD);
 		int xPos = (int)gauntlet.warrior.getX();
 		int xLength = (int)Math.log10(xPos) + 1;
 		cmdBuilder.append(xLength);

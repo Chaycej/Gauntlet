@@ -3,12 +3,16 @@ package gauntlet;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.ServerSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.state.StateBasedGame;
 
 /*
  *  Server
@@ -41,6 +45,7 @@ public class Server {
 	public Socket clientSocket;
 	public BufferedReader clientStream;
 	public DataOutputStream serverStream;
+	public Gauntlet gauntlet;
 	InetAddress clientAddr;
 	
 	/*
@@ -48,12 +53,13 @@ public class Server {
 	 * 
 	 * Initializes a server object and opens a UDP socket on port 3303.
 	 */
-	public Server() {
+	public Server(Gauntlet gauntlet) {
 		try {
 			this.socket = new ServerSocket(PORT);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		this.gauntlet = gauntlet;
 		System.out.println("DEBUG: Started server");
 	}
 	
@@ -63,7 +69,7 @@ public class Server {
 	 * Starts the server and listens for the client connection. Once a client connects
 	 * the server stops listening for new clients.
 	 */
-	public void run() {
+	public void run(GameContainer container, StateBasedGame game, int delta) {
 		
 		// Listen for client connection
 		while (true) {
@@ -73,8 +79,9 @@ public class Server {
 				this.serverStream = new DataOutputStream(this.clientSocket.getOutputStream());
 				
 				String clientMsg = clientStream.readLine();
-				System.out.println(clientMsg);
-				
+				System.out.println("Client joined game");
+				gauntlet.clientThread = new GameThread(this, gauntlet.gameState, container, game, delta);
+				gauntlet.clientThread.start();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -108,6 +115,15 @@ public class Server {
 		}
 	}
 	
+	public void sendGameState(GameState gameState) {
+		try {
+			ObjectOutputStream output = new ObjectOutputStream(this.clientSocket.getOutputStream());
+			output.writeObject(gameState);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/*
 	 * readClientState
 	 * 
@@ -117,8 +133,13 @@ public class Server {
 	 * Example:
 	 * 	"1p320032002up"
 	 * 
+	 * The global game state is updated by setting the new client's state
+	 * 
+	 * Note: Server state is never edited in the GameState object in this method.
+	 * 			Server state is initialized later on in the server game loop.
+	 * 
 	 */
-	public GameState readClientState() {
+	public void readClientState(GameState gameState) {
 		
 		String cmd = null;
 		try {
@@ -126,9 +147,7 @@ public class Server {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		System.out.println(cmd);
-		
+
 		// Read x,y position
 		int index = cmd.charAt(0) - '0' + 1;
 		int xLength = cmd.charAt(index) - '0';
@@ -140,7 +159,20 @@ public class Server {
 		
 		String direction = cmd.substring(index+1, index + cmd.charAt(index) - '0' + 1);
 		
-		return new GameState(direction, xPos, yPos);
+		gameState.setWarriorPosition(xPos, yPos);
+		
+		if (direction.equals("up")) {
+			gameState.setWarriorDirection(GameState.Direction.UP);
+		} else if (direction.equals("do")) {
+			gameState.setWarriorDirection(GameState.Direction.DOWN);
+		} else if (direction.equals("ri")) {
+			gameState.setWarriorDirection(GameState.Direction.RIGHT);
+		} else if (direction.equals("le")) {
+			gameState.setWarriorDirection(GameState.Direction.LEFT);
+		} else if (direction.equals("no")) {
+			gameState.setWarriorDirection(GameState.Direction.STOP);
+			gameState.setWarriorMovement(false);
+		}
 	}
 	
 	/*
