@@ -45,7 +45,7 @@ public class GameThread extends Thread {
 			// Client attempting to move left
 			else if (direction == GameState.Direction.LEFT) {
 				if (this.gameState.getWarriorColumn() > 0) {
-					this.gameState.setRangerMovement(true);
+					this.gameState.setWarriorMovement(true);
 				}
 			} 
 
