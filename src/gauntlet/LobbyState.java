@@ -49,9 +49,7 @@ public class LobbyState extends BasicGameState{
 		if (input.isKeyDown(Input.KEY_SPACE)) {
 			if (gg.server == null) {
 				gg.server = new Server(gg);
-				gg.server.run();
-				gg.clientThread = new GameThread(gg.server, gg.gameState, container, game, delta);
-				gg.clientThread.start();
+				gg.server.run(container, game, delta);
 				gg.enterState(Gauntlet.GAMESTARTSTATE);
 			}
 		} 

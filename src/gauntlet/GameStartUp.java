@@ -86,156 +86,160 @@ public class GameStartUp extends BasicGameState{
 	 */
 	public void handleClient(GameContainer container, StateBasedGame game, int delta) {
 		Input input = container.getInput();
-		Gauntlet gg = (Gauntlet)game;
-		
-//		try {
-//			ObjectInputStream in = new ObjectInputStream(gg.client.socket.getInputStream());
-//			GameState gameState = (GameState)in.readObject();
-//			System.out.println("Got server game state");
-//			System.out.println("Server position is " + gameState.getRangerX() + " " + gameState.getRangerY());
-//		} catch (IOException | ClassNotFoundException e) {
-//			e.printStackTrace();
-//		}
+		Gauntlet gauntlet = (Gauntlet)game;
 		
 		//checks up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
-			if (gg.warrior.getRow() > 0) {
-				gg.client.sendMovement(Client.UP_CMD, gg);
-				String response = gg.client.readServerResponse(gg);
-
-				if (response.equals("y")) {
-					gg.warrior.northAnimation();
-					gg.warrior.setVelocity(new Vector(0, -0.1f));
-				}
-			} else {
-				gg.warrior.setVelocity(new Vector(0, 0f));
+			if (gauntlet.warrior.getRow() > 0) {
+				gauntlet.client.sendMovement(Client.UP_CMD, gauntlet);
 			}
-			gg.warrior.update(delta);
 		}
 		
 		//checks down movement
 		else if (input.isKeyDown(Input.KEY_DOWN)) {
-			if (gg.warrior.getRow() < gg.maxRow-1) {
-				gg.client.sendMovement(Client.DOWN_CMD, gg);
-				String response = gg.client.readServerResponse(gg);
-				if (response.equals("y")) {
-					gg.warrior.southAnimation();
-					gg.warrior.setVelocity(new Vector(0, 0.1f));
-				}
-			} else {
-				gg.warrior.setVelocity(new Vector(0, 0f));
+			if (gauntlet.warrior.getRow() < gauntlet.maxRow-1) {
+				gauntlet.client.sendMovement(Client.DOWN_CMD, gauntlet);
 			}
-			gg.warrior.update(delta);
 		}
 		
 		//checks right movement
 		else if (input.isKeyDown(Input.KEY_RIGHT)) {
-			if (gg.warrior.getColumn() < gg.maxColumn-1) {
-				gg.client.sendMovement(Client.RIGHT_CMD, gg);
-				String response = gg.client.readServerResponse(gg);
-				if (response.equals("y")) {
-					gg.warrior.eastAnimation();
-					gg.warrior.setVelocity(new Vector(0.1f, 0));
-				}
-			} else {
-				gg.warrior.setVelocity(new Vector(0, 0f));
+			if (gauntlet.warrior.getColumn() < gauntlet.maxColumn-1) {
+				gauntlet.client.sendMovement(Client.RIGHT_CMD, gauntlet);
 			}
-			gg.warrior.update(delta);
 		}
 		
 		//checks left movement
 		else if (input.isKeyDown(Input.KEY_LEFT)) {
-			if (gg.warrior.getColumn() > 0) {
-				gg.client.sendMovement(Client.LEFT_CMD, gg);
-				String response = gg.client.readServerResponse(gg);
-				if (response.equals("y")) {
-					gg.warrior.westAnimation();
-					gg.warrior.setVelocity(new Vector(-0.1f, 0));
-				} 
-			} else {
-				gg.warrior.setVelocity(new Vector(0, 0f));
-			}	
-			gg.warrior.update(delta);
-		}
-		
-		else if (input.isKeyPressed(Input.KEY_SPACE)) {
-			gg.wProjectiles.add(new Projectiles(gg.warrior.getPosition().getX(),gg.warrior.getPosition().getY(),gg.warrior.getDirectionFacing()));
-		}
-		
-		for (int i = 0; i < gg.wProjectiles.size(); i++) {
-			
-			gg.wProjectiles.get(i).update(delta);
-			if(gg.wProjectiles.get(i).getColumn() > gg.maxColumn 
-					|| gg.wProjectiles.get(i).getRow() > gg.maxRow 
-					|| gg.wProjectiles.get(i).getColumn() < 0
-					|| gg.wProjectiles.get(i).getRow() < 0) {
-				gg.wProjectiles.remove(i);
+			if (gauntlet.warrior.getColumn() > 0) {
+				gauntlet.client.sendMovement(Client.LEFT_CMD, gauntlet);
 			}
 		}
+		
+		// Not moving
+		else {
+			gauntlet.client.sendMovement("2no\n", gauntlet);
+		}
+		
+		// Projectile
+		if (input.isKeyPressed(Input.KEY_SPACE)) {
+			gauntlet.wProjectiles.add(new Projectiles(gauntlet.warrior.getPosition().getX(),
+					gauntlet.warrior.getPosition().getY(), gauntlet.warrior.getDirectionFacing()));
+		}
+		
+		for (int i = 0; i < gauntlet.wProjectiles.size(); i++) {
+			gauntlet.wProjectiles.get(i).update(delta);
+			if(gauntlet.wProjectiles.get(i).getColumn() > gauntlet.maxColumn 
+					|| gauntlet.wProjectiles.get(i).getRow() > gauntlet.maxRow 
+					|| gauntlet.wProjectiles.get(i).getColumn() < 0
+					|| gauntlet.wProjectiles.get(i).getRow() < 0) {
+				gauntlet.wProjectiles.remove(i);
+			}
+		}
+		
+		// Update client from new game state sent from server
+		GameState newGameState = gauntlet.client.readGameState();
+		if (newGameState != null) {
+			
+			if (!newGameState.warriorIsMoving()) {
+				gauntlet.warrior.setVelocity(new Vector(0f, 0f));
+			}
+			
+			if (newGameState.getWarriorDirection() == GameState.Direction.UP) {
+				gauntlet.warrior.northAnimation();
+				if (newGameState.warriorIsMoving()) {
+					System.out.println("Moving up");
+					gauntlet.warrior.setVelocity(new Vector(0f, -0.1f));
+				}
+			} else if (newGameState.getWarriorDirection() == GameState.Direction.DOWN) {
+				gauntlet.warrior.southAnimation();
+				if (newGameState.warriorIsMoving()) {
+					System.out.println("Moving down");
+					gauntlet.warrior.setVelocity(new Vector(0f, 0.1f));
+				}
+			} else if (newGameState.getWarriorDirection() == GameState.Direction.LEFT) {
+				gauntlet.warrior.westAnimation();
+				if (newGameState.warriorIsMoving()) {
+					System.out.println("Moving left");
+					gauntlet.warrior.setVelocity(new Vector(-0.1f, 0f));
+				}
+			} else if (newGameState.getWarriorDirection() == GameState.Direction.RIGHT) {
+				gauntlet.warrior.eastAnimation();
+				if (newGameState.warriorIsMoving()) {
+					System.out.println("Moving right");
+					gauntlet.warrior.setVelocity(new Vector(0.1f, 0f));
+				}
+			
+			}
+		}
+		
+		gauntlet.warrior.update(delta);
 	}
 	
 	public void handleServer(GameContainer container, StateBasedGame game, int delta) {
 		
 		Input input = container.getInput();
-		Gauntlet gg = (Gauntlet)game;
-		
-		String direction = null;
+		Gauntlet gauntlet = (Gauntlet)game;
 		
 		//checks up movement
 		if (input.isKeyDown(Input.KEY_W)) {
-			if (gg.ranger.getRow() > 0) {
-				gg.ranger.northAnimation();
-				direction = "up";
-				gg.ranger.setVelocity(new Vector(0, -0.1f));
+			if (gauntlet.ranger.getRow() > 0) {
+				gauntlet.ranger.northAnimation();
+				gauntlet.gameState.setRangerDirection(GameState.Direction.UP);
+				gauntlet.gameState.setRangerMovement(true);
+				gauntlet.ranger.setVelocity(new Vector(0, -0.1f));
 			} 
 		}
 		
 		//checks down movement
 		else if (input.isKeyDown(Input.KEY_S)) {
-			if (gg.ranger.getRow() < gg.maxRow-1) {
-				gg.ranger.southAnimation();
-				direction = "do";
-				gg.ranger.setVelocity(new Vector(0, 0.1f));
+			if (gauntlet.ranger.getRow() < gauntlet.maxRow-1) {
+				gauntlet.ranger.southAnimation();
+				gauntlet.gameState.setRangerDirection(GameState.Direction.DOWN);
+				gauntlet.gameState.setRangerMovement(true);
+				gauntlet.ranger.setVelocity(new Vector(0, 0.1f));
 			}
 		}
 		
 		//checks right movement
 		else if (input.isKeyDown(Input.KEY_D)) {
-			if (gg.ranger.getColumn() < gg.maxColumn) {
-				gg.ranger.eastAnimation();
-				direction = "ri";
-				gg.ranger.setVelocity(new Vector(0.1f, 0));
+			if (gauntlet.ranger.getColumn() < gauntlet.maxColumn) {
+				gauntlet.ranger.eastAnimation();
+				gauntlet.server.
+				gauntlet.gameState.setRangerDirection(GameState.Direction.RIGHT);
+				gauntlet.gameState.setRangerMovement(true);
+				gauntlet.ranger.setVelocity(new Vector(0.1f, 0));
 			}
 		}
 		
 		//checks left movement
 		else if (input.isKeyDown(Input.KEY_A)) {
-			if (gg.ranger.getColumn() > 0) {
-				gg.ranger.westAnimation();
-				direction = "le";
-				gg.ranger.setVelocity(new Vector(-0.1f, 0));
+			if (gauntlet.ranger.getColumn() > 0) {
+				gauntlet.ranger.westAnimation();
+				gauntlet.gameState.setRangerDirection(GameState.Direction.LEFT);
+				gauntlet.gameState.setRangerMovement(true);
+				gauntlet.ranger.setVelocity(new Vector(-0.1f, 0));
 			}
 		}
 		
-		// Update warrior position and direction
-		gg.warrior.setPosition((float)gg.gameState.getWarriorX(), (float)gg.gameState.getWarriorY());
-		switch(gg.gameState.getWarriorDirection()) {
-		case "up":
-			gg.warrior.northAnimation();
-		case "le":
-			gg.warrior.westAnimation();
-		case "ri":
-			gg.warrior.eastAnimation();
-		case "do":
-			gg.warrior.southAnimation();
-		default:
-			System.out.println("Unrecognized direction");
-		}
+//		// Update warrior position and direction
+//		gg.warrior.setPosition((float)gg.gameState.getWarriorX(), (float)gg.gameState.getWarriorY());
+//		switch(gg.gameState.getWarriorDirection()) {
+//		case "up":
+//			gg.warrior.northAnimation();
+//		case "le":
+//			gg.warrior.westAnimation();
+//		case "ri":
+//			gg.warrior.eastAnimation();
+//		case "do":
+//			gg.warrior.southAnimation();
+//		default:
+//			System.out.println("Unrecognized direction");
+//		}
 		
-		gg.gameState.setRangerDirection(direction);
-		gg.gameState.setRangerPosition((int)gg.ranger.getX(), (int)gg.ranger.getY());
-		//gg.server.sendGameState(gg.gameState);
-		gg.ranger.update(delta);
+		gauntlet.gameState.setRangerPosition((int)gauntlet.ranger.getX(), (int)gauntlet.ranger.getY());
+		gauntlet.server.sendGameState(gauntlet.gameState);
+		gauntlet.ranger.update(delta);
 	}
 
 	@Override
