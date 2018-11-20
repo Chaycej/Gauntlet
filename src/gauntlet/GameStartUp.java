@@ -91,7 +91,7 @@ public class GameStartUp extends BasicGameState{
 		GameState clientState = new GameState();
 		clientState.setWarriorPosition((int)gauntlet.warrior.getX(), (int)gauntlet.warrior.getY());
 		
-		//gauntlet.skeleton.moveGhost(gauntlet, delta);
+		gauntlet.skeleton.moveGhost(gauntlet, delta);
 		
 		//checks up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
@@ -180,25 +180,16 @@ public class GameStartUp extends BasicGameState{
 			
 			if (newGameState.getRangerDirection() == GameState.Direction.UP) {
 				gauntlet.ranger.northAnimation();
-				if (newGameState.rangerIsMoving()) {
-					gauntlet.ranger.setPosition(newGameState.getRangerX(), newGameState.getRangerY());
-				}
+				gauntlet.ranger.setPosition(newGameState.getRangerX(), newGameState.getRangerY());
 			} else if (newGameState.getRangerDirection() == GameState.Direction.DOWN) {
 				gauntlet.ranger.southAnimation();
-				if (newGameState.rangerIsMoving()) {
-					gauntlet.ranger.setPosition(newGameState.getRangerX(), newGameState.getRangerY());
-				}
+				gauntlet.ranger.setPosition(newGameState.getRangerX(), newGameState.getRangerY());
 			} else if (newGameState.getRangerDirection() == GameState.Direction.LEFT) {
 				gauntlet.ranger.westAnimation();
-				if (newGameState.rangerIsMoving()) {
-					gauntlet.ranger.setPosition(newGameState.getRangerX(), newGameState.getRangerY());
-				}
+				gauntlet.ranger.setPosition(newGameState.getRangerX(), newGameState.getRangerY());
 			} else if (newGameState.getRangerDirection() == GameState.Direction.RIGHT) {
 				gauntlet.ranger.eastAnimation();
-				if (newGameState.rangerIsMoving()) {
-					gauntlet.ranger.setPosition(newGameState.getRangerX(), newGameState.getRangerY());
-				}
-			
+				gauntlet.ranger.setPosition(newGameState.getRangerX(), newGameState.getRangerY());
 			}
 		}
 		
@@ -254,6 +245,8 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.gameState.setRangerMovement(false);
 			gauntlet.ranger.setVelocity(new Vector(0f, 0f));
 		}
+		
+		gauntlet.gameState.setRangerPosition((int)gauntlet.ranger.getX(), (int)gauntlet.ranger.getY());
 		
 		
 		gauntlet.warrior.setPosition(gauntlet.gameState.getWarriorX(), gauntlet.gameState.getWarriorY());
