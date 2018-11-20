@@ -1,7 +1,5 @@
 package gauntlet;
 
-import java.util.ArrayList;
-import java.util.Random;
 import jig.Entity;
 import jig.ResourceManager;
 import jig.Vector;
@@ -148,18 +146,14 @@ public class Skeleton extends Entity {
 	public void getMinPath(int row, int col) {
 		this.direction = 3;
 		double min = this.path[row+1][col];
-		System.out.println("south is "+ min);
-		System.out.println("north is "+ this.path[row-1][col]);
 		if (this.path[row-1][col] < min) {
 			min = this.path[row-1][col];
 			this.direction = 1;
 		}
-		System.out.println("east is "+ this.path[row][col+1]);
 		if (this.path[row][col+1] < min) {
 			min = this.path[row][col+1];
 			direction = 4;
 		}
-		System.out.println("west is "+ this.path[row][col-1]);
 		if (this.path[row][col-1] < min) {
 			min = this.path[row][col-1];
 			direction = 2;
@@ -168,45 +162,6 @@ public class Skeleton extends Entity {
 		}
 	}
 	
-	/*
-	 * Returns the an adjacent cell for the ghost to take.
-	 * 
-	 * 1 - Up
-	 * 2 - left
-	 * 3 - down
-	 * 4 - right
-	 */
-//	public int getMaxPath(int row, int col) {
-//		ArrayList<Integer> directions = new ArrayList<>();
-//		int direction = 3;
-//		double max = this.path[row+1][col];
-//		
-//		if (this.path[row+1][col] < 1000) {
-//			directions.add(3);
-//		}
-//		if (this.path[row-1][col] > max && this.path[row-1][col] < 1000) {
-//			directions.add(1);
-//			max = this.path[row-1][col];
-//			direction = 1;
-//		}
-//		if (this.path[row][col+1] < max && this.path[row][col+1] < 1000) {
-//			directions.add(4);
-//			max = this.path[row][col+1];
-//			direction = 4;
-//		}
-//		if (this.path[row][col-1] < max && this.path[row][col-1] < 1000) {
-//			directions.add(2);
-//			max = this.path[row][col-1];
-//			direction = 2;
-//		}
-//		Random random = new Random();
-//		int rand = random.nextInt(2) + 1;
-//		if (rand < 2) {
-//			return direction;
-//		}
-//		return directions.get(random.nextInt(directions.size()));
-//	}
-
 	/*
 	 * Moves the ghost along a path to intercept pacman
 	 */
@@ -228,7 +183,6 @@ public class Skeleton extends Entity {
 		buildPath( gg, gg.warrior.getRow(), gg.warrior.getColumn());
 		getMinPath( row, col);
 		this.visited[row][col] = 1;
-		System.out.println("direction is  "+ this.direction);
 		
 		// Moving left
 		if (direction == 2) {
@@ -257,33 +211,6 @@ public class Skeleton extends Entity {
 		if (row == gg.warrior.getRow() && col == gg.warrior.getColumn()) {
 			this.setVelocity(new Vector(0f, 0f));
 		}
-//			
-//			// Moving down
-//			
-//			if (this.getVelocity().getY() > 0) {
-//				if (gg.map[row+1][col] == 1) {
-//					this.setVelocity(new Vector(0f, 0f));
-//				}
-//			}	
-//			// Moving up
-//			if (this.getVelocity().getY() < 0) {
-//				if (gg.map[row-1][col] == 1) {
-//					this.setVelocity(new Vector(0f, 0f));
-//				}
-//			}	
-//			// Moving right
-//			if (this.getVelocity().getX() > 0) {
-//				if (gg.map[row][col+1] == 1) {
-//					this.setVelocity(new Vector(0f, 0f));
-//				}
-//			}
-//		
-//			//if (this.getVelocity().getX() < 0) {
-//				if (gg.map[row][col-1] == 1) {
-//					this.setVelocity(new Vector(0f, 0f));
-//				}
-//			//}
-//		}
 		this.update(delta);
 	}
 	
