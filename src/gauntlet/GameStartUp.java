@@ -99,6 +99,7 @@ public class GameStartUp extends BasicGameState{
 		//checks up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
 			if (gauntlet.warrior.getRow() > 0) {
+				gauntlet.warrior.setDirection(GameState.Direction.UP);
 				clientState.setWarriorDirection(GameState.Direction.UP);
 				gauntlet.client.sendGameState(clientState);
 			}
@@ -107,6 +108,7 @@ public class GameStartUp extends BasicGameState{
 		//checks down movement
 		else if (input.isKeyDown(Input.KEY_DOWN)) {
 			if (gauntlet.warrior.getRow() < gauntlet.maxRow-1) {
+				gauntlet.warrior.setDirection(GameState.Direction.DOWN);
 				clientState.setWarriorDirection(GameState.Direction.DOWN);
 				gauntlet.client.sendGameState(clientState);
 			}
@@ -115,6 +117,7 @@ public class GameStartUp extends BasicGameState{
 		//checks right movement
 		else if (input.isKeyDown(Input.KEY_RIGHT)) {
 			if (gauntlet.warrior.getColumn() < gauntlet.maxColumn-1) {
+				gauntlet.warrior.setDirection(GameState.Direction.RIGHT);
 				clientState.setWarriorDirection(GameState.Direction.RIGHT);
 				gauntlet.client.sendGameState(clientState);
 			}
@@ -123,16 +126,18 @@ public class GameStartUp extends BasicGameState{
 		//checks left movement
 		else if (input.isKeyDown(Input.KEY_LEFT)) {
 			if (gauntlet.warrior.getColumn() > 0) {
+				gauntlet.warrior.setDirection(GameState.Direction.LEFT);
 				clientState.setWarriorDirection(GameState.Direction.LEFT);
 				gauntlet.client.sendGameState(clientState);
 			}
 		}
 		
 		// Projectile
-		
-		if (input.isKeyPressed(Input.KEY_SPACE)) {
+		else if (input.isKeyPressed(Input.KEY_SPACE)) {
 				gauntlet.wProjectiles.add(new Projectiles(gauntlet.warrior.getPosition().getX(),
 						gauntlet.warrior.getPosition().getY(), gauntlet.warrior.getDirection()));
+			clientState.setWarriorDirection(GameState.Direction.STOP);
+			gauntlet.client.sendGameState(clientState);
 		}
 			
 		// Not moving

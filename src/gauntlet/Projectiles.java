@@ -7,7 +7,7 @@ import jig.Vector;
 class Projectiles extends Entity {
 	public Vector velocity;
 	private int countdown;
-	private float speed = 0.05f;
+	private float speed = 0.5f;
 	
 	public Projectiles(final float x, final float y, GameState.Direction direction) {
 		super(x, y);
@@ -28,12 +28,12 @@ class Projectiles extends Entity {
 	}
 	
 	public int getRow() {
-		int row = (int) ((super.getY())/32);	
+		int row = (int) ((this.getY())/32);	
 		return row;
 	}
 	
 	public int getColumn() {
-		int col = (int) (super.getX()/32);
+		int col = (int) (this.getX()/32);
 		return col;
 	}
 	
