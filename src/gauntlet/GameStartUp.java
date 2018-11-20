@@ -23,6 +23,7 @@ public class GameStartUp extends BasicGameState{
 		Gauntlet gg = (Gauntlet)game;
 		gg.warrior.setPosition(gg.warriorX,gg.warriorY);
 		gg.ranger.setPosition(gg.rangerX, gg.warriorY);
+		gg.skeleton.setPosition(gg.skeletonX, gg.skeletonY);
 	}
 
 	public void renderMap(GameContainer container, StateBasedGame game, Graphics g) {
@@ -31,7 +32,7 @@ public class GameStartUp extends BasicGameState{
 		int y = 16;
 		for (int row=0; row<gg.maxRow; row++ ) {
 			for (int col=0; col<gg.maxColumn; col++) {
-				if ( gg.map[row][col] == 48) {		//equals a 0 is a path
+				if ( gg.map[row][col] == 0) {		//equals a 0 is a path
 					gg.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
 					gg.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.pathTile));
 				} else {							//equals a 1 is a wall
@@ -54,7 +55,7 @@ public class GameStartUp extends BasicGameState{
 		gauntlet.warrior.setVelocity(new Vector(0f,0f));
 		gauntlet.ranger.render(g);
 		gauntlet.ranger.setVelocity(new Vector(0f,0f));
-		
+		gauntlet.skeleton.render(g);
 		for (int i = 0; i < gauntlet.wProjectiles.size(); i++) {
 			gauntlet.wProjectiles.get(i).render(g);
 		}
@@ -62,7 +63,6 @@ public class GameStartUp extends BasicGameState{
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-		Input input = container.getInput();
 		Gauntlet gauntlet = (Gauntlet)game;
 
 		if (gauntlet.client != null) {
@@ -70,6 +70,7 @@ public class GameStartUp extends BasicGameState{
 		} else {
 			handleServer(container, game, delta);
 		}
+		gauntlet.skeleton.moveGhost(gauntlet, delta);
 	}
 	
 	/*
