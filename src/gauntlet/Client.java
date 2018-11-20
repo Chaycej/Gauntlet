@@ -4,20 +4,12 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.InetAddress;
 
 public class Client {
-	
-	/*
-	 *  Client commands
-	 */
-	public static final String POS_CMD = "1p";
-	public static final String UP_CMD = "2up\n";
-	public static final String DOWN_CMD = "2do\n";
-	public static final String RIGHT_CMD = "2ri\n";
-	public static final String LEFT_CMD = "2le\n";
 	
 	public static final String FIRE_CMD = "1fi\n";
 	
@@ -30,7 +22,7 @@ public class Client {
 	/*
 	 * Client
 	 * 
-	 * Creates a client by opening a UDP socket on port 3303.
+	 * Creates a client by opening a TCP socket on port 3303.
 	 */
 	public Client(String serverIP) {
 		try {
@@ -38,6 +30,7 @@ public class Client {
 			this.fromServer = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 			this.toServer = new DataOutputStream(this.socket.getOutputStream());
 		} catch (IOException e) {
+			System.out.println("Could not connect");
 			e.printStackTrace();
 		}
 	}
@@ -99,19 +92,13 @@ public class Client {
 		}
 	}
 	
-	public void sendMovement(String cmd, Gauntlet gauntlet) {
-		StringBuilder cmdBuilder = new StringBuilder();
-		cmdBuilder.append(POS_CMD);
-		int xPos = (int)gauntlet.warrior.getX();
-		int xLength = (int)Math.log10(xPos) + 1;
-		cmdBuilder.append(xLength);
-		cmdBuilder.append(xPos);
-		int yPos = (int)gauntlet.warrior.getY();
-		int yLength = (int)Math.log10(yPos) + 1;
-		cmdBuilder.append(yLength);
-		cmdBuilder.append(yPos);
-		cmdBuilder.append(cmd);
-		gauntlet.client.sendCommand(cmdBuilder.toString());
+	public void sendGameState(GameState gameState) {
+		try {
+			ObjectOutputStream output = new ObjectOutputStream(this.socket.getOutputStream());
+			output.writeObject(gameState);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/*

@@ -9,18 +9,18 @@ class Projectiles extends Entity {
 	private int countdown;
 	private float speed = 0.05f;
 	
-	public Projectiles(final float x, final float y, String direction) {
+	public Projectiles(final float x, final float y, GameState.Direction direction) {
 		super(x, y);
-		if (direction == "N") {
+		if (direction == GameState.Direction.UP) {
 			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.arrowN));
 			this.velocity = new Vector(0.0f, -speed);
-		}else if (direction == "S") {
+		}else if (direction == GameState.Direction.DOWN) {
 			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.arrowS));
 			this.velocity = new Vector(0.0f, speed);
-		}else if (direction == "E") {
+		}else if (direction == GameState.Direction.RIGHT) {
 			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.arrowE));
 			this.velocity = new Vector(speed, 0.0f);
-		}else if (direction == "W") {
+		}else if (direction == GameState.Direction.LEFT) {
 			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.arrowW));
 			this.velocity = new Vector(-speed, 0.0f);
 		}

@@ -3,6 +3,7 @@ package gauntlet;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -37,8 +38,6 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class Server {
 	
-	public static final String YES_CMD = "1y\n";
-	public static final String NO_CMD  = "1n\n";
 	public static final int PORT = 3303;
 	
 	public ServerSocket socket;
@@ -89,37 +88,10 @@ public class Server {
 		}
 	}
 	
-	/*
-	 * sendValidMove
-	 * 
-	 * Acknowledges the client's next move and sends a command allowing the client to move.
-	 */
-	public void sendValidMove() {
-		try {
-			this.serverStream.writeBytes(YES_CMD);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/*
-	 * sendInvalidMove
-	 * 
-	 * Sends an invalid move command to the client.
-	 */
-	public void sendInvalidMove(InetAddress clientAddr) {
-		try {
-			this.serverStream.writeBytes(NO_CMD);
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	public void sendGameState(GameState gameState) {
 		try {
 			ObjectOutputStream output = new ObjectOutputStream(this.clientSocket.getOutputStream());
 			output.writeObject(gameState);
-			System.out.println("Sent game state");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -128,51 +100,16 @@ public class Server {
 	/*
 	 * readClientState
 	 * 
-	 * Reads a client state. Client packets follow the format
-	 * "1p<x pos length><x pos><y pos length><y pos><direciton command length><direction command>		
-	 * 
-	 * Example:
-	 * 	"1p320032002up"
-	 * 
-	 * The global game state is updated by setting the new client's state
-	 * 
-	 * Note: Server state is never edited in the GameState object in this method.
-	 * 			Server state is initialized later on in the server game loop.
-	 * 
+	 *  Reads a client's state and returns it.
 	 */
-	public void readClientState(GameState gameState) {
-		
-		String cmd = null;
+	public GameState readClientState() {
 		try {
-			cmd = this.clientStream.readLine();
-		} catch (IOException e) {
+			ObjectInputStream in = new ObjectInputStream(this.clientSocket.getInputStream());
+			GameState clientState = (GameState)in.readObject();
+			return clientState;
+		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
-		}
-
-		// Read x,y position
-		int index = cmd.charAt(0) - '0' + 1;
-		int xLength = cmd.charAt(index) - '0';
-		int xPos = Integer.parseInt(cmd.substring(index+1, index + xLength + 1));
-		index += xLength + 1;
-		int yLength = cmd.charAt(index) - '0';
-		int yPos = Integer.parseInt(cmd.substring(index+1, index + yLength + 1));
-		index += yLength + 1;
-		
-		String direction = cmd.substring(index+1, index + cmd.charAt(index) - '0' + 1);
-		
-		gameState.setWarriorPosition(xPos, yPos);
-		
-		if (direction.equals("up")) {
-			gameState.setWarriorDirection(GameState.Direction.UP);
-		} else if (direction.equals("do")) {
-			gameState.setWarriorDirection(GameState.Direction.DOWN);
-		} else if (direction.equals("ri")) {
-			gameState.setWarriorDirection(GameState.Direction.RIGHT);
-		} else if (direction.equals("le")) {
-			gameState.setWarriorDirection(GameState.Direction.LEFT);
-		} else if (direction.equals("no")) {
-			gameState.setWarriorDirection(GameState.Direction.STOP);
-			gameState.setWarriorMovement(false);
+			return null;
 		}
 	}
 	
