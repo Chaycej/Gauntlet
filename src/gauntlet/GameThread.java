@@ -77,9 +77,6 @@ public class GameThread extends Thread {
 			// Update client's position
 			this.gameState.setWarriorPosition(clientState.getWarriorX(), clientState.getWarriorY());
 			
-			
-			System.out.println("Skeleton x is " + this.gameState.skeletonList.get(0).getX());
-			System.out.println("Skeleton y is " + this.gameState.skeletonList.get(0).getY());
 			this.server.sendGameState(this.gameState);
 		}
 	}
