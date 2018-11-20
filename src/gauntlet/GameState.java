@@ -1,5 +1,6 @@
 package gauntlet;
 
+import java.util.ArrayList;
 import java.util.concurrent.atomic.*;
 
 public class GameState implements java.io.Serializable {
@@ -17,15 +18,20 @@ public class GameState implements java.io.Serializable {
 	private AtomicInteger rangerX;
 	private AtomicInteger rangerY;
 	
+	public ArrayList<Skeleton> skeletonList;
+	
 	public GameState() {
 		this.warriorX = new AtomicInteger(200);
 		this.warriorY = new AtomicInteger(200);
 		this.warriorDirection = Direction.DOWN;
 		this.warriorIsMoving = false;
+		
 		this.rangerX = new AtomicInteger(280);
 		this.rangerY = new AtomicInteger(200);
 		this.rangerDirection = Direction.DOWN;
 		this.rangerIsMoving = false;
+		
+		skeletonList = new ArrayList<>();
 	}
 	
 	/*
