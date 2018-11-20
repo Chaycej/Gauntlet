@@ -79,7 +79,7 @@ class Warrior extends Entity {
 		return this.direction;
 	}
 	
-	public void setDireciton(GameState.Direction direction) {
+	public void setDirection(GameState.Direction direction) {
 		this.direction = direction;
 	}
 	

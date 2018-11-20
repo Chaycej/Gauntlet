@@ -58,7 +58,6 @@ public class LobbyState extends BasicGameState{
 		if (input.isKeyDown(Input.KEY_ENTER)) {
 			if (gg.client == null) {
 				gg.client = new Client(tf.getText());
-				gg.client.joinServer();
 				gg.enterState(Gauntlet.GAMESTARTSTATE);
 			}
 		}

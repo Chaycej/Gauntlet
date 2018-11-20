@@ -4,7 +4,7 @@ import jig.Entity;
 import jig.ResourceManager;
 import jig.Vector;
 
-public class Skeleton extends Entity {
+public class Skeleton extends Entity implements java.io.Serializable {
 	public Vector velocity;
 	private int countdown;
 	private double[][] path;
@@ -14,6 +14,9 @@ public class Skeleton extends Entity {
 	int direction;
 	int previousTargetCol;
 	int previousTargetRow;
+	
+	int skeletonX;
+	int skeletonY;
 	
 	public Skeleton(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
@@ -93,7 +96,7 @@ public class Skeleton extends Entity {
 	 * Builds a grid of optimal adjacent moves using the A* algorithm
 	 * 
 	 */
-	public void buildPath(Gauntlet gg, int destRow, int destCol) {
+	synchronized public void buildPath(Gauntlet gg, int destRow, int destCol) {
 		int row = getRow();
 		int col = getColumn();
 		
@@ -143,7 +146,7 @@ public class Skeleton extends Entity {
 	 * 3 - down
 	 * 4 - right
 	 */
-	public void getMinPath(int row, int col) {
+	synchronized public void getMinPath(int row, int col) {
 		this.direction = 3;
 		double min = this.path[row+1][col];
 		if (this.path[row-1][col] < min) {
@@ -165,7 +168,7 @@ public class Skeleton extends Entity {
 	/*
 	 * Moves the ghost along a path to intercept pacman
 	 */
-	public void moveGhost(Gauntlet gg, int delta) {
+	synchronized public void moveGhost(Gauntlet gg, int delta) {
 		int row = getRow();
 		int col = getColumn();
 		
