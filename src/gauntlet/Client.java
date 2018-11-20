@@ -36,21 +36,6 @@ public class Client {
 	}
 	
 	/*
-	 * joinServer
-	 * 
-	 * Attempts to join the server using the server's address.
-	 */
-	public void joinServer() {
-		String msg = "Join\n";
-		
-		try {
-			this.toServer.writeBytes(msg);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/*
 	 * sendCommand
 	 * 
 	 * Sends a command the server asking to move/attack.
