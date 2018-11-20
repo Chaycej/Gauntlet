@@ -15,6 +15,9 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	int previousTargetCol;
 	int previousTargetRow;
 	
+	int skeletonX;
+	int skeletonY;
+	
 	public Skeleton(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
 		velocity = new Vector(vx, vy);

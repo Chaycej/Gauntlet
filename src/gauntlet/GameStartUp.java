@@ -61,9 +61,9 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.wProjectiles.get(i).render(g);
 		}
 		
-		for (Skeleton skeleton : gauntlet.skeletonList) {
-			skeleton.render(g);
-		}
+//		for (Skeleton skeleton : gauntlet.skeletonList) {
+//			skeleton.render(g);
+//		}
 	}
 
 	@Override
@@ -129,7 +129,8 @@ public class GameStartUp extends BasicGameState{
 		}
 		
 		// Projectile
-		else if (input.isKeyPressed(Input.KEY_SPACE)) {
+		
+		if (input.isKeyPressed(Input.KEY_SPACE)) {
 				gauntlet.wProjectiles.add(new Projectiles(gauntlet.warrior.getPosition().getX(),
 						gauntlet.warrior.getPosition().getY(), gauntlet.warrior.getDirection()));
 		}
@@ -197,18 +198,15 @@ public class GameStartUp extends BasicGameState{
 				gauntlet.ranger.setPosition(newGameState.getRangerX(), newGameState.getRangerY());
 			}
 			
-			System.out.println("Client Skeleton x is " + newGameState.skeletonList.get(0).getX());
-			System.out.println("Client Skeleton y is " + newGameState.skeletonList.get(0).getY());
-			
-			gauntlet.skeletonList.get(0).setPosition(newGameState.skeletonList.get(0).getX(), newGameState.skeletonList.get(0).getY());
+			//gauntlet.skeletonList.get(0).setPosition(newGameState.skeletonList.get(0).getX(), newGameState.skeletonList.get(0).getY());
 			
 		}
 		
 		gauntlet.ranger.update(delta);
 		gauntlet.warrior.update(delta);
-		for (Skeleton skeleton : gauntlet.skeletonList) {
-			skeleton.update(delta);
-		}
+//		for (Skeleton skeleton : gauntlet.skeletonList) {
+//			skeleton.update(delta);
+//		}
 	}
 	
 	public void handleServer(GameContainer container, StateBasedGame game, int delta) {
@@ -216,12 +214,12 @@ public class GameStartUp extends BasicGameState{
 		Input input = container.getInput();
 		Gauntlet gauntlet = (Gauntlet)game;
 		
-		// Render skeletons
-		for (Skeleton skeleton : gauntlet.skeletonList) {
-			skeleton.moveGhost(gauntlet, delta);
-		}
-		
-		gauntlet.gameState.skeletonList = gauntlet.skeletonList;
+//		// Render skeletons
+//		for (Skeleton skeleton : gauntlet.skeletonList) {
+//			skeleton.moveGhost(gauntlet, delta);
+//		}
+//		
+//		gauntlet.gameState.skeletonList = gauntlet.skeletonList;
 		
 		//checks up movement
 		if (input.isKeyDown(Input.KEY_W)) {

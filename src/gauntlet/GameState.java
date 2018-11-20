@@ -18,7 +18,7 @@ public class GameState implements java.io.Serializable {
 	private AtomicInteger rangerX;
 	private AtomicInteger rangerY;
 	
-	public ArrayList<Skeleton> skeletonList;
+	//public ArrayList<Skeleton> skeletonList;
 	
 	public GameState() {
 		this.warriorX = new AtomicInteger(200);
@@ -31,7 +31,7 @@ public class GameState implements java.io.Serializable {
 		this.rangerDirection = Direction.DOWN;
 		this.rangerIsMoving = false;
 		
-		skeletonList = new ArrayList<>();
+		//skeletonList = new ArrayList<>();
 	}
 	
 	/*
