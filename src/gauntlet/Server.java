@@ -76,8 +76,6 @@ public class Server {
 				this.clientSocket = this.socket.accept();
 				this.clientStream = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
 				this.serverStream = new DataOutputStream(this.clientSocket.getOutputStream());
-				
-				String clientMsg = clientStream.readLine();
 				System.out.println("Client joined game");
 				gauntlet.clientThread = new GameThread(this, gauntlet.gameState, container, game, delta);
 				gauntlet.clientThread.start();

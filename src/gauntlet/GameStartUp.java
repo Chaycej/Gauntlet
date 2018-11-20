@@ -70,7 +70,6 @@ public class GameStartUp extends BasicGameState{
 		} else {
 			handleServer(container, game, delta);
 		}
-		gauntlet.skeleton.moveGhost(gauntlet, delta);
 	}
 	
 	/*
@@ -91,6 +90,8 @@ public class GameStartUp extends BasicGameState{
 		
 		GameState clientState = new GameState();
 		clientState.setWarriorPosition((int)gauntlet.warrior.getX(), (int)gauntlet.warrior.getY());
+		
+		//gauntlet.skeleton.moveGhost(gauntlet, delta);
 		
 		//checks up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
