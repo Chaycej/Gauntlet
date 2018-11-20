@@ -65,6 +65,7 @@ public class Gauntlet extends StateBasedGame {
 	GameThread clientThread;
 	GameState gameState;
 	ArrayList<Projectiles> wProjectiles;
+	ArrayList<Skeleton> skeletonList;
 
 	
 	public Gauntlet(String title, int width, int height) {
@@ -113,6 +114,8 @@ public class Gauntlet extends StateBasedGame {
 		skeleton = new Skeleton(skeletonX, skeletonY, 0f, 0f);
 		
 		wProjectiles = new ArrayList<Projectiles>();
+		skeletonList = new ArrayList<Skeleton>();
+		skeletonList.add(skeleton);
 		
 		int rowB = 0;
         int colB = 0;
