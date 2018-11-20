@@ -5,15 +5,15 @@ import jig.ResourceManager;
 import jig.Vector;
 
 class Warrior extends Entity {
+	private GameState.Direction direction;
 	public Vector velocity;
 	private int countdown;
-	private String directionFacing; 
 	
 	public Warrior(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorS));
 		this.velocity = new Vector(vx, vy);
-		this.directionFacing = "S";
+		this.direction = GameState.Direction.DOWN;
 		countdown = 0;
 	}
 	
@@ -40,7 +40,6 @@ class Warrior extends Entity {
 		removeImage(ResourceManager.getImage(Gauntlet.warriorE));
 		removeImage(ResourceManager.getImage(Gauntlet.warriorW));
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorN));
-		this.directionFacing = "N";
 	}
 	
 	public void southAnimation() {
@@ -48,7 +47,6 @@ class Warrior extends Entity {
 		removeImage(ResourceManager.getImage(Gauntlet.warriorE));
 		removeImage(ResourceManager.getImage(Gauntlet.warriorW));
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorS));
-		this.directionFacing = "S";
 	}
 	
 	public void eastAnimation() {
@@ -56,7 +54,6 @@ class Warrior extends Entity {
 		removeImage(ResourceManager.getImage(Gauntlet.warriorS));
 		removeImage(ResourceManager.getImage(Gauntlet.warriorW));
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorE));
-		this.directionFacing = "E";
 	}
 	
 	public void westAnimation() {
@@ -64,11 +61,28 @@ class Warrior extends Entity {
 		removeImage(ResourceManager.getImage(Gauntlet.warriorS));
 		removeImage(ResourceManager.getImage(Gauntlet.warriorE));
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorW));
-		this.directionFacing = "W";
 	}
-	public String getDirectionFacing() {
-		return this.directionFacing;
+	
+	public void updateAnimation() {
+		if (this.direction == GameState.Direction.UP) {
+			this.northAnimation();
+		} else if (this.direction == GameState.Direction.DOWN) {
+			this.southAnimation();
+		} else if (this.direction == GameState.Direction.LEFT) {
+			this.westAnimation();
+		} else if (this.direction == GameState.Direction.RIGHT) {
+			this.eastAnimation();
+		}
 	}
+	
+	public GameState.Direction getDirection() {
+		return this.direction;
+	}
+	
+	public void setDireciton(GameState.Direction direction) {
+		this.direction = direction;
+	}
+	
 	public void update(final int delta) {
 		translate(velocity.scale(delta));
 		if (countdown > 0) {
