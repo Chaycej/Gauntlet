@@ -15,13 +15,13 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	int previousTargetCol;
 	int previousTargetRow;
 	
-	int skeletonX;
-	int skeletonY;
+	float xPos;
+	float yPos;
 	
 	public Skeleton(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
-		velocity = new Vector(vx, vy);
-		countdown = 0;
+		
+		this.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.skeletonS));
 		velocity = new Vector(vx, vy);
 		countdown = 0;
 		path = new double[25][25];
@@ -31,6 +31,9 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		direction = 0;
 		previousTargetCol = -1;
 		previousTargetRow = -1;
+		
+		this.xPos = x;
+		this.yPos = y;
 	}
 	
 	public void setVelocity(final Vector v) {
@@ -39,6 +42,28 @@ public class Skeleton extends Entity implements java.io.Serializable {
 
 	public Vector getVelocity() {
 		return velocity;
+	}
+	
+	synchronized public int getXPos() {
+		return (int)this.xPos;
+	}
+	
+	/*
+	 *  Cache the skeleton's current x position.
+	 */
+	synchronized public void setXPos(int x) {
+		this.xPos = x;
+	}
+	
+	synchronized public int getYPos() {
+		return (int)this.yPos;
+	}
+	
+	/*
+	 *  Cache the skeleton's current y position.
+	 */
+	synchronized public void setYPos(int y) {
+		this.yPos = y;
 	}
 	
 	public int getRow() {
@@ -162,11 +187,13 @@ public class Skeleton extends Entity implements java.io.Serializable {
 			direction = 2;
 		}
 		if (this.direction == 3) {
+			min = this.path[row+1][col];
+			direction = 3;
 		}
 	}
 	
 	/*
-	 * Moves the ghost along a path to intercept pacman
+	 * Moves the ghost along a path to intercept the warrior.
 	 */
 	synchronized public void moveGhost(Gauntlet gg, int delta) {
 		int row = getRow();
@@ -190,22 +217,22 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		// Moving left
 		if (direction == 2) {
 			eastAnimation();
-			this.setVelocity(new Vector(-0.12f, 0f));
+			this.setVelocity(new Vector(-0.05f, 0f));
 		}
 		//going right
 		if (direction == 4) {
 			westAnimation();
-			this.setVelocity(new Vector(0.12f, 0f));
+			this.setVelocity(new Vector(0.05f, 0f));
 		}
 		//going down
 		if (direction == 3) {
 			southAnimation();
-			this.setVelocity(new Vector(0f, 0.12f));
+			this.setVelocity(new Vector(0f, 0.05f));
 		}
 		//going up
 		if (direction == 1) {
 			northAnimation();
-			this.setVelocity(new Vector(0f, -0.12f));
+			this.setVelocity(new Vector(0f, -0.05f));
 		}
 	
 		if (row-1 < 0 || row+1 > gg.maxRow-1 || col-1 < 0 || col+1 > gg.maxColumn-1) {
@@ -214,7 +241,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		if (row == gg.warrior.getRow() && col == gg.warrior.getColumn()) {
 			this.setVelocity(new Vector(0f, 0f));
 		}
-		this.update(delta);
+		//this.update(delta);
 	}
 	
 	public void update(final int delta) {
