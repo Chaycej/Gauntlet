@@ -206,10 +206,6 @@ public class GameStartUp extends BasicGameState{
 		Input input = container.getInput();
 		Gauntlet gauntlet = (Gauntlet)game;
 		
-		if (gauntlet.client != null) {
-			System.out.println("Server can see client");
-		}
-		
 		// Render skeletons
 		for (Skeleton skeleton : gauntlet.skeletonList) {
 			skeleton.moveGhost(gauntlet, delta);
