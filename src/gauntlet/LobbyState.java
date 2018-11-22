@@ -42,23 +42,23 @@ public class LobbyState extends BasicGameState{
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-		Gauntlet gg = (Gauntlet) game;
+		Gauntlet gauntlet = (Gauntlet) game;
 		Input input = container.getInput();
 
 		// Start server
 		if (input.isKeyDown(Input.KEY_SPACE)) {
-			if (gg.server == null) {
-				gg.server = new Server(gg);
-				gg.server.run(container, game, delta);
-				gg.enterState(Gauntlet.GAMESTARTSTATE);
+			if (gauntlet.server == null) {
+				gauntlet.server = new Server(gauntlet);
+				gauntlet.server.run(container, game, delta);
+				gauntlet.enterState(Gauntlet.GAMESTARTSTATE);
 			}
 		} 
 		
 		// Join a server
 		if (input.isKeyDown(Input.KEY_ENTER)) {
-			if (gg.client == null) {
-				gg.client = new Client(tf.getText());
-				gg.enterState(Gauntlet.GAMESTARTSTATE);
+			if (gauntlet.client == null) {
+				gauntlet.client = new Client(tf.getText());
+				gauntlet.enterState(Gauntlet.GAMESTARTSTATE);
 			}
 		}
 	}
