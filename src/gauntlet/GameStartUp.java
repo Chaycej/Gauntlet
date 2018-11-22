@@ -20,10 +20,10 @@ public class GameStartUp extends BasicGameState{
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		container.setSoundOn(true);
-		Gauntlet gg = (Gauntlet)game;
-		gg.warrior.setPosition(gg.warriorX,gg.warriorY);
-		gg.ranger.setPosition(gg.rangerX, gg.warriorY);
-		gg.skeleton.setPosition(gg.skeletonX, gg.skeletonY);
+		Gauntlet gauntlet = (Gauntlet)game;
+		gauntlet.warrior.setPosition(gauntlet.warriorX, gauntlet.warriorY);
+		gauntlet.ranger.setPosition(gauntlet.rangerX, gauntlet.warriorY);
+		gauntlet.skeletonList.get(0).setPosition(gauntlet.skeletonX, gauntlet.skeletonY);
 	}
 
 	public void renderMap(GameContainer container, StateBasedGame game, Graphics g) {
@@ -52,18 +52,12 @@ public class GameStartUp extends BasicGameState{
 		Gauntlet gauntlet = (Gauntlet)game;
 		renderMap(container, game, g);
 		gauntlet.warrior.render(g);
-		gauntlet.warrior.setVelocity(new Vector(0f,0f));
 		gauntlet.ranger.render(g);
-		gauntlet.ranger.setVelocity(new Vector(0f,0f));
 		gauntlet.skeleton.render(g);
 		
 		for (int i = 0; i < gauntlet.wProjectiles.size(); i++) {
 			gauntlet.wProjectiles.get(i).render(g);
 		}
-		
-//		for (Skeleton skeleton : gauntlet.skeletonList) {
-//			skeleton.render(g);
-//		}
 	}
 
 	@Override
@@ -80,14 +74,9 @@ public class GameStartUp extends BasicGameState{
 	/*
 	 * handleClient
 	 * 
-	 * Handles client by sending the server client commands based on the client's next move.
+	 * Handles client by sending the server client state based on the client's next move.
 	 * The general client protocol is as follows:
-	 *		
-	 *		client movement:
-	 *			1. Send current (x,y) position to server.
-	 *			2. Send direction command to server. 
-	 *			3. Wait for server's response.
-	 *			4. Move client to requested direction.
+	 *	
 	 */
 	public void handleClient(GameContainer container, StateBasedGame game, int delta) {
 		Input input = container.getInput();
@@ -95,6 +84,7 @@ public class GameStartUp extends BasicGameState{
 		
 		GameState clientState = new GameState();
 		clientState.setWarriorPosition((int)gauntlet.warrior.getX(), (int)gauntlet.warrior.getY());
+		
 		
 		//checks up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
@@ -146,6 +136,7 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.client.sendGameState(clientState);
 		}
 		
+		
 		for (int i = 0; i < gauntlet.wProjectiles.size(); i++) {
 			gauntlet.wProjectiles.get(i).update(delta);
 			if(gauntlet.wProjectiles.get(i).getColumn() > gauntlet.maxColumn 
@@ -185,7 +176,6 @@ public class GameStartUp extends BasicGameState{
 				if (newGameState.warriorIsMoving()) {
 					gauntlet.warrior.setVelocity(new Vector(0.1f, 0f));
 				}
-			
 			}
 			
 			// Render ranger
@@ -203,15 +193,12 @@ public class GameStartUp extends BasicGameState{
 				gauntlet.ranger.setPosition(newGameState.getRangerX(), newGameState.getRangerY());
 			}
 			
-			//gauntlet.skeletonList.get(0).setPosition(newGameState.skeletonList.get(0).getX(), newGameState.skeletonList.get(0).getY());
-			
+			gauntlet.skeleton.setPosition(newGameState.skeletonList.get(0).getXPos(), newGameState.skeletonList.get(0).getYPos());
 		}
 		
+		gauntlet.skeleton.update(delta);
 		gauntlet.ranger.update(delta);
 		gauntlet.warrior.update(delta);
-//		for (Skeleton skeleton : gauntlet.skeletonList) {
-//			skeleton.update(delta);
-//		}
 	}
 	
 	public void handleServer(GameContainer container, StateBasedGame game, int delta) {
@@ -219,12 +206,15 @@ public class GameStartUp extends BasicGameState{
 		Input input = container.getInput();
 		Gauntlet gauntlet = (Gauntlet)game;
 		
-//		// Render skeletons
-//		for (Skeleton skeleton : gauntlet.skeletonList) {
-//			skeleton.moveGhost(gauntlet, delta);
-//		}
-//		
-//		gauntlet.gameState.skeletonList = gauntlet.skeletonList;
+		// Render skeletons
+		for (Skeleton skeleton : gauntlet.skeletonList) {
+			skeleton.moveGhost(gauntlet, delta);
+			skeleton.setXPos((int)skeleton.getX());
+			skeleton.setYPos((int)skeleton.getY());
+			skeleton.update(delta);
+		}
+		
+		gauntlet.gameState.skeletonList = gauntlet.skeletonList;
 		
 		//checks up movement
 		if (input.isKeyDown(Input.KEY_W)) {

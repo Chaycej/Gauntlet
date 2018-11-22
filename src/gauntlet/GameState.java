@@ -18,7 +18,7 @@ public class GameState implements java.io.Serializable {
 	private AtomicInteger rangerX;
 	private AtomicInteger rangerY;
 	
-	//public ArrayList<Skeleton> skeletonList;
+	public ArrayList<Skeleton> skeletonList;
 	
 	public GameState() {
 		this.warriorX = new AtomicInteger(200);
@@ -67,14 +67,14 @@ public class GameState implements java.io.Serializable {
 	/*
 	 *  Returns true if the warrior is moving.
 	 */
-	public boolean warriorIsMoving() {
+	synchronized public boolean warriorIsMoving() {
 		return this.warriorIsMoving;
 	}
 	
 	/*
 	 *  Sets the warrior's movement
 	 */
-	public void setWarriorMovement(boolean bool) {
+	synchronized public void setWarriorMovement(boolean bool) {
 		this.warriorIsMoving = bool;
 	}
 	
