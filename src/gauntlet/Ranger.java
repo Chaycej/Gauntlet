@@ -61,6 +61,18 @@ class Ranger extends Entity {
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.rangerW));
 	}
 	
+	public void updateAnimation(GameState.Direction direction) {
+		if (direction == GameState.Direction.UP) {
+			this.northAnimation();
+		} else if (direction == GameState.Direction.DOWN) {
+			this.southAnimation();
+		} else if (direction == GameState.Direction.LEFT) {
+			this.westAnimation();
+		} else if (direction == GameState.Direction.RIGHT) {
+			this.eastAnimation();
+		}
+	}
+	
 	public void update(final int delta) {
 		translate(velocity.scale(delta));
 		if (countdown > 0) {
