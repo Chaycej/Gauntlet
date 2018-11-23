@@ -5,6 +5,8 @@ import jig.ResourceManager;
 import jig.Vector;
 
 class Warrior extends Entity {
+	
+	private int health;
 	private GameState.Direction direction;
 	public Vector velocity;
 	private int countdown;
@@ -12,9 +14,31 @@ class Warrior extends Entity {
 	public Warrior(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorS));
-		this.velocity = new Vector(vx, vy);
+		
+		this.health = 100;
 		this.direction = GameState.Direction.DOWN;
+		this.velocity = new Vector(vx, vy);
 		countdown = 0;
+	}
+	
+	/*
+	 *  isDead
+	 * 
+	 *  Returns true if the warrior has no more health.
+	 */
+	public boolean isDead() {
+		return this.health <= 0;
+	}
+	
+	/*
+	 *  takeHit
+	 * 
+	 *  Decreases the warrior's health when an enemy successfully attacks.
+	 */
+	public void takeHit() {
+		if (!this.isDead()) {
+			this.health -= 5;
+		}
 	}
 	
 	public void setVelocity(final Vector v) {
