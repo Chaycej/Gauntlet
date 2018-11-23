@@ -4,12 +4,16 @@ import jig.Entity;
 import jig.ResourceManager;
 import jig.Vector;
 
-class Projectiles extends Entity {
+class Projectile extends Entity implements java.io.Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	public Vector velocity;
 	private int countdown;
 	private float speed = 0.5f;
+	private int xPos;
+	private int yPos;
 	
-	public Projectiles(final float x, final float y, GameState.Direction direction) {
+	public Projectile(final float x, final float y, GameState.Direction direction) {
 		super(x, y);
 		if (direction == GameState.Direction.UP) {
 			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.arrowN));
@@ -24,6 +28,10 @@ class Projectiles extends Entity {
 			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.arrowW));
 			this.velocity = new Vector(-speed, 0.0f);
 		}
+		
+		this.xPos = (int)x;
+		this.yPos = (int)y;
+		
 		countdown = 0;
 	}
 	
@@ -35,6 +43,22 @@ class Projectiles extends Entity {
 	public int getColumn() {
 		int col = (int) (this.getX()/32);
 		return col;
+	}
+	
+	public int getXPos() {
+		return this.xPos;
+	}
+	
+	synchronized public void setXPos(int newX) {
+		this.xPos = newX;
+	}
+	
+	public int getYPos() {
+		return this.yPos;
+	}
+	
+	synchronized public void setYPos(int newY) {
+		this.yPos = newY;
 	}
 	
 	public void update(final int delta) {

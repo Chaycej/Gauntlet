@@ -5,14 +5,40 @@ import jig.ResourceManager;
 import jig.Vector;
 
 class Ranger extends Entity {
+	
+	private int health;
+	private GameState.Direction direction;
 	public Vector velocity;
 	private int countdown;
 	
 	public Ranger(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.rangerS));
-		velocity = new Vector(vx, vy);
-		countdown = 0;
+		
+		this.health = 100;
+		this.direction = GameState.Direction.DOWN;
+		this.velocity = new Vector(vx, vy);
+		this.countdown = 0;
+	}
+	
+	/*
+	 *  isDead
+	 * 
+	 *  Returns true if the ranger has no more health.
+	 */
+	public boolean isDead() {
+		return this.health <= 0;
+	}
+	
+	/*
+	 *  takeHit
+	 * 
+	 *  Decreases the ranger's health if an enemy successfully attacks.
+	 */
+	public void takeHit() {
+		if (!this.isDead()) {
+			this.health -= 10;
+		}
 	}
 	
 	public void setVelocity(final Vector v) {
@@ -71,6 +97,14 @@ class Ranger extends Entity {
 		} else if (direction == GameState.Direction.RIGHT) {
 			this.eastAnimation();
 		}
+	}
+	
+	public GameState.Direction getDirection() {
+		return this.direction;
+	}
+	
+	public void setDirection(GameState.Direction direction) {
+		this.direction = direction;
 	}
 	
 	public void update(final int delta) {
