@@ -5,6 +5,9 @@ import jig.ResourceManager;
 import jig.Vector;
 
 public class Skeleton extends Entity implements java.io.Serializable {
+
+	private static final long serialVersionUID = 1L;
+	
 	public Vector velocity;
 	private int countdown;
 	private double[][] path;
@@ -37,11 +40,11 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	}
 	
 	public void setVelocity(final Vector v) {
-		velocity = v;
+		this.velocity = v;
 	}
 
 	public Vector getVelocity() {
-		return velocity;
+		return this.velocity;
 	}
 	
 	synchronized public int getXPos() {
@@ -67,41 +70,41 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	}
 	
 	public int getRow() {
-		int row = (int) ((super.getY())/32);	
+		int row = (int) ((this.getY())/32);	
 		return row;
 	}
 	
 	public int getColumn() {
-		int col = (int) (super.getX()/32);
+		int col = (int) (this.getX()/32);
 		return col;
 	}
 	
 	public void northAnimation() {
-		removeImage(ResourceManager.getImage(Gauntlet.skeletonS));
-		removeImage(ResourceManager.getImage(Gauntlet.skeletonE));
-		removeImage(ResourceManager.getImage(Gauntlet.skeletonW));
-		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.skeletonN));
+		this.removeImage(ResourceManager.getImage(Gauntlet.skeletonS));
+		this.removeImage(ResourceManager.getImage(Gauntlet.skeletonE));
+		this.removeImage(ResourceManager.getImage(Gauntlet.skeletonW));
+		this.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.skeletonN));
 	}	
 	
 	public void southAnimation() {
-		removeImage(ResourceManager.getImage(Gauntlet.skeletonN));
-		removeImage(ResourceManager.getImage(Gauntlet.skeletonE));
-		removeImage(ResourceManager.getImage(Gauntlet.skeletonW));
-		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.skeletonS));
+		this.removeImage(ResourceManager.getImage(Gauntlet.skeletonN));
+		this.removeImage(ResourceManager.getImage(Gauntlet.skeletonE));
+		this.removeImage(ResourceManager.getImage(Gauntlet.skeletonW));
+		this.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.skeletonS));
 	}
 	
 	public void eastAnimation() {
-		removeImage(ResourceManager.getImage(Gauntlet.skeletonN));
-		removeImage(ResourceManager.getImage(Gauntlet.skeletonS));
-		removeImage(ResourceManager.getImage(Gauntlet.skeletonW));
-		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.skeletonE));
+		this.removeImage(ResourceManager.getImage(Gauntlet.skeletonN));
+		this.removeImage(ResourceManager.getImage(Gauntlet.skeletonS));
+		this.removeImage(ResourceManager.getImage(Gauntlet.skeletonW));
+		this.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.skeletonE));
 	}
 	
 	public void westAnimation() {
-		removeImage(ResourceManager.getImage(Gauntlet.skeletonN));
-		removeImage(ResourceManager.getImage(Gauntlet.skeletonS));
-		removeImage(ResourceManager.getImage(Gauntlet.skeletonE));
-		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.skeletonW));
+		this.removeImage(ResourceManager.getImage(Gauntlet.skeletonN));
+		this.removeImage(ResourceManager.getImage(Gauntlet.skeletonS));
+		this.removeImage(ResourceManager.getImage(Gauntlet.skeletonE));
+		this.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.skeletonW));
 	}
 	
 	/*
@@ -121,13 +124,13 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	 * Builds a grid of optimal adjacent moves using the A* algorithm
 	 * 
 	 */
-	synchronized public void buildPath(Gauntlet gg, int destRow, int destCol) {
+	synchronized public void buildPath(Gauntlet gauntlet, int destRow, int destCol) {
 		int row = getRow();
 		int col = getColumn();
 		
 		//north tile 
 		if (row > 0) {
-			if (gg.map[row-1][col] == 1 || this.visited[row-1][col] == 1) {		// Set adjacent walls to poor pathfinding score
+			if (gauntlet.map[row-1][col] == 1 || this.visited[row-1][col] == 1) {		// Set adjacent walls to poor pathfinding score
 				this.path[row-1][col] = this.path[row-1][col]+10000;
 			} else {
 				
@@ -135,9 +138,9 @@ public class Skeleton extends Entity implements java.io.Serializable {
 			}
 		}
 		//south tile 
-		if (row < gg.maxRow) {
+		if (row < Gauntlet.maxRow) {
 			// Set adjacent walls to poor pathfinding score
-			if (gg.map[row+1][col] == 1 || this.visited[row+1][col] == 1) {
+			if (gauntlet.map[row+1][col] == 1 || this.visited[row+1][col] == 1) {
 				this.path[row+1][col] = this.path[row+1][col]+10000;
 			} else {
 				this.path[row+1][col] = 10 + getDestinationDistance(row+1, col, destRow, destCol);
@@ -146,16 +149,16 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		//west tile 
 		if (col > 0) {
 			// Set adjacent walls to poor pathfinding score
-			if (gg.map[row][col-1] == 1 || this.visited[row][col-1] == 1) {
+			if (gauntlet.map[row][col-1] == 1 || this.visited[row][col-1] == 1) {
 				this.path[row][col-1] = this.path[row][col-1]+10000;
 			} else {
 				this.path[row][col-1] = 10 + getDestinationDistance(row, col-1, destRow, destCol);
 			}
 		}
 		//east tile 
-		if (col < gg.maxColumn ) {
+		if (col < Gauntlet.maxColumn ) {
 			// Set adjacent walls to poor pathfinding score
-			if (gg.map[row][col+1] == 1 ||  this.visited[row][col+1]== 1) {
+			if (gauntlet.map[row][col+1] == 1 ||  this.visited[row][col+1]== 1) {
 				this.path[row][col+1] = this.path[row][col+1]+10000;
 			} else {
 				this.path[row][col+1] = 10 + getDestinationDistance(row, col+1, destRow, destCol);
@@ -180,68 +183,70 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		}
 		if (this.path[row][col+1] < min) {
 			min = this.path[row][col+1];
-			direction = 4;
+			this.direction = 4;
 		}
 		if (this.path[row][col-1] < min) {
 			min = this.path[row][col-1];
-			direction = 2;
+			this.direction = 2;
 		}
-		if (this.direction == 3) {
+		if (this.path[row+1][col] < min) {
 			min = this.path[row+1][col];
-			direction = 3;
+			this.direction = 3;
 		}
 	}
 	
 	/*
 	 * Moves the ghost along a path to intercept the warrior.
 	 */
-	synchronized public void moveGhost(Gauntlet gg, int delta) {
+	synchronized public void moveGhost(Gauntlet gauntlet, int delta) {
 		int row = getRow();
 		int col = getColumn();
 		
 		if (previousTargetCol ==-1 || previousTargetRow ==-1 || previousTargetCol==col || previousTargetRow==row) {
 			
-			previousTargetCol = gg.warrior.getRow();
-			previousTargetRow = gg.warrior.getColumn();
+			previousTargetCol = gauntlet.warrior.getRow();
+			previousTargetRow = gauntlet.warrior.getColumn();
 			
-			for (int i=0; i<gg.maxRow; i++) {
-				for (int j=0; j<gg.maxColumn; j++) {
+			for (int i = 0; i < Gauntlet.maxRow; i++) {
+				for (int j = 0; j < Gauntlet.maxColumn; j++) {
 					this.visited[i][j]=0;
 				}
 			}
 		}
-		buildPath( gg, gg.warrior.getRow(), gg.warrior.getColumn());
+		buildPath( gauntlet, gauntlet.warrior.getRow(), gauntlet.warrior.getColumn());
 		getMinPath( row, col);
 		this.visited[row][col] = 1;
 		
 		// Moving left
 		if (direction == 2) {
-			eastAnimation();
+			this.eastAnimation();
 			this.setVelocity(new Vector(-0.05f, 0f));
 		}
+		
 		//going right
 		if (direction == 4) {
-			westAnimation();
+			this.westAnimation();
 			this.setVelocity(new Vector(0.05f, 0f));
 		}
+		
 		//going down
 		if (direction == 3) {
-			southAnimation();
+			this.southAnimation();
 			this.setVelocity(new Vector(0f, 0.05f));
 		}
+		
 		//going up
 		if (direction == 1) {
-			northAnimation();
+			this.northAnimation();
 			this.setVelocity(new Vector(0f, -0.05f));
 		}
 	
-		if (row-1 < 0 || row+1 > gg.maxRow-1 || col-1 < 0 || col+1 > gg.maxColumn-1) {
+		if (row-1 < 0 || row+1 > Gauntlet.maxRow-1 || col-1 < 0 || col+1 > Gauntlet.maxColumn-1) {
 			this.setVelocity(new Vector(0f, 0f));
 		}
-		if (row == gg.warrior.getRow() && col == gg.warrior.getColumn()) {
+		if (row == gauntlet.warrior.getRow() && col == gauntlet.warrior.getColumn()) {
 			this.setVelocity(new Vector(0f, 0f));
 		}
-		//this.update(delta);
 	}
 	
 	public void update(final int delta) {

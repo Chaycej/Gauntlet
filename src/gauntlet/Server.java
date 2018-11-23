@@ -6,11 +6,9 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.ServerSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.state.StateBasedGame;
@@ -18,7 +16,7 @@ import org.newdawn.slick.state.StateBasedGame;
 /*
  *  Server
  * 
- * The server communicates to clients through a UDP socket on port 3303. The first person
+ * The server communicates to clients through a TCP socket on port 3303. The first person
  * that boots up the game is considered the server, and any player to boot up the game after
  * the server has been configured is considered a client where they send commands asking the server
  * to move, attack, etc. 
@@ -32,8 +30,7 @@ import org.newdawn.slick.state.StateBasedGame;
  * - Listening for new moves.
  * - Listening for a client's attack.
  * - Listening for client's position.
- * - Sending acknowledgement commands to the client for whether
- * 	 they are allowed to move or attack.
+ * - Sending updated game state to the client 
  * 
  */
 public class Server {

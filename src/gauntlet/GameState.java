@@ -5,6 +5,8 @@ import java.util.concurrent.atomic.*;
 
 public class GameState implements java.io.Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	enum Direction {
 		UP, DOWN, RIGHT, LEFT, STOP;
 	}

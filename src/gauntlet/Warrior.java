@@ -75,6 +75,39 @@ class Warrior extends Entity {
 		}
 	}
 	
+	/*
+	 *  updateWarriorState
+	 * 
+	 *  Updates the warrior's velocity and direction based on the server's game state.
+	 */
+	public void updateWarriorState(GameState.Direction direction, boolean isMoving) {
+		if (!isMoving) {
+			this.setVelocity(new Vector(0f, 0f));
+		}
+		
+		if (direction == GameState.Direction.UP) {
+			this.northAnimation();
+			if (isMoving) {
+				this.setVelocity(new Vector(0f, -0.1f));
+			}
+		} else if (direction == GameState.Direction.DOWN) {
+			this.southAnimation();
+			if (isMoving) {
+				this.setVelocity(new Vector(0f, 0.1f));
+			}
+		} else if (direction == GameState.Direction.LEFT) {
+			this.westAnimation();
+			if (isMoving) {
+				this.setVelocity(new Vector(-0.1f, 0f));
+			}
+		} else if (direction == GameState.Direction.RIGHT) {
+			this.eastAnimation();
+			if (isMoving) {
+				this.setVelocity(new Vector(0.1f, 0f));
+			}
+		}
+	}
+	
 	public GameState.Direction getDirection() {
 		return this.direction;
 	}
