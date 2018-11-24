@@ -72,7 +72,7 @@ public class Client {
 			GameState gameState = (GameState)in.readObject();
 			return gameState;
 		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			return null;
 		}
 	}
@@ -82,7 +82,7 @@ public class Client {
 			ObjectOutputStream output = new ObjectOutputStream(this.socket.getOutputStream());
 			output.writeObject(gameState);
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 	
