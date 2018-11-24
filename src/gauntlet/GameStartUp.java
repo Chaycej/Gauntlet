@@ -1,6 +1,7 @@
 package gauntlet;
 
 import java.util.ArrayList;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -275,7 +276,7 @@ public class GameStartUp extends BasicGameState{
 	 * 
 	 *  updates projectile locations.
 	 */
-	public void updateProjectiles(ArrayList<Projectile> projectiles, int delta) {
+	public void updateProjectiles(java.util.Vector<Projectile> projectiles, int delta) {
 		
 		ArrayList<Integer> removeList = new ArrayList<Integer>();
 		
