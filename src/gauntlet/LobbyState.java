@@ -34,7 +34,6 @@ public class LobbyState extends BasicGameState{
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-		//Gauntlet gg = (Gauntlet)game;
 		g.drawString("Press space to start a server", 270, 200);
 		g.drawString("OR", 375, 250);
 		g.drawString("Type in a server ip address and press enter", 200, 300);
@@ -43,27 +42,23 @@ public class LobbyState extends BasicGameState{
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-		Gauntlet gg = (Gauntlet) game;
+		Gauntlet gauntlet = (Gauntlet) game;
 		Input input = container.getInput();
 
 		// Start server
 		if (input.isKeyDown(Input.KEY_SPACE)) {
-			if (gg.server == null) {
-				gg.server = new Server();
-				gg.server.run();
-				GameState gameState = new GameState("", (int)280/32, (int)200/32);
-				gg.clientThread = new GameThread(gg.server, gameState, container, game, delta);
-				gg.clientThread.start();
-				gg.enterState(Gauntlet.GAMESTARTSTATE);
+			if (gauntlet.server == null) {
+				gauntlet.server = new Server(gauntlet);
+				gauntlet.server.run(container, game, delta);
+				gauntlet.enterState(Gauntlet.GAMESTARTSTATE);
 			}
 		} 
 		
 		// Join a server
 		if (input.isKeyDown(Input.KEY_ENTER)) {
-			if (gg.client == null) {
-				gg.client = new Client(tf.getText());
-				gg.client.joinServer();
-				gg.enterState(Gauntlet.GAMESTARTSTATE);
+			if (gauntlet.client == null) {
+				gauntlet.client = new Client(tf.getText());
+				gauntlet.enterState(Gauntlet.GAMESTARTSTATE);
 			}
 		}
 	}

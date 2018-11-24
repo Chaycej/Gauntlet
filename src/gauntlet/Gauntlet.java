@@ -4,6 +4,7 @@ import jig.Entity;
 import jig.ResourceManager;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -22,6 +23,8 @@ public class Gauntlet extends StateBasedGame {
 	public final int  warriorY= 200;
 	public final int  rangerX= 280;
 	public final int  rangerY= 200;
+	public final int  skeletonX= 500;
+	public final int  skeletonY= 500;
 	
 	public static final String pathTile = "gauntlet/resources/WalkingTile.png";
 	public static final String wallTile = "gauntlet/resources/WallTile.png";
@@ -37,21 +40,33 @@ public class Gauntlet extends StateBasedGame {
 	public static final String warriorS = "gauntlet/resources/warrior_s.png";
 	public static final String warriorE = "gauntlet/resources/warrior_e.png";
 	public static final String warriorW = "gauntlet/resources/warrior_w.png";
+	public static final String arrowN = "gauntlet/resources/Arrow_N.png";
+	public static final String arrowE = "gauntlet/resources/Arrow_E.png";
+	public static final String arrowS = "gauntlet/resources/Arrow_S.png";
+	public static final String arrowW = "gauntlet/resources/Arrow_W.png";
+	
+	public static final String skeletonN = "gauntlet/resources/skeletonN.png";
+	public static final String skeletonS = "gauntlet/resources/skeletonS.png";
+	public static final String skeletonE = "gauntlet/resources/skeletonE.png";
+	public static final String skeletonW = "gauntlet/resources/skeletonW.png";
 
 	public final int ScreenWidth;
 	public final int ScreenHeight;
 	
 	public static AppGameContainer app;
 	
-	public GameSocket socket;
-	
 	int[][] map;
 	MapMatrix[][] mapMatrix;
 	Warrior warrior;
 	Ranger ranger;
+	Skeleton skeleton;
 	Server server;
 	Client client;
 	GameThread clientThread;
+	GameState gameState;
+	ArrayList<Projectiles> wProjectiles;
+	ArrayList<Skeleton> skeletonList;
+
 	
 	public Gauntlet(String title, int width, int height) {
 		super(title);
@@ -61,6 +76,7 @@ public class Gauntlet extends StateBasedGame {
 		Entity.setCoarseGrainedCollisionBoundary(Entity.AABB);
 		map = new int[maxRow][maxColumn];
 		mapMatrix = new MapMatrix[maxRow][maxColumn];
+		gameState = new GameState();
 	}
 
 	@Override
@@ -83,8 +99,23 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(warriorE);
 		ResourceManager.loadImage(warriorW);
 		
+		ResourceManager.loadImage(arrowN);
+		ResourceManager.loadImage(arrowE);
+		ResourceManager.loadImage(arrowS);
+		ResourceManager.loadImage(arrowW);
+
+		ResourceManager.loadImage(skeletonN);
+		ResourceManager.loadImage(skeletonS);
+		ResourceManager.loadImage(skeletonE);
+		ResourceManager.loadImage(skeletonW);
+		
 		warrior = new Warrior(warriorX, warriorY, 0f, 0f);
 		ranger = new Ranger(rangerX, rangerY, 0f, 0f);
+		skeleton = new Skeleton(skeletonX, skeletonY, 0f, 0f);
+		
+		wProjectiles = new ArrayList<Projectiles>();
+		skeletonList = new ArrayList<Skeleton>();
+		skeletonList.add(skeleton);
 		
 		int rowB = 0;
         int colB = 0;
@@ -106,6 +137,15 @@ public class Gauntlet extends StateBasedGame {
         } catch (IOException ioe) {
             System.out.println("Trouble reading from the file: " + ioe.getMessage());
         }
+		for (int row=0; row<maxRow; row++ ) {
+			for (int col=0; col<maxColumn; col++) {
+				if ( map[row][col] == 48) {		//equals a 0 is a path
+					map[row][col] = 0;
+				} else {
+					map[row][col] = 1;
+				}
+			}
+		}
 	}
 	
 	public static void main(String[] args) {

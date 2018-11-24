@@ -25,44 +25,59 @@ public class GameThread extends Thread {
 	public void run() {
 		while (true) {
 			
+			GameState clientState = this.server.readClientState();
 			
-			System.out.println("Waiting for client state");
-			this.gameState = this.server.readClientState();
-			String direction = this.gameState.getDirection();
-			System.out.println("Direction is " + direction);
-			System.out.println("x: " + this.gameState.getX() + " y: " + this.gameState.getY());
+			this.gameState.setWarriorPosition(clientState.getWarriorX(), clientState.getWarriorY());
+			
 			// Client attempting to move down
-			if (direction.equals("do")) {
-				if (this.gameState.getRow() < 24) {
-					this.server.sendValidMove();
-					System.out.println("Send valid move!");
+			if (clientState.getWarriorDirection() == GameState.Direction.DOWN) {
+				if (this.gameState.getWarriorY() < 24 * 32 - 29) {
+					this.gameState.setWarriorMovement(true);
+					this.gameState.setWarriorDirection(GameState.Direction.DOWN);
+				} else {
+					this.gameState.setWarriorMovement(false);
 				}
 			} 
 
 			// Client attempting to move up
-			else if (direction.equals("up")) {
-				if (this.gameState.getRow() > 0) {
-					this.server.sendValidMove();
-					System.out.println("Sent valid move!");
+			else if (clientState.getWarriorDirection() == GameState.Direction.UP) {
+				if (this.gameState.getWarriorY() > 40) {
+					this.gameState.setWarriorMovement(true);
+					this.gameState.setWarriorDirection(GameState.Direction.UP);
+				} else {
+					this.gameState.setWarriorMovement(false);
 				}
 			} 
 
 			// Client attempting to move left
-			else if (direction.equals("le")) {
-				if (this.gameState.getColumn() > 0) {
-					this.server.sendValidMove();
-					System.out.println("Sent valid move!");
+			else if (clientState.getWarriorDirection() == GameState.Direction.LEFT) {
+				if (this.gameState.getWarriorX() > 40) {
+					this.gameState.setWarriorMovement(true);
+					this.gameState.setWarriorDirection(GameState.Direction.LEFT);
+				} else {
+					this.gameState.setWarriorMovement(false);
 				}
 			} 
 
 			// Client attempting to move right
-			else if (direction.equals("ri")) {
-				if (this.gameState.getColumn() < 24) {
-					this.server.sendValidMove();
-					System.out.println("Sent valid move!");
+			else if (clientState.getWarriorDirection() == GameState.Direction.RIGHT) {
+				if (this.gameState.getWarriorX() < 24 * 32 - 29) {
+					this.gameState.setWarriorMovement(true);
+					this.gameState.setWarriorDirection(GameState.Direction.RIGHT);
+				} else {
+					this.gameState.setWarriorMovement(false);
 				}
 			}
+			
+			else if (clientState.getWarriorDirection() == GameState.Direction.STOP) {
+				this.gameState.setWarriorDirection(GameState.Direction.STOP);
+				this.gameState.setWarriorMovement(false);
+			}
+			
+			// Update client's position
+			this.gameState.setWarriorPosition(clientState.getWarriorX(), clientState.getWarriorY());
 
+			this.server.sendGameState(this.gameState);
 		}
 	}
 }
