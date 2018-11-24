@@ -111,10 +111,11 @@ public class GameStartUp extends BasicGameState{
 			clientState.setWarriorDirection(GameState.Direction.STOP);
 		}
 		
+		updateProjectiles(gauntlet.warriorProjectiles, delta);
+		clientState.warriorProjectiles = gauntlet.warriorProjectiles;
+		
 		gauntlet.client.sendGameState(clientState);
 		
-		
-		updateProjectiles(gauntlet.warriorProjectiles, delta);
 		
 		// Update new game state
 		GameState newGameState = gauntlet.client.readGameState();
@@ -127,8 +128,16 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.ranger.setPosition(newGameState.getRangerX(), newGameState.getRangerY());
 			gauntlet.ranger.updateAnimation(newGameState.getRangerDirection());
 			
+			// Update skeletons
 			gauntlet.skeleton.setPosition(newGameState.skeletons.get(0).getXPos(),
 					newGameState.skeletons.get(0).getYPos());
+			
+			// Update teammates projectiles
+			gauntlet.rangerProjectiles = newGameState.rangerProjectiles;
+			for (Projectile projectile : gauntlet.rangerProjectiles) {
+				projectile.addImage();
+				projectile.setPosition(projectile.getXPos(), projectile.getYPos());
+			}
 		}
 		
 		gauntlet.skeleton.update(delta);
@@ -141,6 +150,8 @@ public class GameStartUp extends BasicGameState{
 	 * 
 	 *  Updates the ranger state based on the server's key presses and updates the rest of the 
 	 *  game state once the new game state has been sent to the client.
+	 *  
+	 *  Note: Server is also handling client state on a seperate thread.
 	 */
 	public void handleServer(GameContainer container, StateBasedGame game, int delta) {
 		
@@ -207,7 +218,7 @@ public class GameStartUp extends BasicGameState{
 					gauntlet.ranger.getPosition().getY(), gauntlet.ranger.getDirection());
 			gauntlet.rangerProjectiles.add(projectile);
 			gauntlet.gameState.setRangerDirection(GameState.Direction.STOP);
-			gauntlet.gameState.projectiles.add(projectile);
+			
 		}
 		
 		else {
@@ -215,12 +226,21 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.ranger.setVelocity(new Vector(0f, 0f));
 		}
 		
+		// Update server's game state before sending to client
 		gauntlet.gameState.setRangerPosition((int)gauntlet.ranger.getX(), (int)gauntlet.ranger.getY());
-		
 		updateProjectiles(gauntlet.rangerProjectiles, delta);
+		gauntlet.gameState.rangerProjectiles = gauntlet.rangerProjectiles;
 		
+		// Update teammate
 		gauntlet.warrior.setPosition(gauntlet.gameState.getWarriorX(), gauntlet.gameState.getWarriorY());
 		gauntlet.warrior.updateAnimation();
+		
+		// Update teammate projectiles
+		gauntlet.warriorProjectiles = gauntlet.gameState.warriorProjectiles;
+		for (Projectile projectile : gauntlet.warriorProjectiles) {
+			projectile.addImage();
+			projectile.setPosition(projectile.getXPos(), projectile.getYPos());
+		}
 		
 		gauntlet.ranger.update(delta);
 	}
@@ -259,6 +279,8 @@ public class GameStartUp extends BasicGameState{
 	public void updateProjectiles(ArrayList<Projectile> projectiles, int delta) {
 		for (int i = 0; i < projectiles.size(); i++) {
 			projectiles.get(i).update(delta);
+			projectiles.get(i).setXPos((int) projectiles.get(i).getX());
+			projectiles.get(i).setYPos((int) projectiles.get(i).getY());
 			if(projectiles.get(i).getColumn() > Gauntlet.maxColumn 
 					|| projectiles.get(i).getRow() > Gauntlet.maxRow 
 					|| projectiles.get(i).getColumn() < 0
