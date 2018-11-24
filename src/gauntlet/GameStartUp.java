@@ -276,6 +276,9 @@ public class GameStartUp extends BasicGameState{
 	 *  updates projectile locations.
 	 */
 	public void updateProjectiles(ArrayList<Projectile> projectiles, int delta) {
+		
+		ArrayList<Integer> removeList = new ArrayList<Integer>();
+		
 		for (int i = 0; i < projectiles.size(); i++) {
 			projectiles.get(i).update(delta);
 			projectiles.get(i).setXPos((int) projectiles.get(i).getX());
@@ -284,8 +287,12 @@ public class GameStartUp extends BasicGameState{
 					|| projectiles.get(i).getRow() > Gauntlet.maxRow 
 					|| projectiles.get(i).getColumn() < 0
 					|| projectiles.get(i).getRow() < 0) {
-				projectiles.remove(i);
+				removeList.add(i);
 			}
+		}
+		
+		for (int i = 0; i < removeList.size(); i++) {
+			projectiles.remove(removeList.get(i).intValue());
 		}
 	}
 
