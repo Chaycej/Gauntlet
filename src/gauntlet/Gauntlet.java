@@ -5,6 +5,8 @@ import jig.ResourceManager;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Vector;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -80,8 +82,8 @@ public class Gauntlet extends StateBasedGame {
 	Client client;
 	GameThread clientThread;
 	GameState gameState;
-	ArrayList<Projectile> warriorProjectiles;
-	ArrayList<Projectile> rangerProjectiles;
+	Vector<Projectile> warriorProjectiles;
+	Vector<Projectile> rangerProjectiles;
 	ArrayList<Skeleton> skeletonList;
 
 	
@@ -145,8 +147,8 @@ public class Gauntlet extends StateBasedGame {
 		ranger = new Ranger(rangerX, rangerY, 0f, 0f);
 		skeleton = new Skeleton(skeletonX, skeletonY, 0f, 0f);
 		
-		warriorProjectiles = new ArrayList<>();
-		rangerProjectiles = new ArrayList<>();
+		warriorProjectiles = new Vector<>();
+		rangerProjectiles = new Vector<>();
 		skeletonList = new ArrayList<Skeleton>();
 		skeletonList.add(skeleton);
 		
