@@ -19,10 +19,10 @@ public class Gauntlet extends StateBasedGame {
 	public final static int windowWidth = 800;
 	public final static int windowHeight = 800;
 	
-	public final int  warriorX= 200;
-	public final int  warriorY= 200;
-	public final int  rangerX= 280;
-	public final int  rangerY= 200;
+	public final int  warriorX= 100;
+	public final int  warriorY= 750;
+	public final int  rangerX= 150;
+	public final int  rangerY= 750;
 	public final int  skeletonX= 500;
 	public final int  skeletonY= 500;
 	
@@ -49,6 +49,22 @@ public class Gauntlet extends StateBasedGame {
 	public static final String skeletonS = "gauntlet/resources/skeletonS.png";
 	public static final String skeletonE = "gauntlet/resources/skeletonE.png";
 	public static final String skeletonW = "gauntlet/resources/skeletonW.png";
+	
+	public static final String LobbyPic = "gauntlet/resources/LobbyPic.png";
+	
+	public static final String KeyHUp = "gauntlet/resources/KeyHUp.png";
+	public static final String KeyHDown = "gauntlet/resources/KeyHDown.png";
+	public static final String KeyVLeft = "gauntlet/resources/KeyVLeft.png";
+	public static final String KeyVRight = "gauntlet/resources/KeyVRight.png";
+	
+	public static final String DoorOpen = "gauntlet/resources/DoorOpen.png";
+	public static final String DoorClosed = "gauntlet/resources/DoorClosed.png";
+	public static final String DoorODown = "gauntlet/resources/DoorOpenDown.png";
+	public static final String DoorCDown = "gauntlet/resources/DoorClosedDown.png";
+	public static final String DoorORight = "gauntlet/resources/DoorOpenRight.png";
+	public static final String DoorCRight = "gauntlet/resources/DoorClosedRight.png";
+	public static final String DoorCLeft = "gauntlet/resources/DoorClosedLeft.png";
+	public static final String DoorOLeft = "gauntlet/resources/DoorOpenLeft.png";
 
 	public final int ScreenWidth;
 	public final int ScreenHeight;
@@ -109,6 +125,21 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(skeletonS);
 		ResourceManager.loadImage(skeletonE);
 		ResourceManager.loadImage(skeletonW);
+		
+		ResourceManager.loadImage(LobbyPic);
+		ResourceManager.loadImage(KeyHUp);
+		ResourceManager.loadImage(KeyHDown);
+		ResourceManager.loadImage(KeyVRight);
+		ResourceManager.loadImage(KeyVLeft);
+		
+		ResourceManager.loadImage(DoorOpen);
+		ResourceManager.loadImage(DoorClosed);
+		ResourceManager.loadImage(DoorORight);
+		ResourceManager.loadImage(DoorCRight);
+		ResourceManager.loadImage(DoorOLeft);
+		ResourceManager.loadImage(DoorCLeft);
+		ResourceManager.loadImage(DoorODown);
+		ResourceManager.loadImage(DoorCDown);
 		
 		warrior = new Warrior(warriorX, warriorY, 0f, 0f);
 		ranger = new Ranger(rangerX, rangerY, 0f, 0f);
