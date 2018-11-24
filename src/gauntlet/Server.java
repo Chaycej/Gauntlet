@@ -3,17 +3,20 @@ package gauntlet;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.ServerSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
+
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.state.StateBasedGame;
 
 /*
  *  Server
  * 
- * The server communicates to clients through a UDP socket on port 3303. The first person
+ * The server communicates to clients through a TCP socket on port 3303. The first person
  * that boots up the game is considered the server, and any player to boot up the game after
  * the server has been configured is considered a client where they send commands asking the server
  * to move, attack, etc. 
@@ -27,20 +30,18 @@ import java.net.SocketException;
  * - Listening for new moves.
  * - Listening for a client's attack.
  * - Listening for client's position.
- * - Sending acknowledgement commands to the client for whether
- * 	 they are allowed to move or attack.
+ * - Sending updated game state to the client 
  * 
  */
 public class Server {
 	
-	public static final String YES_CMD = "1y\n";
-	public static final String NO_CMD  = "1n\n";
 	public static final int PORT = 3303;
 	
 	public ServerSocket socket;
 	public Socket clientSocket;
 	public BufferedReader clientStream;
 	public DataOutputStream serverStream;
+	public Gauntlet gauntlet;
 	InetAddress clientAddr;
 	
 	/*
@@ -48,12 +49,13 @@ public class Server {
 	 * 
 	 * Initializes a server object and opens a UDP socket on port 3303.
 	 */
-	public Server() {
+	public Server(Gauntlet gauntlet) {
 		try {
 			this.socket = new ServerSocket(PORT);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		this.gauntlet = gauntlet;
 		System.out.println("DEBUG: Started server");
 	}
 	
@@ -63,7 +65,7 @@ public class Server {
 	 * Starts the server and listens for the client connection. Once a client connects
 	 * the server stops listening for new clients.
 	 */
-	public void run() {
+	public void run(GameContainer container, StateBasedGame game, int delta) {
 		
 		// Listen for client connection
 		while (true) {
@@ -71,10 +73,9 @@ public class Server {
 				this.clientSocket = this.socket.accept();
 				this.clientStream = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
 				this.serverStream = new DataOutputStream(this.clientSocket.getOutputStream());
-				
-				String clientMsg = clientStream.readLine();
-				System.out.println(clientMsg);
-				
+				System.out.println("Client joined game");
+				gauntlet.clientThread = new GameThread(this, gauntlet.gameState, container, game, delta);
+				gauntlet.clientThread.start();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -82,28 +83,11 @@ public class Server {
 		}
 	}
 	
-	/*
-	 * sendValidMove
-	 * 
-	 * Acknowledges the client's next move and sends a command allowing the client to move.
-	 */
-	public void sendValidMove() {
+	public void sendGameState(GameState gameState) {
 		try {
-			this.serverStream.writeBytes(YES_CMD);
+			ObjectOutputStream output = new ObjectOutputStream(this.clientSocket.getOutputStream());
+			output.writeObject(gameState);
 		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/*
-	 * sendInvalidMove
-	 * 
-	 * Sends an invalid move command to the client.
-	 */
-	public void sendInvalidMove(InetAddress clientAddr) {
-		try {
-			this.serverStream.writeBytes(NO_CMD);
-		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -111,36 +95,17 @@ public class Server {
 	/*
 	 * readClientState
 	 * 
-	 * Reads a client state. Client packets follow the format
-	 * "1p<x pos length><x pos><y pos length><y pos><direciton command length><direction command>		
-	 * 
-	 * Example:
-	 * 	"1p320032002up"
-	 * 
+	 *  Reads a client's state and returns it.
 	 */
 	public GameState readClientState() {
-		
-		String cmd = null;
 		try {
-			cmd = this.clientStream.readLine();
-		} catch (IOException e) {
+			ObjectInputStream in = new ObjectInputStream(this.clientSocket.getInputStream());
+			GameState clientState = (GameState)in.readObject();
+			return clientState;
+		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
+			return null;
 		}
-		
-		System.out.println(cmd);
-		
-		// Read x,y position
-		int index = cmd.charAt(0) - '0' + 1;
-		int xLength = cmd.charAt(index) - '0';
-		int xPos = Integer.parseInt(cmd.substring(index+1, index + xLength + 1));
-		index += xLength + 1;
-		int yLength = cmd.charAt(index) - '0';
-		int yPos = Integer.parseInt(cmd.substring(index+1, index + yLength + 1));
-		index += yLength + 1;
-		
-		String direction = cmd.substring(index+1, index + cmd.charAt(index) - '0' + 1);
-		
-		return new GameState(direction, xPos, yPos);
 	}
 	
 	/*
