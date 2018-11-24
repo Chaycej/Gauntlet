@@ -8,6 +8,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	private int health;
 	public Vector velocity;
 	private int countdown;
 	private double[][] path;
@@ -25,6 +26,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		super(x, y);
 		
 		this.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.skeletonS));
+		this.health = 10;
 		velocity = new Vector(vx, vy);
 		countdown = 0;
 		path = new double[25][25];
@@ -37,6 +39,16 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		
 		this.xPos = x;
 		this.yPos = y;
+	}
+	
+	/*
+	 *  isDead
+	 *  
+	 *  Returns true if the skeleton has no more health.
+	 * 
+	 */
+	public boolean isDead() {
+		return this.health <= 0;
 	}
 	
 	public void setVelocity(final Vector v) {
