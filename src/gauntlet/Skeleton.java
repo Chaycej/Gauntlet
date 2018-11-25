@@ -7,7 +7,6 @@ import jig.Vector;
 public class Skeleton extends Entity implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
 	private int health;
 	public Vector velocity;
 	private int countdown;
@@ -18,13 +17,11 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	int direction;
 	int previousTargetCol;
 	int previousTargetRow;
-	
 	float xPos;
 	float yPos;
 	
 	public Skeleton(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
-		
 		this.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.skeletonS));
 		this.health = 10;
 		velocity = new Vector(vx, vy);
@@ -36,7 +33,6 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		direction = 0;
 		previousTargetCol = -1;
 		previousTargetRow = -1;
-		
 		this.xPos = x;
 		this.yPos = y;
 	}
@@ -145,7 +141,6 @@ public class Skeleton extends Entity implements java.io.Serializable {
 			if (gauntlet.map[row-1][col] == 1 || this.visited[row-1][col] == 1) {		// Set adjacent walls to poor pathfinding score
 				this.path[row-1][col] = this.path[row-1][col]+10000;
 			} else {
-				
 				this.path[row-1][col] = 10 + getDestinationDistance(row-1, col, destRow, destCol);
 			}
 		}
@@ -186,24 +181,32 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	 * 3 - down
 	 * 4 - right
 	 */
-	synchronized public void getMinPath(int row, int col) {
-		this.direction = 3;
-		double min = this.path[row+1][col];
-		if (this.path[row-1][col] < min) {
-			min = this.path[row-1][col];
-			this.direction = 1;
+	synchronized public void getMinPath(Gauntlet gauntlet, int row, int col) {
+		this.direction = 0;
+		double min = 10000;
+		if (this.path[row-1][col] > 0) {
+			if (this.path[row-1][col] < min) {
+				min = this.path[row-1][col];
+				this.direction = 1;
+			}
 		}
-		if (this.path[row][col+1] < min) {
-			min = this.path[row][col+1];
-			this.direction = 4;
+		if (this.path[row][col+1] > 0) {
+			if (this.path[row][col+1] < min) {
+				min = this.path[row][col+1];
+				this.direction = 4;
+			}
 		}
-		if (this.path[row][col-1] < min) {
-			min = this.path[row][col-1];
-			this.direction = 2;
+		if (this.path[row][col-1] > 0) {
+			if (this.path[row][col-1] < min) {
+				min = this.path[row][col-1];
+				this.direction = 2;
+			}
 		}
-		if (this.path[row+1][col] < min) {
-			min = this.path[row+1][col];
-			this.direction = 3;
+		if (this.path[row+1][col] > 0) {
+			if (this.path[row+1][col] < min) {
+				min = this.path[row+1][col];
+				this.direction = 3;
+			}
 		}
 	}
 	
@@ -226,33 +229,33 @@ public class Skeleton extends Entity implements java.io.Serializable {
 			}
 		}
 		buildPath( gauntlet, gauntlet.warrior.getRow(), gauntlet.warrior.getColumn());
-		getMinPath( row, col);
+		getMinPath(gauntlet, row, col);
 		this.visited[row][col] = 1;
-		
+	
 		// Moving left
 		if (direction == 2) {
 			this.eastAnimation();
-			this.setVelocity(new Vector(-0.05f, 0f));
+			this.setVelocity(new Vector(-0.06f, 0f));
 		}
 		
 		//going right
 		if (direction == 4) {
 			this.westAnimation();
-			this.setVelocity(new Vector(0.05f, 0f));
+			this.setVelocity(new Vector(0.06f, 0f));
 		}
 		
 		//going down
 		if (direction == 3) {
 			this.southAnimation();
-			this.setVelocity(new Vector(0f, 0.05f));
+			this.setVelocity(new Vector(0f, 0.06f));
 		}
 		
 		//going up
 		if (direction == 1) {
 			this.northAnimation();
-			this.setVelocity(new Vector(0f, -0.05f));
+			this.setVelocity(new Vector(0f, -0.06f));
 		}
-	
+		
 		if (row-1 < 0 || row+1 > Gauntlet.maxRow-1 || col-1 < 0 || col+1 > Gauntlet.maxColumn-1) {
 			this.setVelocity(new Vector(0f, 0f));
 		}
