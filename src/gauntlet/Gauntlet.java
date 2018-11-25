@@ -187,7 +187,8 @@ public class Gauntlet extends StateBasedGame {
 		try {
 			app = new AppGameContainer(new Gauntlet("Gauntlet", windowWidth, windowHeight));		//(x,y)
 			app.setDisplayMode(windowWidth, windowHeight, false);
-			app.setVSync(true);
+			app.setClearEachFrame(false);
+			app.setTargetFrameRate(35);
 			app.start();
 		} catch (SlickException e) {
 			e.printStackTrace();
