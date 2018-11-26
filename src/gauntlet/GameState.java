@@ -1,10 +1,13 @@
 package gauntlet;
 
 import java.util.ArrayList;
+import java.util.Vector;
 import java.util.concurrent.atomic.*;
 
 public class GameState implements java.io.Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	enum Direction {
 		UP, DOWN, RIGHT, LEFT, STOP;
 	}
@@ -18,7 +21,9 @@ public class GameState implements java.io.Serializable {
 	private AtomicInteger rangerX;
 	private AtomicInteger rangerY;
 	
-	//public ArrayList<Skeleton> skeletonList;
+	public ArrayList<Skeleton> skeletons;
+	public Vector<Projectile> warriorProjectiles;
+	public Vector<Projectile> rangerProjectiles;
 	
 	public GameState() {
 		this.warriorX = new AtomicInteger(200);
@@ -31,7 +36,9 @@ public class GameState implements java.io.Serializable {
 		this.rangerDirection = Direction.DOWN;
 		this.rangerIsMoving = false;
 		
-		//skeletonList = new ArrayList<>();
+		skeletons = new ArrayList<>();
+		warriorProjectiles = new Vector<>();
+		rangerProjectiles = new Vector<>();
 	}
 	
 	/*
@@ -67,14 +74,14 @@ public class GameState implements java.io.Serializable {
 	/*
 	 *  Returns true if the warrior is moving.
 	 */
-	public boolean warriorIsMoving() {
+	synchronized public boolean warriorIsMoving() {
 		return this.warriorIsMoving;
 	}
 	
 	/*
 	 *  Sets the warrior's movement
 	 */
-	public void setWarriorMovement(boolean bool) {
+	synchronized public void setWarriorMovement(boolean bool) {
 		this.warriorIsMoving = bool;
 	}
 	
