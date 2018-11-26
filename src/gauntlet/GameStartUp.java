@@ -293,9 +293,9 @@ public class GameStartUp extends BasicGameState{
 			}
 		}
 
-		for (int i = 0; i < removeList.size(); i++) {
-			projectiles.remove(removeList.get(i).intValue());
-		}
+//		for (int i = 0; i < removeList.size(); i++) {
+//			projectiles.remove(removeList.get(i).intValue());
+//		}
 	}
 
 	@Override
