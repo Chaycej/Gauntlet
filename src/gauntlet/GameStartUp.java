@@ -63,7 +63,6 @@ public class GameStartUp extends BasicGameState{
 		GameState clientState = new GameState();
 		clientState.setWarriorPosition((int)gauntlet.warrior.getX(), (int)gauntlet.warrior.getY());
 
-
 		// Up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
 			if (gauntlet.warrior.getRow() > 0) {
@@ -279,8 +278,8 @@ public class GameStartUp extends BasicGameState{
 	 */
 	public void updateProjectiles(java.util.Vector<Projectile> projectiles, int delta) {
 
-		ArrayList<Integer> removeList = new ArrayList<Integer>();
-
+		ArrayList<Integer> removeList = new ArrayList<>();
+		
 		for (int i = 0; i < projectiles.size(); i++) {
 			projectiles.get(i).update(delta);
 			projectiles.get(i).setXPos((int) projectiles.get(i).getX());
@@ -289,8 +288,19 @@ public class GameStartUp extends BasicGameState{
 					|| projectiles.get(i).getRow() > Gauntlet.maxRow 
 					|| projectiles.get(i).getColumn() < 0
 					|| projectiles.get(i).getRow() < 0) {
+				
+			}
+			
+			int row = projectiles.get(i).getRow();
+			int col = projectiles.get(i).getColumn();
+			if (Gauntlet.map[row][col] == 1) {
 				removeList.add(i);
 			}
+		}
+		
+		
+		for (int i : removeList) {
+			projectiles.remove(i);
 		}
 	}
 
