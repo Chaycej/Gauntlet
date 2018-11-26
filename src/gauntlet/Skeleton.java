@@ -184,25 +184,25 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	synchronized public void getMinPath(Gauntlet gauntlet, int row, int col) {
 		this.direction = 0;
 		double min = 10000;
-		if (this.path[row-1][col] > 0) {
+		if (row-1 >= 0) {
 			if (this.path[row-1][col] < min) {
 				min = this.path[row-1][col];
 				this.direction = 1;
 			}
 		}
-		if (this.path[row][col+1] > 0) {
+		if (col+1 <= 25 ) {
 			if (this.path[row][col+1] < min) {
 				min = this.path[row][col+1];
 				this.direction = 4;
 			}
 		}
-		if (this.path[row][col-1] > 0) {
+		if (col-1 >= 0) {
 			if (this.path[row][col-1] < min) {
 				min = this.path[row][col-1];
 				this.direction = 2;
 			}
 		}
-		if (this.path[row+1][col] > 0) {
+		if (row+1 <= 25) {
 			if (this.path[row+1][col] < min) {
 				min = this.path[row+1][col];
 				this.direction = 3;
@@ -214,21 +214,57 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	 * Moves the ghost along a path to intercept the warrior.
 	 */
 	synchronized public void moveGhost(Gauntlet gauntlet, int delta) {
+//		int row = getRow();
+//		int col = getColumn();
+//		
+//		if (previousTargetCol ==-1 || previousTargetRow ==-1 || previousTargetCol==col || previousTargetRow==row) {
+//			
+//			previousTargetCol = gauntlet.warrior.getRow();
+//			previousTargetRow = gauntlet.warrior.getColumn();
+//			
+//			for (int i = 0; i < Gauntlet.maxRow; i++) {
+//				for (int j = 0; j < Gauntlet.maxColumn; j++) {
+//					this.visited[i][j]=0;
+//				}
+//			}
+//		}
+//		buildPath( gauntlet, gauntlet.warrior.getRow(), gauntlet.warrior.getColumn());
 		int row = getRow();
-		int col = getColumn();
-		
-		if (previousTargetCol ==-1 || previousTargetRow ==-1 || previousTargetCol==col || previousTargetRow==row) {
-			
-			previousTargetCol = gauntlet.warrior.getRow();
-			previousTargetRow = gauntlet.warrior.getColumn();
-			
-			for (int i = 0; i < Gauntlet.maxRow; i++) {
-				for (int j = 0; j < Gauntlet.maxColumn; j++) {
-					this.visited[i][j]=0;
-				}
-			}
-		}
-		buildPath( gauntlet, gauntlet.warrior.getRow(), gauntlet.warrior.getColumn());
+        int col = getColumn();
+        int targetCol = -1;
+        int targetRow = -1;
+        if (previousTargetCol ==-1 || previousTargetRow ==-1 || previousTargetCol==col || previousTargetRow==row) {
+           
+            for (int i=0; i<gauntlet.maxRow; i++) {
+                for (int j=0; j<gauntlet.maxColumn; j++) {
+                    this.visited[i][j]=0;
+                }
+            }
+        }
+        int warriorTargetRow = gauntlet.warrior.getRow();
+        int warriorTargetCol = gauntlet.warrior.getColumn();
+        int rangerTargetRow = gauntlet.ranger.getRow();
+        int rangerTargetCol = gauntlet.ranger.getColumn();
+        int diffRowW = Math.abs(row - warriorTargetRow);
+        int diffColW = Math.abs(col - warriorTargetCol);
+        int diffRowR = Math.abs(row - rangerTargetRow);
+        int diffColR = Math.abs(col - rangerTargetCol);
+        int totalDiffWarrior = diffRowW+diffColW;
+        int totalDiffRanger = diffRowR+diffColR;
+        if (totalDiffRanger <= totalDiffWarrior) {
+            previousTargetCol = rangerTargetCol; 
+            previousTargetRow = rangerTargetRow;
+            targetCol = rangerTargetCol;
+            targetRow =  rangerTargetRow;
+        } else {
+            previousTargetCol = warriorTargetCol; 
+            previousTargetRow = warriorTargetRow;
+            targetCol = warriorTargetCol;
+            targetRow = warriorTargetRow;
+            System.out.println("targetCol is " +targetCol);
+            System.out.println("targetRow is " +targetRow);
+        }
+        buildPath( gauntlet, targetRow, targetCol);
 		getMinPath(gauntlet, row, col);
 		this.visited[row][col] = 1;
 	
@@ -260,6 +296,9 @@ public class Skeleton extends Entity implements java.io.Serializable {
 			this.setVelocity(new Vector(0f, 0f));
 		}
 		if (row == gauntlet.warrior.getRow() && col == gauntlet.warrior.getColumn()) {
+			this.setVelocity(new Vector(0f, 0f));
+		}
+		if (row == gauntlet.ranger.getRow() && col == gauntlet.ranger.getColumn()) {
 			this.setVelocity(new Vector(0f, 0f));
 		}
 	}
