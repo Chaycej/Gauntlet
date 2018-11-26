@@ -128,9 +128,6 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.ranger.updateAnimation(newGameState.getRangerDirection());
 
 			// Update skeletons
-//			gauntlet.skeleton.setPosition(newGameState.skeletons.get(0).getXPos(),
-//					newGameState.skeletons.get(0).getYPos());
-			
 			for (int i = 0; i < newGameState.skeletons.size(); i++) {
 				gauntlet.skeletonList.get(i).setPosition(newGameState.skeletons.get(i).getXPos(),
 						newGameState.skeletons.get(i).getYPos());
