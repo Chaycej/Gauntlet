@@ -136,6 +136,10 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		int row = getRow();
 		int col = getColumn();
 		
+		if (row < 0 || col < 0) {
+			return;
+		}
+		
 		//north tile 
 		if (row > 0) {
 			if (gauntlet.map[row-1][col] == 1 || this.visited[row-1][col] == 1) {		// Set adjacent walls to poor pathfinding score
@@ -229,8 +233,8 @@ public class Skeleton extends Entity implements java.io.Serializable {
 //			}
 //		}
 //		buildPath( gauntlet, gauntlet.warrior.getRow(), gauntlet.warrior.getColumn());
-		int row = getRow();
-        int col = getColumn();
+		int row = this.getRow();
+        int col = this.getColumn();
         int targetCol = -1;
         int targetRow = -1;
         if (previousTargetCol ==-1 || previousTargetRow ==-1 || previousTargetCol==col || previousTargetRow==row) {
@@ -241,6 +245,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
                 }
             }
         }
+        
         int warriorTargetRow = gauntlet.warrior.getRow();
         int warriorTargetCol = gauntlet.warrior.getColumn();
         int rangerTargetRow = gauntlet.ranger.getRow();
