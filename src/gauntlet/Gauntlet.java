@@ -25,7 +25,7 @@ public class Gauntlet extends StateBasedGame {
 	public final int  warriorY= 750;
 	public final int  rangerX= 150;
 	public final int  rangerY= 750;
-	public final int  skeletonX= 500;
+	public final int  skeletonX= 700;
 	public final int  skeletonY= 500;
 	
 	public static final String pathTile = "gauntlet/resources/WalkingTile.png";
