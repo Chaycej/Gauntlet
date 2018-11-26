@@ -33,8 +33,11 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		direction = 0;
 		previousTargetCol = -1;
 		previousTargetRow = -1;
-		this.xPos = x;
-		this.yPos = y;
+		this.setXPos((int)x);
+		this.setYPos((int)y);
+		
+		System.out.println("x is " + this.xPos);
+		System.out.println("y is " + this.yPos);
 	}
 	
 	/*
@@ -78,13 +81,11 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	}
 	
 	public int getRow() {
-		int row = (int) ((this.getY())/32);	
-		return row;
+		return this.getYPos()/32;	
 	}
 	
 	public int getColumn() {
-		int col = (int) (this.getX()/32);
-		return col;
+		return this.getXPos()/32;
 	}
 	
 	public void northAnimation() {
@@ -135,6 +136,10 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	synchronized public void buildPath(Gauntlet gauntlet, int destRow, int destCol) {
 		int row = getRow();
 		int col = getColumn();
+		
+		if (row < 0 || col < 0) {
+			return;
+		}
 		
 		//north tile 
 		if (row > 0) {
@@ -214,33 +219,18 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	 * Moves the ghost along a path to intercept the warrior.
 	 */
 	synchronized public void moveGhost(Gauntlet gauntlet, int delta) {
-//		int row = getRow();
-//		int col = getColumn();
-//		
-//		if (previousTargetCol ==-1 || previousTargetRow ==-1 || previousTargetCol==col || previousTargetRow==row) {
-//			
-//			previousTargetCol = gauntlet.warrior.getRow();
-//			previousTargetRow = gauntlet.warrior.getColumn();
-//			
-//			for (int i = 0; i < Gauntlet.maxRow; i++) {
-//				for (int j = 0; j < Gauntlet.maxColumn; j++) {
-//					this.visited[i][j]=0;
-//				}
-//			}
-//		}
-//		buildPath( gauntlet, gauntlet.warrior.getRow(), gauntlet.warrior.getColumn());
-		int row = getRow();
-        int col = getColumn();
+		int row = this.getRow();
+        int col = this.getColumn();
         int targetCol = -1;
         int targetRow = -1;
         if (previousTargetCol ==-1 || previousTargetRow ==-1 || previousTargetCol==col || previousTargetRow==row) {
-           
-            for (int i=0; i<gauntlet.maxRow; i++) {
-                for (int j=0; j<gauntlet.maxColumn; j++) {
-                    this.visited[i][j]=0;
+            for (int i = 0; i < Gauntlet.maxRow; i++) {
+                for (int j = 0; j < Gauntlet.maxColumn; j++) {
+                    this.visited[i][j] = 0;
                 }
             }
         }
+        
         int warriorTargetRow = gauntlet.warrior.getRow();
         int warriorTargetCol = gauntlet.warrior.getColumn();
         int rangerTargetRow = gauntlet.ranger.getRow();
