@@ -219,21 +219,6 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	 * Moves the ghost along a path to intercept the warrior.
 	 */
 	synchronized public void moveGhost(Gauntlet gauntlet, int delta) {
-//		int row = getRow();
-//		int col = getColumn();
-//		
-//		if (previousTargetCol ==-1 || previousTargetRow ==-1 || previousTargetCol==col || previousTargetRow==row) {
-//			
-//			previousTargetCol = gauntlet.warrior.getRow();
-//			previousTargetRow = gauntlet.warrior.getColumn();
-//			
-//			for (int i = 0; i < Gauntlet.maxRow; i++) {
-//				for (int j = 0; j < Gauntlet.maxColumn; j++) {
-//					this.visited[i][j]=0;
-//				}
-//			}
-//		}
-//		buildPath( gauntlet, gauntlet.warrior.getRow(), gauntlet.warrior.getColumn());
 		int row = this.getRow();
         int col = this.getColumn();
         int targetCol = -1;
