@@ -29,7 +29,7 @@ public class GameStartUp extends BasicGameState{
 		gauntlet.warrior.render(g);
 		gauntlet.ranger.render(g);
 		gauntlet.skeleton.render(g);
-
+		
 		for (Projectile projectile : gauntlet.warriorProjectiles) {
 			projectile.render(g);
 		}
@@ -128,8 +128,13 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.ranger.updateAnimation(newGameState.getRangerDirection());
 
 			// Update skeletons
-			gauntlet.skeleton.setPosition(newGameState.skeletons.get(0).getXPos(),
-					newGameState.skeletons.get(0).getYPos());
+//			gauntlet.skeleton.setPosition(newGameState.skeletons.get(0).getXPos(),
+//					newGameState.skeletons.get(0).getYPos());
+			
+			for (int i = 0; i < newGameState.skeletons.size(); i++) {
+				gauntlet.skeletonList.get(i).setPosition(newGameState.skeletons.get(i).getXPos(),
+						newGameState.skeletons.get(i).getYPos());
+			}
 
 			// Update teammates projectiles
 			gauntlet.rangerProjectiles = newGameState.rangerProjectiles;
