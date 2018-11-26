@@ -261,9 +261,8 @@ public class Skeleton extends Entity implements java.io.Serializable {
             previousTargetRow = warriorTargetRow;
             targetCol = warriorTargetCol;
             targetRow = warriorTargetRow;
-            System.out.println("targetCol is " +targetCol);
-            System.out.println("targetRow is " +targetRow);
         }
+        
         buildPath( gauntlet, targetRow, targetCol);
 		getMinPath(gauntlet, row, col);
 		this.visited[row][col] = 1;
