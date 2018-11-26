@@ -33,7 +33,7 @@ public class GameThread extends Thread {
 			int warriorCol = gameState.getWarriorColumn();
 			// Client attempting to move down
 			if (clientState.getWarriorDirection() == GameState.Direction.DOWN) {
-				if (this.gameState.getWarriorY() < 24 * 32 - 29 && gauntlet.map[warriorRow+1][warriorCol] == 0) {
+				if (this.gameState.getWarriorY() < ((24 * 32)-32) && gauntlet.map[warriorRow+1][warriorCol] == 0) {
 					this.gameState.setWarriorMovement(true);
 					this.gameState.setWarriorDirection(GameState.Direction.DOWN);
 				} else {
