@@ -73,7 +73,7 @@ public class Gauntlet extends StateBasedGame {
 	
 	public static AppGameContainer app;
 	
-	int[][] map;
+	static int[][] map;
 	MapMatrix[][] mapMatrix;
 	Warrior warrior;
 	Ranger ranger;

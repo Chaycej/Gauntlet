@@ -27,7 +27,7 @@ public class GameStartUp extends BasicGameState{
 		gauntlet.warrior.render(g);
 		gauntlet.ranger.render(g);
 		gauntlet.skeleton.render(g);
-		
+
 		for (Projectile projectile : gauntlet.warriorProjectiles) {
 			projectile.render(g);
 		}
@@ -254,7 +254,7 @@ public class GameStartUp extends BasicGameState{
 		int y = 16;
 		for (int row = 0; row < Gauntlet.maxRow; row++ ) {
 			for (int col = 0; col < Gauntlet.maxColumn; col++) {
-				if ( gauntlet.map[row][col] == 0) {		//equals a 0 is a path
+				if ( Gauntlet.map[row][col] == 0) {		//equals a 0 is a path
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
 					gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.pathTile));
 				} else {							//equals a 1 is a wall
@@ -286,6 +286,7 @@ public class GameStartUp extends BasicGameState{
 			}
 		}
 	}
+
 
 	@Override
 	public int getID() {

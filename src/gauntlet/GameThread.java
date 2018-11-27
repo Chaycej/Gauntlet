@@ -21,7 +21,7 @@ public class GameThread extends Thread {
 	}
 
 	public void run() {
-		Gauntlet gauntlet = (Gauntlet) this.game;
+		//Gauntlet gauntlet = (Gauntlet) this.game;
 		while (true) {
 			GameState clientState = this.server.readClientState();
 			this.gameState.setWarriorPosition(clientState.getWarriorX(), clientState.getWarriorY());
@@ -34,7 +34,7 @@ public class GameThread extends Thread {
 			
 			if (clientState.getWarriorDirection() == GameState.Direction.DOWN) {
 				tempRow = (clientState.getWarriorY()-14)/32;
-				if (this.gameState.getWarriorY() < (Gauntlet.maxRow * 32) && gauntlet.map[tempRow+1][warriorCol] == 0) {
+				if (this.gameState.getWarriorY() < (Gauntlet.maxRow * 32) && Gauntlet.map[tempRow+1][warriorCol] == 0) {
 					this.gameState.setWarriorMovement(true);
 					this.gameState.setWarriorDirection(GameState.Direction.DOWN);
 					commandTrue = 1;
@@ -53,7 +53,7 @@ public class GameThread extends Thread {
 			// Client attempting to move up
 			else if (clientState.getWarriorDirection() == GameState.Direction.UP) {
 				tempRow = (clientState.getWarriorY()+14)/32;
-				if (this.gameState.getWarriorY() > 34 &&  gauntlet.map[tempRow-1][warriorCol] == 0) {
+				if (this.gameState.getWarriorY() > 34 &&  Gauntlet.map[tempRow-1][warriorCol] == 0) {
 					this.gameState.setWarriorMovement(true);
 					this.gameState.setWarriorDirection(GameState.Direction.UP);
 					commandTrue = 1;
@@ -72,7 +72,7 @@ public class GameThread extends Thread {
 			// Client attempting to move left
 			else if (clientState.getWarriorDirection() == GameState.Direction.LEFT) {
 				tempCol = (clientState.getWarriorX()+15)/32;
-				if (this.gameState.getWarriorX() > 34 && gauntlet.map[warriorRow][tempCol-1] == 0) {
+				if (this.gameState.getWarriorX() > 34 && Gauntlet.map[warriorRow][tempCol-1] == 0) {
 					this.gameState.setWarriorMovement(true);
 					this.gameState.setWarriorDirection(GameState.Direction.LEFT);
 					commandTrue = 1;
@@ -91,7 +91,7 @@ public class GameThread extends Thread {
 			// Client attempting to move right
 			else if (clientState.getWarriorDirection() == GameState.Direction.RIGHT) {
 				tempCol = (clientState.getWarriorX()-15)/32;
-				if (this.gameState.getWarriorX() < (Gauntlet.maxColumn * 32) && gauntlet.map[warriorRow][tempCol+1] == 0) {
+				if (this.gameState.getWarriorX() < (Gauntlet.maxColumn * 32) && Gauntlet.map[warriorRow][tempCol+1] == 0) {
 					this.gameState.setWarriorMovement(true);
 					this.gameState.setWarriorDirection(GameState.Direction.RIGHT);
 					commandTrue = 1;
@@ -105,7 +105,7 @@ public class GameThread extends Thread {
 					this.gameState.setWarriorDirection(GameState.Direction.RIGHT);
 					this.gameState.setWarriorMovement(false);
 				}
-			}
+			} 
 			
 			else if (clientState.getWarriorDirection() == GameState.Direction.STOP) {
 				this.gameState.setWarriorDirection(GameState.Direction.STOP);
