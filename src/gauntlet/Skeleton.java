@@ -35,9 +35,6 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		previousTargetRow = -1;
 		this.setXPos((int)x);
 		this.setYPos((int)y);
-		
-		System.out.println("x is " + this.xPos);
-		System.out.println("y is " + this.yPos);
 	}
 	
 	/*
