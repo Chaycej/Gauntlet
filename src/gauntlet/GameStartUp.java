@@ -1,7 +1,5 @@
 package gauntlet;
 
-import java.util.ArrayList;
-
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -29,7 +27,7 @@ public class GameStartUp extends BasicGameState{
 		gauntlet.warrior.render(g);
 		gauntlet.ranger.render(g);
 		gauntlet.skeleton.render(g);
-		
+
 		for (Projectile projectile : gauntlet.warriorProjectiles) {
 			projectile.render(g);
 		}
@@ -63,7 +61,6 @@ public class GameStartUp extends BasicGameState{
 		GameState clientState = new GameState();
 		clientState.setWarriorPosition((int)gauntlet.warrior.getX(), (int)gauntlet.warrior.getY());
 
-
 		// Up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
 			if (gauntlet.warrior.getRow() > 0) {
@@ -74,7 +71,7 @@ public class GameStartUp extends BasicGameState{
 
 		// Down movement
 		else if (input.isKeyDown(Input.KEY_DOWN)) {
-			if (gauntlet.warrior.getRow() < Gauntlet.maxRow-1) {
+			if ( gauntlet.warrior.getRow() < Gauntlet.maxRow-1) {
 				gauntlet.warrior.setDirection(GameState.Direction.DOWN);
 				clientState.setWarriorDirection(GameState.Direction.DOWN);
 			}
@@ -257,7 +254,7 @@ public class GameStartUp extends BasicGameState{
 		int y = 16;
 		for (int row = 0; row < Gauntlet.maxRow; row++ ) {
 			for (int col = 0; col < Gauntlet.maxColumn; col++) {
-				if ( gauntlet.map[row][col] == 0) {		//equals a 0 is a path
+				if ( Gauntlet.map[row][col] == 0) {		//equals a 0 is a path
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
 					gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.pathTile));
 				} else {							//equals a 1 is a wall
@@ -289,6 +286,7 @@ public class GameStartUp extends BasicGameState{
 			}
 		}
 	}
+
 
 	@Override
 	public int getID() {
