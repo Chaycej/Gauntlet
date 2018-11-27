@@ -140,7 +140,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		
 		//north tile 
 		if (row > 0) {
-			if (gauntlet.map[row-1][col] == 1 || this.visited[row-1][col] == 1) {		// Set adjacent walls to poor pathfinding score
+			if (Gauntlet.map[row-1][col] == 1 || this.visited[row-1][col] == 1) {		// Set adjacent walls to poor pathfinding score
 				this.path[row-1][col] = this.path[row-1][col]+10000;
 			} else {
 				this.path[row-1][col] = 10 + getDestinationDistance(row-1, col, destRow, destCol);
@@ -149,7 +149,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		//south tile 
 		if (row < Gauntlet.maxRow) {
 			// Set adjacent walls to poor pathfinding score
-			if (gauntlet.map[row+1][col] == 1 || this.visited[row+1][col] == 1) {
+			if (Gauntlet.map[row+1][col] == 1 || this.visited[row+1][col] == 1) {
 				this.path[row+1][col] = this.path[row+1][col]+10000;
 			} else {
 				this.path[row+1][col] = 10 + getDestinationDistance(row+1, col, destRow, destCol);
@@ -158,7 +158,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		//west tile 
 		if (col > 0) {
 			// Set adjacent walls to poor pathfinding score
-			if (gauntlet.map[row][col-1] == 1 || this.visited[row][col-1] == 1) {
+			if (Gauntlet.map[row][col-1] == 1 || this.visited[row][col-1] == 1) {
 				this.path[row][col-1] = this.path[row][col-1]+10000;
 			} else {
 				this.path[row][col-1] = 10 + getDestinationDistance(row, col-1, destRow, destCol);
@@ -167,7 +167,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		//east tile 
 		if (col < Gauntlet.maxColumn ) {
 			// Set adjacent walls to poor pathfinding score
-			if (gauntlet.map[row][col+1] == 1 ||  this.visited[row][col+1]== 1) {
+			if (Gauntlet.map[row][col+1] == 1 ||  this.visited[row][col+1]== 1) {
 				this.path[row][col+1] = this.path[row][col+1]+10000;
 			} else {
 				this.path[row][col+1] = 10 + getDestinationDistance(row, col+1, destRow, destCol);
