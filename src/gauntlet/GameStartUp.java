@@ -256,9 +256,14 @@ public class GameStartUp extends BasicGameState{
 				if ( Gauntlet.map[row][col] == 0) {		//equals a 0 is a path
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
 					gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.pathTile));
-				} else {							//equals a 1 is a wall
+				} 
+				if (Gauntlet.map[row][col] == 1){							//equals a 1 is a wall
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
 					gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.wallTile));
+				} 
+				if (Gauntlet.map[row][col] == 2){
+					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
+					gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.DoorCLeft));
 				}
 				x = x + 32;
 				gauntlet.mapMatrix[row][col].render(g);

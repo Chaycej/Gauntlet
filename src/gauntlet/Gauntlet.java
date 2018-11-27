@@ -61,12 +61,12 @@ public class Gauntlet extends StateBasedGame {
 	
 	public static final String DoorOpen = "gauntlet/resources/DoorOpen.png";
 	public static final String DoorClosed = "gauntlet/resources/DoorClosed.png";
-	public static final String DoorODown = "gauntlet/resources/DoorOpenDown.png";
-	public static final String DoorCDown = "gauntlet/resources/DoorClosedDown.png";
+	public static final String DoorCDown = "gauntlet/resources/DoorOpenDown.png";
+	public static final String DoorODown = "gauntlet/resources/DoorClosedDown.png";
 	public static final String DoorORight = "gauntlet/resources/DoorOpenRight.png";
 	public static final String DoorCRight = "gauntlet/resources/DoorClosedRight.png";
-	public static final String DoorCLeft = "gauntlet/resources/DoorClosedLeft.png";
-	public static final String DoorOLeft = "gauntlet/resources/DoorOpenLeft.png";
+	public static final String DoorOLeft = "gauntlet/resources/DoorClosedLeft.png";
+	public static final String DoorCLeft = "gauntlet/resources/DoorOpenLeft.png";
 
 	public final int ScreenWidth;
 	public final int ScreenHeight;
@@ -176,8 +176,12 @@ public class Gauntlet extends StateBasedGame {
 			for (int col=0; col<maxColumn; col++) {
 				if ( map[row][col] == 48) {		//equals a 0 is a path
 					map[row][col] = 0;
-				} else {
+				}
+				if ( map[row][col] == 49) {		//equals a 1 is a wall
 					map[row][col] = 1;
+				}
+				if ( map[row][col] == 50) {	
+					map[row][col] = 2;			//a door facing 
 				}
 			}
 		}
