@@ -1,7 +1,5 @@
 package gauntlet;
 
-import java.util.ArrayList;
-
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -29,7 +27,7 @@ public class GameStartUp extends BasicGameState{
 		gauntlet.warrior.render(g);
 		gauntlet.ranger.render(g);
 		gauntlet.skeleton.render(g);
-		
+
 		for (Projectile projectile : gauntlet.warriorProjectiles) {
 			projectile.render(g);
 		}
@@ -73,7 +71,7 @@ public class GameStartUp extends BasicGameState{
 
 		// Down movement
 		else if (input.isKeyDown(Input.KEY_DOWN)) {
-			if (gauntlet.warrior.getRow() < Gauntlet.maxRow-1) {
+			if ( gauntlet.warrior.getRow() < Gauntlet.maxRow-1) {
 				gauntlet.warrior.setDirection(GameState.Direction.DOWN);
 				clientState.setWarriorDirection(GameState.Direction.DOWN);
 			}
@@ -256,7 +254,7 @@ public class GameStartUp extends BasicGameState{
 		int y = 16;
 		for (int row = 0; row < Gauntlet.maxRow; row++ ) {
 			for (int col = 0; col < Gauntlet.maxColumn; col++) {
-				if ( gauntlet.map[row][col] == 0) {		//equals a 0 is a path
+				if ( Gauntlet.map[row][col] == 0) {		//equals a 0 is a path
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
 					gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.pathTile));
 				} else {							//equals a 1 is a wall
@@ -277,9 +275,6 @@ public class GameStartUp extends BasicGameState{
 	 *  updates projectile locations.
 	 */
 	public void updateProjectiles(java.util.Vector<Projectile> projectiles, int delta) {
-
-		ArrayList<Integer> removeList = new ArrayList<>();
-
 		for (int i = 0; i < projectiles.size(); i++) {
 			projectiles.get(i).update(delta);
 			projectiles.get(i).setXPos((int) projectiles.get(i).getX());
@@ -287,21 +282,11 @@ public class GameStartUp extends BasicGameState{
 			if(projectiles.get(i).getColumn() > Gauntlet.maxColumn 
 					|| projectiles.get(i).getRow() > Gauntlet.maxRow 
 					|| projectiles.get(i).getColumn() < 0
-					|| projectiles.get(i).getRow() < 0) {		
+					|| projectiles.get(i).getRow() < 0) {
 			}
-			
-			int row = projectiles.get(i).getRow();
-			int col = projectiles.get(i).getColumn();
-			if (Gauntlet.map[row][col] == 1) {
-				removeList.add(i);
-			}
-		}
-		
-		
-		for (int i : removeList) {
-			projectiles.remove(i);
 		}
 	}
+
 
 	@Override
 	public int getID() {
