@@ -30,7 +30,9 @@ public class GameThread extends Thread {
 			int warriorCol = gameState.getWarriorColumn();
 			
 			for (int i = 0; i < clientState.skeletons.size(); i++) {
-				this.gauntlet.skeletonList.get(i).setHealth(clientState.skeletons.get(i).getHealth());
+				if (clientState.skeletons.get(i).isDead()) {
+					this.gauntlet.skeletonList.get(i).setHealth(-1);
+				}
 			}
 			
 			// Client attempting to move down
