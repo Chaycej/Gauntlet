@@ -170,7 +170,7 @@ public class GameStartUp extends BasicGameState{
 		// Up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
 			gauntlet.ranger.northAnimation();
-			if (gauntlet.ranger.getRow() > 0 && Gauntlet.map[row-1][col] == 0) {
+			if (row > 0 && Gauntlet.map[row-1][col] == 0) {
 				gauntlet.ranger.setDirection(GameState.Direction.UP);
 				gauntlet.gameState.setRangerDirection(GameState.Direction.UP);
 				gauntlet.gameState.setRangerMovement(true);
@@ -181,7 +181,7 @@ public class GameStartUp extends BasicGameState{
 		// Down movement
 		else if (input.isKeyDown(Input.KEY_DOWN)) {
 			gauntlet.ranger.southAnimation();
-			if (gauntlet.ranger.getRow() < Gauntlet.maxRow-1 && Gauntlet.map[row+1][col] == 0) {
+			if (row < Gauntlet.maxRow-1 && Gauntlet.map[row+1][col] == 0) {
 				gauntlet.ranger.setDirection(GameState.Direction.DOWN);
 				gauntlet.gameState.setRangerDirection(GameState.Direction.DOWN);
 				gauntlet.gameState.setRangerMovement(true);
@@ -192,7 +192,7 @@ public class GameStartUp extends BasicGameState{
 		// Right movement
 		else if (input.isKeyDown(Input.KEY_RIGHT)) {
 			gauntlet.ranger.eastAnimation();
-			if (gauntlet.ranger.getColumn() < Gauntlet.maxColumn && Gauntlet.map[row][col+1] == 0) {
+			if (col < Gauntlet.maxColumn && Gauntlet.map[row][col+1] == 0) {
 				gauntlet.ranger.setDirection(GameState.Direction.RIGHT);
 				gauntlet.gameState.setRangerDirection(GameState.Direction.RIGHT);
 				gauntlet.gameState.setRangerMovement(true);
@@ -203,7 +203,7 @@ public class GameStartUp extends BasicGameState{
 		// Left movement
 		else if (input.isKeyDown(Input.KEY_LEFT)) {
 			gauntlet.ranger.westAnimation();
-			if (gauntlet.ranger.getColumn() > 0 && Gauntlet.map[row][col-1] == 0) {
+			if (col > 0 && Gauntlet.map[row][col-1] == 0) {
 				gauntlet.ranger.setDirection(GameState.Direction.LEFT);
 				gauntlet.gameState.setRangerDirection(GameState.Direction.LEFT);
 				gauntlet.gameState.setRangerMovement(true);
