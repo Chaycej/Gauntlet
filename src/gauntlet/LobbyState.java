@@ -36,9 +36,6 @@ public class LobbyState extends BasicGameState{
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-		//g.drawString("Press space to start a server", 270, 200);
-		//g.drawString("OR", 375, 250);
-		//g.drawString("Type in a server ip address and press enter", 200, 300);
 		g.drawImage(ResourceManager.getImage(Gauntlet.LobbyPic),0,0);
 		tf.render(container, g);
 	}
@@ -60,7 +57,6 @@ public class LobbyState extends BasicGameState{
 		// Join a server
 		if (input.isKeyDown(Input.KEY_ENTER)) {  
 			if (gauntlet.client == null) {
-				System.out.println("Got enter");
 				gauntlet.client = new Client(tf.getText());
 				gauntlet.enterState(Gauntlet.GAMESTARTSTATE);
 			}

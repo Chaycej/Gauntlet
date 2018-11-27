@@ -10,6 +10,7 @@ public class GameThread extends Thread {
 	GameState gameState;
 	GameContainer container;
 	StateBasedGame game;
+	Gauntlet gauntlet;
 	int delta;
 
 	InetAddress clientAddr;
@@ -20,10 +21,10 @@ public class GameThread extends Thread {
 		this.container = container;
 		this.game = game;
 		this.delta = delta;
+		this.gauntlet = (Gauntlet)game;
 	}
 
 	public void run() {
-		Gauntlet gauntlet = (Gauntlet) this.game;
 		while (true) {
 			
 			GameState clientState = this.server.readClientState();
@@ -31,9 +32,14 @@ public class GameThread extends Thread {
 			this.gameState.setWarriorPosition(clientState.getWarriorX(), clientState.getWarriorY());
 			int warriorRow = gameState.getWarriorRow();
 			int warriorCol = gameState.getWarriorColumn();
+			
+			for (int i = 0; i < clientState.skeletons.size(); i++) {
+				this.gauntlet.skeletonList.get(i).setHealth(clientState.skeletons.get(i).getHealth());
+			}
+			
 			// Client attempting to move down
 			if (clientState.getWarriorDirection() == GameState.Direction.DOWN) {
-				if (this.gameState.getWarriorY() < 24 * 32 - 29 && gauntlet.map[warriorRow+1][warriorCol] == 0) {
+				if (this.gameState.getWarriorY() < 24 * 32 - 29 && Gauntlet.map[warriorRow+1][warriorCol] == 0) {
 					this.gameState.setWarriorMovement(true);
 					this.gameState.setWarriorDirection(GameState.Direction.DOWN);
 				} else {
@@ -43,7 +49,7 @@ public class GameThread extends Thread {
 
 			// Client attempting to move up
 			else if (clientState.getWarriorDirection() == GameState.Direction.UP) {
-				if (this.gameState.getWarriorY() > 40 &&  gauntlet.map[warriorRow-1][warriorCol] == 0) {
+				if (this.gameState.getWarriorY() > 40 &&  Gauntlet.map[warriorRow-1][warriorCol] == 0) {
 					this.gameState.setWarriorMovement(true);
 					this.gameState.setWarriorDirection(GameState.Direction.UP);
 				} else {
@@ -53,7 +59,7 @@ public class GameThread extends Thread {
 
 			// Client attempting to move left
 			else if (clientState.getWarriorDirection() == GameState.Direction.LEFT) {
-				if (this.gameState.getWarriorX() > 40 && gauntlet.map[warriorRow][warriorCol-1] == 0) {
+				if (this.gameState.getWarriorX() > 40 && Gauntlet.map[warriorRow][warriorCol-1] == 0) {
 					this.gameState.setWarriorMovement(true);
 					this.gameState.setWarriorDirection(GameState.Direction.LEFT);
 				} else {
@@ -63,7 +69,7 @@ public class GameThread extends Thread {
 
 			// Client attempting to move right
 			else if (clientState.getWarriorDirection() == GameState.Direction.RIGHT) {
-				if (this.gameState.getWarriorX() < 24 * 32 - 29 && gauntlet.map[warriorRow][warriorCol+1] == 0) {
+				if (this.gameState.getWarriorX() < 24 * 32 - 29 && Gauntlet.map[warriorRow][warriorCol+1] == 0) {
 					this.gameState.setWarriorMovement(true);
 					this.gameState.setWarriorDirection(GameState.Direction.RIGHT);
 				} else {
@@ -79,6 +85,7 @@ public class GameThread extends Thread {
 			// Update client's position and projectiles
 			this.gameState.setWarriorPosition(clientState.getWarriorX(), clientState.getWarriorY());
 			this.gameState.warriorProjectiles = clientState.warriorProjectiles;
+			//this.gameState.skeletons = this.gauntlet.skeletonList;
 			
 			this.server.sendGameState(this.gameState);
 		}
