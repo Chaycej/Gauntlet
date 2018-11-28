@@ -100,7 +100,7 @@ public class GameStartUp extends BasicGameState{
 		}
 
 		// Projectile
-		else if (input.isKeyPressed(Input.KEY_SPACE)) {
+		else if (input.isKeyPressed(Input.KEY_M)) {
 
 			Projectile projectile = new Projectile(gauntlet.warrior.getPosition().getX(),
 					gauntlet.warrior.getPosition().getY(), gauntlet.warrior.getDirection());
@@ -222,7 +222,7 @@ public class GameStartUp extends BasicGameState{
 		} 
 
 		// Projectile
-		else if (input.isKeyPressed(Input.KEY_SPACE)) {
+		else if (input.isKeyPressed(Input.KEY_M)) {
 			Projectile projectile = new Projectile(gauntlet.ranger.getPosition().getX(),
 					gauntlet.ranger.getPosition().getY(), gauntlet.ranger.getDirection());
 			gauntlet.rangerProjectiles.add(projectile);
@@ -290,6 +290,8 @@ public class GameStartUp extends BasicGameState{
 	public void updateProjectiles(ArrayList<Skeleton> skeletonList, java.util.Vector<Projectile> projectiles, int delta) {
 
 		ArrayList<Integer> removeList = new ArrayList<>();
+		
+		System.out.println("Size of projectiles is " + projectiles.size());
 
 		for (int i = 0; i < projectiles.size(); i++) {
 			projectiles.get(i).update(delta);
