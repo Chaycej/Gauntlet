@@ -291,7 +291,6 @@ public class GameStartUp extends BasicGameState{
 
 		ArrayList<Integer> removeList = new ArrayList<>();
 		
-		System.out.println("Size of projectiles is " + projectiles.size());
 
 		for (int i = 0; i < projectiles.size(); i++) {
 			projectiles.get(i).update(delta);
