@@ -13,6 +13,7 @@ class Projectile extends Entity implements java.io.Serializable {
 	private int xPos;
 	private int yPos;
 	private GameState.Direction direction;
+	private boolean imageMounted;
 	
 	public Projectile(final float x, final float y, GameState.Direction direction) {
 		super(x, y);
@@ -34,6 +35,7 @@ class Projectile extends Entity implements java.io.Serializable {
 		this.xPos = (int)x;
 		this.yPos = (int)y;
 		this.direction = direction;
+		this.imageMounted = false;
 		
 		countdown = 0;
 	}
@@ -76,6 +78,11 @@ class Projectile extends Entity implements java.io.Serializable {
 	 *  of the server's projectiles.
 	 */
 	public void addImage() {
+		
+		if (this.imageMounted) {
+			return;
+		}
+		
 		if (this.direction == GameState.Direction.UP) {
 			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.arrowN));
 		} else if (this.direction == GameState.Direction.DOWN) {
@@ -85,6 +92,8 @@ class Projectile extends Entity implements java.io.Serializable {
 		} else if (this.direction == GameState.Direction.LEFT) {
 			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.arrowW));
 		}
+		
+		this.imageMounted = true;
 	}
 	
 	public void update(final int delta) {

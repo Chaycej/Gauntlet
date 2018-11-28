@@ -59,32 +59,36 @@ class Ranger extends Entity {
 		return col;
 	}
 	
-	public void northAnimation() {
+	/*
+	 *  flush
+	 * 
+	 *  Removes all images from the ranger entity.
+	 */
+	private void flush() {
+		removeImage(ResourceManager.getImage(Gauntlet.rangerS));
 		removeImage(ResourceManager.getImage(Gauntlet.rangerS));
 		removeImage(ResourceManager.getImage(Gauntlet.rangerE));
 		removeImage(ResourceManager.getImage(Gauntlet.rangerW));
-		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.rangerN));
+	}
+	
+	public void northAnimation() {
+		this.flush();
+		this.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.rangerN));
 	}	
 	
 	public void southAnimation() {
-		removeImage(ResourceManager.getImage(Gauntlet.rangerN));
-		removeImage(ResourceManager.getImage(Gauntlet.rangerE));
-		removeImage(ResourceManager.getImage(Gauntlet.rangerW));
-		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.rangerS));
+		this.flush();
+		this.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.rangerS));
 	}
 	
 	public void eastAnimation() {
-		removeImage(ResourceManager.getImage(Gauntlet.rangerN));
-		removeImage(ResourceManager.getImage(Gauntlet.rangerS));
-		removeImage(ResourceManager.getImage(Gauntlet.rangerW));
-		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.rangerE));
+		this.flush();
+		this.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.rangerE));
 	}
 	
 	public void westAnimation() {
-		removeImage(ResourceManager.getImage(Gauntlet.rangerN));
-		removeImage(ResourceManager.getImage(Gauntlet.rangerS));
-		removeImage(ResourceManager.getImage(Gauntlet.rangerE));
-		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.rangerW));
+		this.flush();
+		this.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.rangerW));
 	}
 	
 	public void updateAnimation(GameState.Direction direction) {

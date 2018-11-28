@@ -59,32 +59,36 @@ class Warrior extends Entity {
 		return col;
 	}
 	
-	public void northAnimation() {
+	/*
+	 *  flush
+	 * 
+	 *  Removes all images from the warrior entity.
+	 */
+	private void flush() {
+		removeImage(ResourceManager.getImage(Gauntlet.warriorW));
 		removeImage(ResourceManager.getImage(Gauntlet.warriorS));
 		removeImage(ResourceManager.getImage(Gauntlet.warriorE));
 		removeImage(ResourceManager.getImage(Gauntlet.warriorW));
-		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorN));
+	}
+	
+	public void northAnimation() {
+		this.flush();
+		this.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorN));
 	}
 	
 	public void southAnimation() {
-		removeImage(ResourceManager.getImage(Gauntlet.warriorN));
-		removeImage(ResourceManager.getImage(Gauntlet.warriorE));
-		removeImage(ResourceManager.getImage(Gauntlet.warriorW));
-		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorS));
+		this.flush();
+		this.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorS));
 	}
 	
 	public void eastAnimation() {
-		removeImage(ResourceManager.getImage(Gauntlet.warriorN));
-		removeImage(ResourceManager.getImage(Gauntlet.warriorS));
-		removeImage(ResourceManager.getImage(Gauntlet.warriorW));
-		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorE));
+		this.flush();
+		this.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorE));
 	}
 	
 	public void westAnimation() {
-		removeImage(ResourceManager.getImage(Gauntlet.warriorN));
-		removeImage(ResourceManager.getImage(Gauntlet.warriorS));
-		removeImage(ResourceManager.getImage(Gauntlet.warriorE));
-		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorW));
+		this.flush();
+		this.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorW));
 	}
 	
 	public void updateAnimation() {
