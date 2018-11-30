@@ -296,14 +296,14 @@ public class GameStartUp extends BasicGameState{
 			projectiles.get(i).update(delta);
 			projectiles.get(i).setXPos((int) projectiles.get(i).getX());
 			projectiles.get(i).setYPos((int) projectiles.get(i).getY());
-			if(projectiles.get(i).getColumn() > Gauntlet.maxColumn 
-					|| projectiles.get(i).getRow() > Gauntlet.maxRow 
-					|| projectiles.get(i).getColumn() < 0
-					|| projectiles.get(i).getRow() < 0) {
-			}
 			
 			int row = projectiles.get(i).getRow();
 			int col = projectiles.get(i).getColumn();
+			
+			if(col > Gauntlet.maxColumn || row > Gauntlet.maxRow || col < 0 || row < 0) {
+				removeList.add(i);
+			}
+			
 			if (Gauntlet.map[row][col] == 1) {
 				removeList.add(i);
 			}
