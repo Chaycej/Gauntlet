@@ -324,10 +324,11 @@ public class GameStartUp extends BasicGameState{
 	
 	public void flushEnemies(ArrayList<Skeleton> skeletonList) {
 		ArrayList<Integer> removeList = new ArrayList<>();
-		
-		for (int i = 0; i < skeletonList.size(); i++) {
+		int lastRemoved = 0;
+		for (int i = skeletonList.size(); i > lastRemoved; i--) {
 			if (skeletonList.get(i).isDead()) {
 				removeList.add(i);
+				lastRemoved = i;
 			}
 		}
 		
