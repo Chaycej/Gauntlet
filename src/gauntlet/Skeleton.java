@@ -146,7 +146,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		int row = getRow();
 		int col = getColumn();
 		
-		if (row < 0 || col < 0 || row > 25 || col > 25) {
+		if (row < 0 || col < 0 || row >= Gauntlet.maxRow || col >= Gauntlet.maxColumn) {
 			return;
 		}
 		
@@ -197,7 +197,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	 */
 	synchronized public void getMinPath(int row, int col) {
 		
-		if (row < 0 || col < 0 || row > 25 || col > 25) {
+		if (row < 0 || col < 0 || row >= Gauntlet.maxRow || col > Gauntlet.maxColumn) {
 			return;
 		}
 		
@@ -237,7 +237,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		int row = this.getRow();
         int col = this.getColumn();
         
-        if (col < 0 || col > Gauntlet.maxColumn || row < 0 || row > Gauntlet.maxRow) {
+        if (col < 0 || col >= Gauntlet.maxColumn || row < 0 || row >= Gauntlet.maxRow) {
         	return;
         }
         
