@@ -196,8 +196,14 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	 * 4 - right
 	 */
 	synchronized public void getMinPath(int row, int col) {
+		
+		if (row < 0 || col < 0 || row > 25 || col > 25) {
+			return;
+		}
+		
 		this.direction = 0;
 		double min = 10000;
+		
 		if (row-1 >= 0) {
 			if (this.path[row-1][col] < min) {
 				min = this.path[row-1][col];
