@@ -317,8 +317,10 @@ public class GameStartUp extends BasicGameState{
 			}
 		}
 		
+		int offSet = 0;
 		for (int i : removeList) {
-			projectiles.remove(i);
+			projectiles.remove(i - offSet);
+			offSet += 1;
 		}
 	}
 	
@@ -332,8 +334,10 @@ public class GameStartUp extends BasicGameState{
 			}
 		}
 		
-		for (Integer i : removeList) {
-			skeletonList.remove(i.intValue());
+		int offSet = 0;
+		for (int i : removeList) {			
+			skeletonList.remove(i - offSet);
+			offSet += 1;
 		}
 	}
 
