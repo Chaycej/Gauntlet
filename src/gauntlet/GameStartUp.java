@@ -17,9 +17,9 @@ public class GameStartUp extends BasicGameState{
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		container.setSoundOn(true);
 		Gauntlet gauntlet = (Gauntlet)game;
-		gauntlet.warrior.setPosition(gauntlet.warriorX, gauntlet.warriorY);
-		gauntlet.ranger.setPosition(gauntlet.rangerX, gauntlet.warriorY);
-		gauntlet.skeletonList.get(0).setPosition(gauntlet.skeletonX, gauntlet.skeletonY);
+		//gauntlet.warrior.setPosition(gauntlet.warriorX, gauntlet.warriorY);
+		//gauntlet.ranger.setPosition(gauntlet.rangerX, gauntlet.warriorY);
+		//gauntlet.skeletonList.get(0).setPosition(gauntlet.skeletonX, gauntlet.skeletonY);
 	}
 
 	@Override
@@ -300,14 +300,14 @@ public class GameStartUp extends BasicGameState{
 			projectiles.get(i).update(delta);
 			projectiles.get(i).setXPos((int) projectiles.get(i).getX());
 			projectiles.get(i).setYPos((int) projectiles.get(i).getY());
-			if(projectiles.get(i).getColumn() > Gauntlet.maxColumn 
-					|| projectiles.get(i).getRow() > Gauntlet.maxRow 
-					|| projectiles.get(i).getColumn() < 0
-					|| projectiles.get(i).getRow() < 0) {
-			}
 			
 			int row = projectiles.get(i).getRow();
 			int col = projectiles.get(i).getColumn();
+			
+			if(col > Gauntlet.maxColumn || row > Gauntlet.maxRow || col < 0 || row < 0) {
+				removeList.add(i);
+			}
+			
 			if (Gauntlet.map[row][col] == 1) {
 				removeList.add(i);
 			}
@@ -321,8 +321,10 @@ public class GameStartUp extends BasicGameState{
 			}
 		}
 		
+		int offSet = 0;
 		for (int i : removeList) {
-			projectiles.remove(i);
+			projectiles.remove(i - offSet);
+			offSet += 1;
 		}
 	}
 	
@@ -336,8 +338,10 @@ public class GameStartUp extends BasicGameState{
 			}
 		}
 		
-		for (Integer i : removeList) {
-			skeletonList.remove(i.intValue());
+		int offSet = 0;
+		for (int i : removeList) {			
+			skeletonList.remove(i - offSet);
+			offSet += 1;
 		}
 	}
 

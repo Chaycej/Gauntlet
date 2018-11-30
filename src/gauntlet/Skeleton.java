@@ -17,8 +17,8 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	int direction;
 	int previousTargetCol;
 	int previousTargetRow;
-	float xPos;
-	float yPos;
+	int xPos;
+	int yPos;
 	
 	public Skeleton(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
@@ -69,7 +69,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	}
 	
 	synchronized public int getXPos() {
-		return (int)this.xPos;
+		return this.xPos;
 	}
 	
 	/*
@@ -146,7 +146,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		int row = getRow();
 		int col = getColumn();
 		
-		if (row < 0 || col < 0 || row > 25 || col > 25) {
+		if (row < 0 || col < 0 || row >= Gauntlet.maxRow || col >= Gauntlet.maxColumn) {
 			return;
 		}
 		
@@ -197,7 +197,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	 */
 	synchronized public void getMinPath(int row, int col) {
 		
-		if (row < 0 || col < 0 || row > 25 || col > 25) {
+		if (row < 0 || col < 0 || row >= Gauntlet.maxRow || col > Gauntlet.maxColumn) {
 			return;
 		}
 		
@@ -236,6 +236,11 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	synchronized public void moveGhost(Gauntlet gauntlet, int delta) {
 		int row = this.getRow();
         int col = this.getColumn();
+        
+        if (col < 0 || col >= Gauntlet.maxColumn || row < 0 || row >= Gauntlet.maxRow) {
+        	return;
+        }
+        
         int targetCol = -1;
         int targetRow = -1;
         if (previousTargetCol ==-1 || previousTargetRow ==-1 || previousTargetCol==col || previousTargetRow==row) {
