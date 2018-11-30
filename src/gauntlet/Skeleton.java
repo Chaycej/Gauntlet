@@ -236,6 +236,11 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	synchronized public void moveGhost(Gauntlet gauntlet, int delta) {
 		int row = this.getRow();
         int col = this.getColumn();
+        
+        if (col < 0 || col > Gauntlet.maxColumn || row < 0 || row > Gauntlet.maxRow) {
+        	return;
+        }
+        
         int targetCol = -1;
         int targetRow = -1;
         if (previousTargetCol ==-1 || previousTargetRow ==-1 || previousTargetCol==col || previousTargetRow==row) {
