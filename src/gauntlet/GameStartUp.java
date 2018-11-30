@@ -181,9 +181,14 @@ public class GameStartUp extends BasicGameState{
 		// Up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
 			gauntlet.ranger.northAnimation();
-			if (row > 0 && Gauntlet.map[row-1][col] == 0) {
-				gauntlet.ranger.setDirection(GameState.Direction.UP);
-				gauntlet.gameState.setRangerDirection(GameState.Direction.UP);
+			gauntlet.ranger.setDirection(GameState.Direction.UP);
+			gauntlet.gameState.setRangerDirection(GameState.Direction.UP);
+			
+			if (Gauntlet.map[row][col] == 1) {
+				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
+			}
+			
+			else if (row > 0 && Gauntlet.map[row-1][col] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
 				gauntlet.ranger.setVelocity(new Vector(0, -0.1f));
 			} 
@@ -192,9 +197,14 @@ public class GameStartUp extends BasicGameState{
 		// Down movement
 		else if (input.isKeyDown(Input.KEY_DOWN)) {
 			gauntlet.ranger.southAnimation();
-			if (row < Gauntlet.maxRow-1 && Gauntlet.map[row+1][col] == 0) {
-				gauntlet.ranger.setDirection(GameState.Direction.DOWN);
-				gauntlet.gameState.setRangerDirection(GameState.Direction.DOWN);
+			gauntlet.ranger.setDirection(GameState.Direction.DOWN);
+			gauntlet.gameState.setRangerDirection(GameState.Direction.DOWN);
+			
+			if (Gauntlet.map[row][col] == 1) {
+				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
+			}
+			
+			else if (row < Gauntlet.maxRow-1 && Gauntlet.map[row+1][col] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
 				gauntlet.ranger.setVelocity(new Vector(0, 0.1f));
 			}
@@ -203,9 +213,14 @@ public class GameStartUp extends BasicGameState{
 		// Right movement
 		else if (input.isKeyDown(Input.KEY_RIGHT)) {
 			gauntlet.ranger.eastAnimation();
-			if (col < Gauntlet.maxColumn && Gauntlet.map[row][col+1] == 0) {
-				gauntlet.ranger.setDirection(GameState.Direction.RIGHT);
-				gauntlet.gameState.setRangerDirection(GameState.Direction.RIGHT);
+			gauntlet.ranger.setDirection(GameState.Direction.RIGHT);
+			gauntlet.gameState.setRangerDirection(GameState.Direction.RIGHT);
+			
+			if (Gauntlet.map[row][col] == 1) {
+				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
+			}
+			
+			else if (col < Gauntlet.maxColumn && Gauntlet.map[row][col+1] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
 				gauntlet.ranger.setVelocity(new Vector(0.1f, 0));
 			}
@@ -214,9 +229,14 @@ public class GameStartUp extends BasicGameState{
 		// Left movement
 		else if (input.isKeyDown(Input.KEY_LEFT)) {
 			gauntlet.ranger.westAnimation();
-			if (col > 0 && Gauntlet.map[row][col-1] == 0) {
-				gauntlet.ranger.setDirection(GameState.Direction.LEFT);
-				gauntlet.gameState.setRangerDirection(GameState.Direction.LEFT);
+			gauntlet.ranger.setDirection(GameState.Direction.LEFT);
+			gauntlet.gameState.setRangerDirection(GameState.Direction.LEFT);
+			
+			if (Gauntlet.map[row][col] == 1) {
+				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
+			}
+			
+			else if (col > 0 && Gauntlet.map[row][col-1] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
 				gauntlet.ranger.setVelocity(new Vector(-0.1f, 0));
 			}
