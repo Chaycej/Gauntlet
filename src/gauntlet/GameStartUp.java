@@ -17,9 +17,9 @@ public class GameStartUp extends BasicGameState{
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		container.setSoundOn(true);
 		Gauntlet gauntlet = (Gauntlet)game;
-		gauntlet.warrior.setPosition(gauntlet.warriorX, gauntlet.warriorY);
-		gauntlet.ranger.setPosition(gauntlet.rangerX, gauntlet.warriorY);
-		gauntlet.skeletonList.get(0).setPosition(gauntlet.skeletonX, gauntlet.skeletonY);
+		//gauntlet.warrior.setPosition(gauntlet.warriorX, gauntlet.warriorY);
+		//gauntlet.ranger.setPosition(gauntlet.rangerX, gauntlet.warriorY);
+		//gauntlet.skeletonList.get(0).setPosition(gauntlet.skeletonX, gauntlet.skeletonY);
 	}
 
 	@Override

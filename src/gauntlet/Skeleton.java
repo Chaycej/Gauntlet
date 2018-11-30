@@ -17,8 +17,8 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	int direction;
 	int previousTargetCol;
 	int previousTargetRow;
-	float xPos;
-	float yPos;
+	int xPos;
+	int yPos;
 	
 	public Skeleton(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
@@ -69,7 +69,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	}
 	
 	synchronized public int getXPos() {
-		return (int)this.xPos;
+		return this.xPos;
 	}
 	
 	/*
