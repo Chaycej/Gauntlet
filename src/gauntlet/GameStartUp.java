@@ -17,9 +17,6 @@ public class GameStartUp extends BasicGameState{
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		container.setSoundOn(true);
 		Gauntlet gauntlet = (Gauntlet)game;
-		gauntlet.warrior.setPosition(gauntlet.warriorX, gauntlet.warriorY);
-		gauntlet.ranger.setPosition(gauntlet.rangerX, gauntlet.warriorY);
-		gauntlet.skeletonList.get(0).setPosition(gauntlet.skeletonX, gauntlet.skeletonY);
 	}
 
 	@Override
@@ -100,7 +97,7 @@ public class GameStartUp extends BasicGameState{
 		}
 
 		// Projectile
-		else if (input.isKeyPressed(Input.KEY_SPACE)) {
+		else if (input.isKeyPressed(Input.KEY_M)) {
 
 			Projectile projectile = new Projectile(gauntlet.warrior.getPosition().getX(),
 					gauntlet.warrior.getPosition().getY(), gauntlet.warrior.getDirection());
@@ -176,13 +173,20 @@ public class GameStartUp extends BasicGameState{
 		}
 		
 		gauntlet.gameState.skeletons = gauntlet.skeletonList;
-
+		int row = gauntlet.ranger.getRow();
+		int col = gauntlet.ranger.getColumn();
+		
 		// Up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
-			if (gauntlet.ranger.getRow() > 0) {
-				gauntlet.ranger.northAnimation();
-				gauntlet.ranger.setDirection(GameState.Direction.UP);
-				gauntlet.gameState.setRangerDirection(GameState.Direction.UP);
+			gauntlet.ranger.northAnimation();
+			gauntlet.ranger.setDirection(GameState.Direction.UP);
+			gauntlet.gameState.setRangerDirection(GameState.Direction.UP);
+			
+			if (Gauntlet.map[row][col] == 1) {
+				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
+			}
+			
+			else if (row > 0 && Gauntlet.map[row-1][col] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
 				gauntlet.ranger.setVelocity(new Vector(0, -0.1f));
 			} 
@@ -190,10 +194,15 @@ public class GameStartUp extends BasicGameState{
 
 		// Down movement
 		else if (input.isKeyDown(Input.KEY_DOWN)) {
-			if (gauntlet.ranger.getRow() < Gauntlet.maxRow-1) {
-				gauntlet.ranger.southAnimation();
-				gauntlet.ranger.setDirection(GameState.Direction.DOWN);
-				gauntlet.gameState.setRangerDirection(GameState.Direction.DOWN);
+			gauntlet.ranger.southAnimation();
+			gauntlet.ranger.setDirection(GameState.Direction.DOWN);
+			gauntlet.gameState.setRangerDirection(GameState.Direction.DOWN);
+			
+			if (Gauntlet.map[row][col] == 1) {
+				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
+			}
+			
+			else if (row < Gauntlet.maxRow-1 && Gauntlet.map[row+1][col] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
 				gauntlet.ranger.setVelocity(new Vector(0, 0.1f));
 			}
@@ -201,10 +210,15 @@ public class GameStartUp extends BasicGameState{
 
 		// Right movement
 		else if (input.isKeyDown(Input.KEY_RIGHT)) {
-			if (gauntlet.ranger.getColumn() < Gauntlet.maxColumn) {
-				gauntlet.ranger.eastAnimation();
-				gauntlet.ranger.setDirection(GameState.Direction.RIGHT);
-				gauntlet.gameState.setRangerDirection(GameState.Direction.RIGHT);
+			gauntlet.ranger.eastAnimation();
+			gauntlet.ranger.setDirection(GameState.Direction.RIGHT);
+			gauntlet.gameState.setRangerDirection(GameState.Direction.RIGHT);
+			
+			if (Gauntlet.map[row][col] == 1) {
+				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
+			}
+			
+			else if (col < Gauntlet.maxColumn && Gauntlet.map[row][col+1] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
 				gauntlet.ranger.setVelocity(new Vector(0.1f, 0));
 			}
@@ -212,22 +226,26 @@ public class GameStartUp extends BasicGameState{
 
 		// Left movement
 		else if (input.isKeyDown(Input.KEY_LEFT)) {
-			if (gauntlet.ranger.getColumn() > 0) {
-				gauntlet.ranger.westAnimation();
-				gauntlet.ranger.setDirection(GameState.Direction.LEFT);
-				gauntlet.gameState.setRangerDirection(GameState.Direction.LEFT);
+			gauntlet.ranger.westAnimation();
+			gauntlet.ranger.setDirection(GameState.Direction.LEFT);
+			gauntlet.gameState.setRangerDirection(GameState.Direction.LEFT);
+			
+			if (Gauntlet.map[row][col] == 1) {
+				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
+			}
+			
+			else if (col > 0 && Gauntlet.map[row][col-1] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
 				gauntlet.ranger.setVelocity(new Vector(-0.1f, 0));
 			}
 		} 
 
 		// Projectile
-		else if (input.isKeyPressed(Input.KEY_SPACE)) {
+		else if (input.isKeyPressed(Input.KEY_M)) {
 			Projectile projectile = new Projectile(gauntlet.ranger.getPosition().getX(),
 					gauntlet.ranger.getPosition().getY(), gauntlet.ranger.getDirection());
 			gauntlet.rangerProjectiles.add(projectile);
 			gauntlet.gameState.setRangerDirection(GameState.Direction.STOP);
-
 		}
 
 		// If no input stop the ranger
@@ -252,7 +270,6 @@ public class GameStartUp extends BasicGameState{
 			projectile.addImage();
 			projectile.setPosition(projectile.getXPos(), projectile.getYPos());
 		}
-
 		gauntlet.ranger.update(delta);
 	}
 
@@ -270,9 +287,14 @@ public class GameStartUp extends BasicGameState{
 				if ( Gauntlet.map[row][col] == 0) {		//equals a 0 is a path
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
 					gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.pathTile));
-				} else {							//equals a 1 is a wall
+				} 
+				if (Gauntlet.map[row][col] == 1){							//equals a 1 is a wall
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
 					gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.wallTile));
+				} 
+				if (Gauntlet.map[row][col] == 2){
+					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
+					gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.DoorCLeft));
 				}
 				x = x + 32;
 				gauntlet.mapMatrix[row][col].render(g);
@@ -290,19 +312,20 @@ public class GameStartUp extends BasicGameState{
 	public void updateProjectiles(ArrayList<Skeleton> skeletonList, java.util.Vector<Projectile> projectiles, int delta) {
 
 		ArrayList<Integer> removeList = new ArrayList<>();
+		
 
 		for (int i = 0; i < projectiles.size(); i++) {
 			projectiles.get(i).update(delta);
 			projectiles.get(i).setXPos((int) projectiles.get(i).getX());
 			projectiles.get(i).setYPos((int) projectiles.get(i).getY());
-			if(projectiles.get(i).getColumn() > Gauntlet.maxColumn 
-					|| projectiles.get(i).getRow() > Gauntlet.maxRow 
-					|| projectiles.get(i).getColumn() < 0
-					|| projectiles.get(i).getRow() < 0) {
-			}
 			
 			int row = projectiles.get(i).getRow();
 			int col = projectiles.get(i).getColumn();
+			
+			if(col > Gauntlet.maxColumn || row > Gauntlet.maxRow || col < 0 || row < 0) {
+				removeList.add(i);
+			}
+			
 			if (Gauntlet.map[row][col] == 1) {
 				removeList.add(i);
 			}
@@ -316,22 +339,27 @@ public class GameStartUp extends BasicGameState{
 			}
 		}
 		
+		int offSet = 0;
 		for (int i : removeList) {
-			projectiles.remove(i);
+			projectiles.remove(i - offSet);
+			offSet += 1;
 		}
 	}
 	
 	public void flushEnemies(ArrayList<Skeleton> skeletonList) {
 		ArrayList<Integer> removeList = new ArrayList<>();
-		
-		for (int i = 0; i < skeletonList.size(); i++) {
+		int lastRemoved = 0;
+		for (int i = skeletonList.size(); i > lastRemoved; i--) {
 			if (skeletonList.get(i).isDead()) {
 				removeList.add(i);
+				lastRemoved = i;
 			}
 		}
 		
-		for (Integer i : removeList) {
-			skeletonList.remove(i.intValue());
+		int offSet = 0;
+		for (int i : removeList) {			
+			skeletonList.remove(i - offSet);
+			offSet += 1;
 		}
 	}
 

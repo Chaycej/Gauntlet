@@ -17,8 +17,8 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	int direction;
 	int previousTargetCol;
 	int previousTargetRow;
-	float xPos;
-	float yPos;
+	int xPos;
+	int yPos;
 	
 	public Skeleton(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
@@ -69,7 +69,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	}
 	
 	synchronized public int getXPos() {
-		return (int)this.xPos;
+		return this.xPos;
 	}
 	
 	/*
@@ -142,11 +142,11 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	 * Builds a grid of optimal adjacent moves using the A* algorithm
 	 * 
 	 */
-	synchronized public void buildPath(Gauntlet gauntlet, int destRow, int destCol) {
+	synchronized public void buildPath(int destRow, int destCol) {
 		int row = getRow();
 		int col = getColumn();
 		
-		if (row < 0 || col < 0) {
+		if (row < 0 || col < 0 || row >= Gauntlet.maxRow || col >= Gauntlet.maxColumn) {
 			return;
 		}
 		
@@ -195,9 +195,15 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	 * 3 - down
 	 * 4 - right
 	 */
-	synchronized public void getMinPath(Gauntlet gauntlet, int row, int col) {
+	synchronized public void getMinPath(int row, int col) {
+		
+		if (row < 0 || col < 0 || row >= Gauntlet.maxRow || col > Gauntlet.maxColumn) {
+			return;
+		}
+		
 		this.direction = 0;
 		double min = 10000;
+		
 		if (row-1 >= 0) {
 			if (this.path[row-1][col] < min) {
 				min = this.path[row-1][col];
@@ -230,6 +236,11 @@ public class Skeleton extends Entity implements java.io.Serializable {
 	synchronized public void moveGhost(Gauntlet gauntlet, int delta) {
 		int row = this.getRow();
         int col = this.getColumn();
+        
+        if (col < 0 || col >= Gauntlet.maxColumn || row < 0 || row >= Gauntlet.maxRow) {
+        	return;
+        }
+        
         int targetCol = -1;
         int targetRow = -1;
         if (previousTargetCol ==-1 || previousTargetRow ==-1 || previousTargetCol==col || previousTargetRow==row) {
@@ -262,8 +273,8 @@ public class Skeleton extends Entity implements java.io.Serializable {
             targetRow = warriorTargetRow;
         }
         
-        buildPath( gauntlet, targetRow, targetCol);
-		getMinPath(gauntlet, row, col);
+        buildPath(targetRow, targetCol);
+		getMinPath(row, col);
 		this.visited[row][col] = 1;
 	
 		// Moving left
