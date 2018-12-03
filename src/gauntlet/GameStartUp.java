@@ -16,16 +16,22 @@ public class GameStartUp extends BasicGameState{
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		container.setSoundOn(true);
-		Gauntlet gauntlet = (Gauntlet)game;
+		//Gauntlet gauntlet = (Gauntlet)game;
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		Gauntlet gauntlet = (Gauntlet)game;
 		renderMap(container, game, g);
-		gauntlet.warrior.render(g);
-		gauntlet.ranger.render(g);
-
+		
+		// Don't render a dead guy
+		if(!gauntlet.warrior.isDead()) {
+		    gauntlet.warrior.render(g);
+		}
+		// Don't render a dead guy
+		if(!gauntlet.ranger.isDead()) {
+		    gauntlet.ranger.render(g);
+		}
 		for (Skeleton s : gauntlet.skeletonList) {
 			if (!s.isDead()) {
 				s.render(g);
@@ -49,6 +55,16 @@ public class GameStartUp extends BasicGameState{
 		} else {
 			handleServer(container, game, delta);
 		}
+		
+		for (Skeleton s : gauntlet.skeletonList) {
+			if (s.collides(gauntlet.warrior) != null) {
+				gauntlet.warrior.takeHit();
+			}
+			if (s.collides(gauntlet.ranger) != null) {
+				gauntlet.ranger.takeHit();
+			}
+		}
+		
 	}
 
 	/*
@@ -63,9 +79,13 @@ public class GameStartUp extends BasicGameState{
 		Gauntlet gauntlet = (Gauntlet)game;
 
 		gauntlet.gameState.setWarriorPosition((int)gauntlet.warrior.getX(), (int)gauntlet.warrior.getY());
-
+        // Check if dead
+		if (gauntlet.warrior.isDead()) {
+			gauntlet.gameState.setWarriorDirection(GameState.Direction.STOP);
+		}
+		
 		// Up movement
-		if (input.isKeyDown(Input.KEY_UP)) {
+		else if (input.isKeyDown(Input.KEY_UP)) {
 			if (gauntlet.warrior.getRow() > 0) {
 				gauntlet.warrior.setDirection(GameState.Direction.UP);
 				gauntlet.gameState.setWarriorDirection(GameState.Direction.UP);
@@ -176,8 +196,12 @@ public class GameStartUp extends BasicGameState{
 		int row = gauntlet.ranger.getRow();
 		int col = gauntlet.ranger.getColumn();
 		
+		if (gauntlet.ranger.isDead()) {
+			gauntlet.gameState.setRangerDirection(GameState.Direction.STOP);
+		}
+		
 		// Up movement
-		if (input.isKeyDown(Input.KEY_UP)) {
+		else if (input.isKeyDown(Input.KEY_UP)) {
 			gauntlet.ranger.northAnimation();
 			gauntlet.ranger.setDirection(GameState.Direction.UP);
 			gauntlet.gameState.setRangerDirection(GameState.Direction.UP);
