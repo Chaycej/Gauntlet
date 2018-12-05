@@ -84,7 +84,7 @@ class Warrior extends Entity {
 	 *  Removes all images from the warrior entity.
 	 */
 	private void flush() {
-		removeImage(ResourceManager.getImage(Gauntlet.warriorW));
+		removeImage(ResourceManager.getImage(Gauntlet.warriorN));
 		removeImage(ResourceManager.getImage(Gauntlet.warriorS));
 		removeImage(ResourceManager.getImage(Gauntlet.warriorE));
 		removeImage(ResourceManager.getImage(Gauntlet.warriorW));
