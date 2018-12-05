@@ -16,15 +16,15 @@ public class Gauntlet extends StateBasedGame {
 	public static final int LOBBYSTATE = 0;
 	public static final int GAMESTARTSTATE = 1;
 
-	public final static int maxRow = 50;
-	public final static int maxColumn = 50;
+	public final static int maxRow = 25;
+	public final static int maxColumn = 25;
 	public final static int windowWidth = 800;
 	public final static int windowHeight = 800;
 	
-	public final int  warriorX= 64;
-	public final int  warriorY= 128;
-	public final int  rangerX= 128;
-	public final int  rangerY= 128;
+	public final int  warriorX= 100;
+	public final int  warriorY= 750;
+	public final int  rangerX= 150;
+	public final int  rangerY= 750;
 	public final int  skeletonX= 300;
 	public final int  skeletonY= 300;
 	
@@ -68,11 +68,12 @@ public class Gauntlet extends StateBasedGame {
 	public static final String DoorOLeft = "gauntlet/resources/DoorClosedLeft.png";
 	public static final String DoorCLeft = "gauntlet/resources/DoorOpenLeft.png";
 
+	public static final String LowerHealthPotion = "gauntlet/resources/LowerHealthPotion.png";
+	public static final String HealthPotion = "gauntlet/resources/HealthPotion.png";
+	public static final String HigherHealthPotion = "gauntlet/resources/HigherHealthPotion.png";
+	
 	public final int ScreenWidth;
 	public final int ScreenHeight;
-	
-	public final float clientCamX;
-	public final float clientCamY;
 	
 	public static AppGameContainer app;
 	
@@ -88,19 +89,13 @@ public class Gauntlet extends StateBasedGame {
 	Vector<Projectile> warriorProjectiles;
 	Vector<Projectile> rangerProjectiles;
 	ArrayList<Skeleton> skeletonList;
-	
-	//Camera class determines what the player is looking at.
-	Camera warriorCamera;
-    Camera rangerCamera;
+    ArrayList<Powerups> potions;
 	
 	public Gauntlet(String title, int width, int height) {
 		super(title);
 		ScreenHeight = height;
 		ScreenWidth = width;
 
-		clientCamX = 0;
-		clientCamY = 0;
-		
 		Entity.setCoarseGrainedCollisionBoundary(Entity.AABB);
 		map = new int[maxRow][maxColumn];
 		mapMatrix = new MapMatrix[maxRow][maxColumn];
@@ -152,18 +147,21 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(DoorODown);
 		ResourceManager.loadImage(DoorCDown);
 		
+		ResourceManager.loadImage(HigherHealthPotion);
+		ResourceManager.loadImage(HealthPotion);
+		ResourceManager.loadImage(LowerHealthPotion);
+		
+		
 		warrior = new Warrior(warriorX, warriorY, 0f, 0f);
 		ranger = new Ranger(rangerX, rangerY, 0f, 0f);
 		skeleton = new Skeleton(skeletonX, skeletonY, 0f, 0f);
 		
 		warriorProjectiles = new Vector<>();
 		rangerProjectiles = new Vector<>();
-		
-		//Cameras start centered so the characters are on the center of the viewing screen.
-		warriorCamera = new Camera(ScreenWidth/2,ScreenHeight/2);
-		rangerCamera = new Camera(ScreenWidth/2,ScreenHeight/2);
-		
 		skeletonList = new ArrayList<Skeleton>();
+		
+		potions = new ArrayList<Powerups>();
+		
 		skeletonList.add(skeleton);
 		
 		int rowB = 0;

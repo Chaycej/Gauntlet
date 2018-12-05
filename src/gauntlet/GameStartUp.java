@@ -16,19 +16,16 @@ public class GameStartUp extends BasicGameState{
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		container.setSoundOn(true);
-		//Gauntlet gauntlet = (Gauntlet)game;
+		Gauntlet gauntlet = (Gauntlet)game;
+		
+		for (int i = 0; i < 3; i++) {
+		    gauntlet.potions.add(new Powerups(32.0f+32.0f*i,32.0f+32.0f*i, i));
+		}
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		Gauntlet gauntlet = (Gauntlet)game;
-		// Clears all background noise/ pictures Comment out you'll understand.
-		g.clear();
-		
-		// Moves the map in accordance to the character both are needed.
-		g.translate(gauntlet.ScreenWidth/2-gauntlet.warriorCamera.getXoffset(), gauntlet.ScreenHeight/2-gauntlet.warriorCamera.getYoffset());
-		g.translate(gauntlet.ScreenWidth/2-gauntlet.rangerCamera.getXoffset(), gauntlet.ScreenHeight/2-gauntlet.rangerCamera.getYoffset());
-
 		renderMap(container, game, g);
 		gauntlet.warrior.render(g);
 		gauntlet.ranger.render(g);
@@ -46,16 +43,34 @@ public class GameStartUp extends BasicGameState{
 		for (Projectile projectile : gauntlet.rangerProjectiles) {
 			projectile.render(g);
 		}
+		
+		for (Powerups potions : gauntlet.potions) {
+			potions.render(g);
+		}
+		
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 		Gauntlet gauntlet = (Gauntlet)game;
+		
 		if (gauntlet.client != null) {
 			handleClient(container, game, delta);
 		} else {
 			handleServer(container, game, delta);
 		}
+		
+		for (int i = 0; i < gauntlet.potions.size(); i++) {
+			if(gauntlet.warrior.collides(gauntlet.potions.get(i)) != null) {
+				gauntlet.warrior.potion(gauntlet.potions.get(i).getType());
+				gauntlet.potions.remove(i);
+			}
+			else if(gauntlet.ranger.collides(gauntlet.potions.get(i)) != null) {
+				gauntlet.ranger.potion(gauntlet.potions.get(i).getType());
+				gauntlet.potions.remove(i);
+			}
+		}
+		
 	}
 
 	/*
@@ -158,9 +173,6 @@ public class GameStartUp extends BasicGameState{
 		
 		gauntlet.ranger.update(delta);
 		gauntlet.warrior.update(delta);
-		
-		//updates the camera as Warrior moves.
-		gauntlet.warriorCamera.update(gauntlet.warrior.getPosition().getX(), gauntlet.warrior.getPosition().getY());
 	}
 
 	/*
@@ -178,7 +190,7 @@ public class GameStartUp extends BasicGameState{
 
 		// Move skeletons
 		for (Skeleton skeleton : gauntlet.skeletonList) {
-			//skeleton.moveGhost(gauntlet, delta);
+			skeleton.moveGhost(gauntlet, delta);
 			skeleton.update(delta);
 		}
 		
@@ -281,9 +293,6 @@ public class GameStartUp extends BasicGameState{
 			projectile.setPosition(projectile.getXPos(), projectile.getYPos());
 		}
 		gauntlet.ranger.update(delta);
-		
-		//updates the camera as Ranger moves.
-		gauntlet.rangerCamera.update(gauntlet.ranger.getPosition().getX(), gauntlet.ranger.getPosition().getY());
 	}
 
 	/*
@@ -293,8 +302,8 @@ public class GameStartUp extends BasicGameState{
 	 */
 	public void renderMap(GameContainer container, StateBasedGame game, Graphics g) {
 		Gauntlet gauntlet = (Gauntlet)game;
-		int x = (int) (16);// + gauntlet.warriorCamera.getXoffset()*32);
-		int y = (int) (16);// + gauntlet.warriorCamera.getYoffset()*32);
+		int x = 16;
+		int y = 16;
 		for (int row = 0; row < Gauntlet.maxRow; row++ ) {
 			for (int col = 0; col < Gauntlet.maxColumn; col++) {
 				if ( Gauntlet.map[row][col] == 0) {		//equals a 0 is a path
