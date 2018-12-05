@@ -370,9 +370,10 @@ public class GameStartUp extends BasicGameState{
 			
 			if(col >= Gauntlet.maxColumn || row >= Gauntlet.maxRow || col < 0 || row < 0) {
 				removeList.add(i);
+				continue;
 			}
 			
-			else if (Gauntlet.map[row][col] == 1) {
+			if (Gauntlet.map[row][col] == 1) {
 				removeList.add(i);
 			}
 			
