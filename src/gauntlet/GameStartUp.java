@@ -34,8 +34,8 @@ public class GameStartUp extends BasicGameState{
 		gauntlet.ranger.render(g);
 		
 		if (gauntlet.client != null) {
-			g.drawString("Warrior health: " + String.valueOf(gauntlet.warrior.getHealth()), 100 - gauntlet.warriorCamera.getXoffset(), 10 - gauntlet.warriorCamera.getYoffset());
-			g.drawString("Ranger health: " + String.valueOf(gauntlet.ranger.getHealth()), 275 - gauntlet.warriorCamera.getXoffset(), 10 - - gauntlet.warriorCamera.getYoffset());
+			g.drawString("Warrior health: " + String.valueOf(gauntlet.warrior.getHealth()), gauntlet.warriorCamera.getXoffset() - 100, gauntlet.warriorCamera.getYoffset() - 400);
+			g.drawString("Ranger health: " + String.valueOf(gauntlet.ranger.getHealth()), gauntlet.warriorCamera.getXoffset() - 300, gauntlet.warriorCamera.getYoffset() - 400);
 		} else {
 			g.drawString("Warrior health: " + String.valueOf(gauntlet.warrior.getHealth()), gauntlet.rangerCamera.getXoffset() - 100, gauntlet.rangerCamera.getYoffset() - 400);
 			g.drawString("Ranger health: " + String.valueOf(gauntlet.ranger.getHealth()), gauntlet.rangerCamera.getXoffset() - 300, gauntlet.rangerCamera.getYoffset() - 400);
