@@ -178,7 +178,7 @@ public class GameStartUp extends BasicGameState{
 
 		// Move skeletons
 		for (Skeleton skeleton : gauntlet.skeletonList) {
-			//skeleton.moveGhost(gauntlet, delta);
+			skeleton.moveGhost(gauntlet, delta);
 			skeleton.update(delta);
 		}
 		
