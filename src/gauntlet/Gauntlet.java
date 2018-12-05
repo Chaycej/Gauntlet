@@ -59,17 +59,18 @@ public class Gauntlet extends StateBasedGame {
 	public static final String KeyVLeft = "gauntlet/resources/KeyVLeft.png";
 	public static final String KeyVRight = "gauntlet/resources/KeyVRight.png";
 	
-	public static final String DoorOpen = "gauntlet/resources/DoorOpen.png";
-	public static final String DoorClosed = "gauntlet/resources/DoorClosed.png";
-	public static final String DoorCDown = "gauntlet/resources/DoorOpenDown.png";
-	public static final String DoorODown = "gauntlet/resources/DoorClosedDown.png";
-	public static final String DoorORight = "gauntlet/resources/DoorOpenRight.png";
-	public static final String DoorCRight = "gauntlet/resources/DoorClosedRight.png";
-	public static final String DoorOLeft = "gauntlet/resources/DoorClosedLeft.png";
-	public static final String DoorCLeft = "gauntlet/resources/DoorOpenLeft.png";
+	public static final String doorCNorth = "gauntlet/resources/doorCNorth.png";
+	public static final String doorCSouth = "gauntlet/resources/doorCSouth.png";
+	public static final String doorCEast = "gauntlet/resources/doorCEast.png";
+	public static final String doorCWest = "gauntlet/resources/doorCWest.png";
+	public static final String doorONorth = "gauntlet/resources/doorONorth.png";
+	public static final String doorOSouth = "gauntlet/resources/doorOSouth.png";
+	public static final String doorOEast = "gauntlet/resources/doorOEast.png";
+	public static final String doorOWest = "gauntlet/resources/doorOWest.png";
 
 	public final int ScreenWidth;
-	public final int ScreenHeight;
+	public final int ScreenHeight; 
+	
 	
 	public final float clientCamX;
 	public final float clientCamY;
@@ -143,14 +144,14 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(KeyVRight);
 		ResourceManager.loadImage(KeyVLeft);
 		
-		ResourceManager.loadImage(DoorOpen);
-		ResourceManager.loadImage(DoorClosed);
-		ResourceManager.loadImage(DoorORight);
-		ResourceManager.loadImage(DoorCRight);
-		ResourceManager.loadImage(DoorOLeft);
-		ResourceManager.loadImage(DoorCLeft);
-		ResourceManager.loadImage(DoorODown);
-		ResourceManager.loadImage(DoorCDown);
+		ResourceManager.loadImage(doorCNorth);
+		ResourceManager.loadImage(doorCSouth);
+		ResourceManager.loadImage(doorCEast);
+		ResourceManager.loadImage(doorCWest);
+		ResourceManager.loadImage(doorONorth);
+		ResourceManager.loadImage(doorOSouth);
+		ResourceManager.loadImage(doorOEast);
+		ResourceManager.loadImage(doorOWest);
 		
 		warrior = new Warrior(warriorX, warriorY, 0f, 0f);
 		ranger = new Ranger(rangerX, rangerY, 0f, 0f);
