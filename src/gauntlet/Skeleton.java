@@ -26,8 +26,8 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		this.health = 10;
 		velocity = new Vector(vx, vy);
 		countdown = 0;
-		path = new double[25][25];
-		visited = new double[25][25];
+		path = new double[Gauntlet.maxRow][Gauntlet.maxColumn];
+		visited = new double[Gauntlet.maxRow][Gauntlet.maxColumn];;
 		isDead = false;
 		moves = 0;
 		direction = 0;
