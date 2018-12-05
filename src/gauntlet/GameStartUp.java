@@ -335,11 +335,11 @@ public class GameStartUp extends BasicGameState{
 			int row = projectiles.get(i).getRow();
 			int col = projectiles.get(i).getColumn();
 			
-			if(col > Gauntlet.maxColumn || row > Gauntlet.maxRow || col < 0 || row < 0) {
+			if(col >= Gauntlet.maxColumn || row >= Gauntlet.maxRow || col < 0 || row < 0) {
 				removeList.add(i);
 			}
 			
-			if (Gauntlet.map[row][col] == 1) {
+			else if (Gauntlet.map[row][col] == 1) {
 				removeList.add(i);
 			}
 			
