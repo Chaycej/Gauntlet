@@ -194,6 +194,10 @@ public class GameStartUp extends BasicGameState{
 		
 		//updates the camera as Warrior moves.
 		gauntlet.warriorCamera.update(gauntlet.warrior.getPosition().getX(), gauntlet.warrior.getPosition().getY());
+		
+		for (Projectile p : gauntlet.warriorProjectiles) {
+			p.update(delta);
+		}
 	}
 
 	/*
@@ -317,6 +321,10 @@ public class GameStartUp extends BasicGameState{
 		
 		//updates the camera as Ranger moves.
 		gauntlet.rangerCamera.update(gauntlet.ranger.getPosition().getX(), gauntlet.ranger.getPosition().getY());
+		
+		for (Projectile p : gauntlet.rangerProjectiles) {
+			p.update(delta);
+		}
 	}
 
 	/*
@@ -366,7 +374,6 @@ public class GameStartUp extends BasicGameState{
 			
 			int row = projectiles.get(i).getRow();
 			int col = projectiles.get(i).getColumn();
-			projectiles.get(i).update(delta);
 			
 			if(col >= Gauntlet.maxColumn || row >= Gauntlet.maxRow || col < 0 || row < 0) {
 				removeList.add(i);
