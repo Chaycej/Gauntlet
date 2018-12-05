@@ -17,6 +17,10 @@ public class GameStartUp extends BasicGameState{
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		container.setSoundOn(true);
 		Gauntlet gauntlet = (Gauntlet)game;
+		
+		for (int i = 0; i < 3; i++) {
+		    gauntlet.potions.add(new Powerups(32.0f+32.0f*i,32.0f+32.0f*i, i));
+		}
 	}
 
 	@Override
@@ -39,16 +43,34 @@ public class GameStartUp extends BasicGameState{
 		for (Projectile projectile : gauntlet.rangerProjectiles) {
 			projectile.render(g);
 		}
+		
+		for (Powerups potions : gauntlet.potions) {
+			potions.render(g);
+		}
+		
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 		Gauntlet gauntlet = (Gauntlet)game;
+		
 		if (gauntlet.client != null) {
 			handleClient(container, game, delta);
 		} else {
 			handleServer(container, game, delta);
 		}
+		
+		for (int i = 0; i < gauntlet.potions.size(); i++) {
+			if(gauntlet.warrior.collides(gauntlet.potions.get(i)) != null) {
+				gauntlet.warrior.potion(gauntlet.potions.get(i).getType());
+				gauntlet.potions.remove(i);
+			}
+			else if(gauntlet.ranger.collides(gauntlet.potions.get(i)) != null) {
+				gauntlet.ranger.potion(gauntlet.potions.get(i).getType());
+				gauntlet.potions.remove(i);
+			}
+		}
+		
 	}
 
 	/*
