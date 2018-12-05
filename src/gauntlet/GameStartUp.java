@@ -361,12 +361,12 @@ public class GameStartUp extends BasicGameState{
 		
 
 		for (int i = 0; i < projectiles.size(); i++) {
-			projectiles.get(i).update(delta);
 			projectiles.get(i).setXPos((int) projectiles.get(i).getX());
 			projectiles.get(i).setYPos((int) projectiles.get(i).getY());
 			
 			int row = projectiles.get(i).getRow();
 			int col = projectiles.get(i).getColumn();
+			projectiles.get(i).update(delta);
 			
 			if(col >= Gauntlet.maxColumn || row >= Gauntlet.maxRow || col < 0 || row < 0) {
 				removeList.add(i);
@@ -375,6 +375,7 @@ public class GameStartUp extends BasicGameState{
 			
 			if (Gauntlet.map[row][col] == 1) {
 				removeList.add(i);
+				continue;
 			}
 			
 			// Check if a projectile hits an enemy
