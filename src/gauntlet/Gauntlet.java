@@ -16,15 +16,15 @@ public class Gauntlet extends StateBasedGame {
 	public static final int LOBBYSTATE = 0;
 	public static final int GAMESTARTSTATE = 1;
 
-	public final static int maxRow = 25;
-	public final static int maxColumn = 25;
+	public final static int maxRow = 50;
+	public final static int maxColumn = 50;
 	public final static int windowWidth = 800;
 	public final static int windowHeight = 800;
 	
-	public final int  warriorX= 100;
-	public final int  warriorY= 750;
-	public final int  rangerX= 150;
-	public final int  rangerY= 750;
+	public final int  warriorX= 64;
+	public final int  warriorY= 128;
+	public final int  rangerX= 128;
+	public final int  rangerY= 128;
 	public final int  skeletonX= 300;
 	public final int  skeletonY= 300;
 	
@@ -71,6 +71,9 @@ public class Gauntlet extends StateBasedGame {
 	public final int ScreenWidth;
 	public final int ScreenHeight;
 	
+	public final float clientCamX;
+	public final float clientCamY;
+	
 	public static AppGameContainer app;
 	
 	static int[][] map;
@@ -85,13 +88,19 @@ public class Gauntlet extends StateBasedGame {
 	Vector<Projectile> warriorProjectiles;
 	Vector<Projectile> rangerProjectiles;
 	ArrayList<Skeleton> skeletonList;
-
+	
+	//Camera class determines what the player is looking at.
+	Camera warriorCamera;
+    Camera rangerCamera;
 	
 	public Gauntlet(String title, int width, int height) {
 		super(title);
 		ScreenHeight = height;
 		ScreenWidth = width;
 
+		clientCamX = 0;
+		clientCamY = 0;
+		
 		Entity.setCoarseGrainedCollisionBoundary(Entity.AABB);
 		map = new int[maxRow][maxColumn];
 		mapMatrix = new MapMatrix[maxRow][maxColumn];
@@ -149,6 +158,11 @@ public class Gauntlet extends StateBasedGame {
 		
 		warriorProjectiles = new Vector<>();
 		rangerProjectiles = new Vector<>();
+		
+		//Cameras start centered so the characters are on the center of the viewing screen.
+		warriorCamera = new Camera(ScreenWidth/2,ScreenHeight/2);
+		rangerCamera = new Camera(ScreenWidth/2,ScreenHeight/2);
+		
 		skeletonList = new ArrayList<Skeleton>();
 		skeletonList.add(skeleton);
 		
