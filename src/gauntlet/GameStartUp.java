@@ -16,26 +16,55 @@ public class GameStartUp extends BasicGameState{
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		container.setSoundOn(true);
+
 		Gauntlet gauntlet = (Gauntlet)game;
-		gauntlet.warrior.setPosition(gauntlet.warriorX, gauntlet.warriorY);
-		gauntlet.ranger.setPosition(gauntlet.rangerX, gauntlet.warriorY);
-		gauntlet.skeletonList.get(0).setPosition(gauntlet.skeletonX, gauntlet.skeletonY);
+		
+		for (int i = 0; i < 3; i++) {
+		    gauntlet.potions.add(new Powerups(32.0f+32.0f*i,32.0f+32.0f*i, i));
+		}
 	}
-	
+
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		Gauntlet gauntlet = (Gauntlet)game;
+
+		// Clears all background noise/ pictures Comment out you'll understand.
+		g.clear();
+		
+		// Moves the map in accordance to the character both are needed.
+		g.translate(gauntlet.ScreenWidth/2-gauntlet.warriorCamera.getXoffset(), gauntlet.ScreenHeight/2-gauntlet.warriorCamera.getYoffset());
+		g.translate(gauntlet.ScreenWidth/2-gauntlet.rangerCamera.getXoffset(), gauntlet.ScreenHeight/2-gauntlet.rangerCamera.getYoffset());
+		
 		renderMap(container, game, g);
 		gauntlet.warrior.render(g);
 		gauntlet.ranger.render(g);
-		gauntlet.skeleton.render(g);
+		
+		if (gauntlet.client != null) {
+			g.drawString("Warrior health: " + String.valueOf(gauntlet.warrior.getHealth()), gauntlet.warriorCamera.getXoffset() - 100, gauntlet.warriorCamera.getYoffset() - 400);
+			g.drawString("Ranger health: " + String.valueOf(gauntlet.ranger.getHealth()), gauntlet.warriorCamera.getXoffset() - 300, gauntlet.warriorCamera.getYoffset() - 400);
+		} else {
+			g.drawString("Warrior health: " + String.valueOf(gauntlet.warrior.getHealth()), gauntlet.rangerCamera.getXoffset() - 100, gauntlet.rangerCamera.getYoffset() - 400);
+			g.drawString("Ranger health: " + String.valueOf(gauntlet.ranger.getHealth()), gauntlet.rangerCamera.getXoffset() - 300, gauntlet.rangerCamera.getYoffset() - 400);
+		}
+		
+
+		for (Skeleton s : gauntlet.skeletonList) {
+			if (!s.isDead()) {
+				s.render(g);
+			}
+		}
 		
 		for (Projectile projectile : gauntlet.warriorProjectiles) {
 			projectile.render(g);
 		}
-		
+
 		for (Projectile projectile : gauntlet.rangerProjectiles) {
 			projectile.render(g);
+		}
+
+		
+		for (Powerups potions : gauntlet.potions) {
+			potions.render(g);
 		}
 	}
 
@@ -48,8 +77,20 @@ public class GameStartUp extends BasicGameState{
 		} else {
 			handleServer(container, game, delta);
 		}
+		
+		for (int i = 0; i < gauntlet.potions.size(); i++) {
+			if(gauntlet.warrior.collides(gauntlet.potions.get(i)) != null) {
+				gauntlet.warrior.potion(gauntlet.potions.get(i).getType());
+				gauntlet.potions.remove(i);
+			}
+			else if(gauntlet.ranger.collides(gauntlet.potions.get(i)) != null) {
+				gauntlet.ranger.potion(gauntlet.potions.get(i).getType());
+				gauntlet.potions.remove(i);
+			}
+		}
+		
 	}
-	
+
 	/*
 	 * handleClient
 	 * 
@@ -60,78 +101,82 @@ public class GameStartUp extends BasicGameState{
 	public void handleClient(GameContainer container, StateBasedGame game, int delta) {
 		Input input = container.getInput();
 		Gauntlet gauntlet = (Gauntlet)game;
-		
-		GameState clientState = new GameState();
-		clientState.setWarriorPosition((int)gauntlet.warrior.getX(), (int)gauntlet.warrior.getY());
-		
-		
+
+		gauntlet.gameState.setWarriorPosition((int)gauntlet.warrior.getX(), (int)gauntlet.warrior.getY());
+
 		// Up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
 			if (gauntlet.warrior.getRow() > 0) {
 				gauntlet.warrior.setDirection(GameState.Direction.UP);
-				clientState.setWarriorDirection(GameState.Direction.UP);
+				gauntlet.gameState.setWarriorDirection(GameState.Direction.UP);
 			}
 		}
-		
+
 		// Down movement
 		else if (input.isKeyDown(Input.KEY_DOWN)) {
-			if (gauntlet.warrior.getRow() < Gauntlet.maxRow-1) {
+			if ( gauntlet.warrior.getRow() < Gauntlet.maxRow-1) {
 				gauntlet.warrior.setDirection(GameState.Direction.DOWN);
-				clientState.setWarriorDirection(GameState.Direction.DOWN);
+				gauntlet.gameState.setWarriorDirection(GameState.Direction.DOWN);
 			}
 		}
-		
+
 		// Right movement
 		else if (input.isKeyDown(Input.KEY_RIGHT)) {
 			if (gauntlet.warrior.getColumn() < Gauntlet.maxColumn-1) {
 				gauntlet.warrior.setDirection(GameState.Direction.RIGHT);
-				clientState.setWarriorDirection(GameState.Direction.RIGHT);
+				gauntlet.gameState.setWarriorDirection(GameState.Direction.RIGHT);
 			}
 		}
-		
+
 		// Left movement
 		else if (input.isKeyDown(Input.KEY_LEFT)) {
 			if (gauntlet.warrior.getColumn() > 0) {
 				gauntlet.warrior.setDirection(GameState.Direction.LEFT);
-				clientState.setWarriorDirection(GameState.Direction.LEFT);
+				gauntlet.gameState.setWarriorDirection(GameState.Direction.LEFT);
 			}
 		}
-		
+
 		// Projectile
-		else if (input.isKeyPressed(Input.KEY_SPACE)) {
-			
+		else if (input.isKeyPressed(Input.KEY_M)) {
+
 			Projectile projectile = new Projectile(gauntlet.warrior.getPosition().getX(),
 					gauntlet.warrior.getPosition().getY(), gauntlet.warrior.getDirection());
-				gauntlet.warriorProjectiles.add(projectile);
-			clientState.setWarriorDirection(GameState.Direction.STOP);
+			gauntlet.warriorProjectiles.add(projectile);
+			gauntlet.gameState.setWarriorDirection(GameState.Direction.STOP);
 		}
-			
+
 		// Not moving
 		else {
-			clientState.setWarriorDirection(GameState.Direction.STOP);
+			gauntlet.gameState.setWarriorDirection(GameState.Direction.STOP);
 		}
-		
-		updateProjectiles(gauntlet.warriorProjectiles, delta);
-		clientState.warriorProjectiles = gauntlet.warriorProjectiles;
-		
-		gauntlet.client.sendGameState(clientState);
-		
-		
+
+		updateProjectiles(gauntlet.skeletonList, gauntlet.warriorProjectiles, delta);
+		gauntlet.gameState.warriorProjectiles = gauntlet.warriorProjectiles;
+		gauntlet.gameState.skeletons = gauntlet.skeletonList;
+
+		gauntlet.client.sendGameState(gauntlet.gameState);
+
+
 		// Update new game state
 		GameState newGameState = gauntlet.client.readGameState();
 		if (newGameState != null) {
-			
+
 			// Update warrior
 			gauntlet.warrior.updateWarriorState(newGameState.getWarriorDirection(), newGameState.warriorIsMoving());
-			
+
 			// Update ranger
 			gauntlet.ranger.setPosition(newGameState.getRangerX(), newGameState.getRangerY());
 			gauntlet.ranger.updateAnimation(newGameState.getRangerDirection());
-			
+
 			// Update skeletons
-			gauntlet.skeleton.setPosition(newGameState.skeletons.get(0).getXPos(),
-					newGameState.skeletons.get(0).getYPos());
-			
+			for (int i = 0; i < newGameState.skeletons.size(); i++) {
+				gauntlet.skeletonList.get(i).setPosition(newGameState.skeletons.get(i).getXPos(),
+						newGameState.skeletons.get(i).getYPos());
+				gauntlet.skeletonList.get(i).setXPos(newGameState.skeletons.get(i).getXPos());
+				gauntlet.skeletonList.get(i).setYPos(newGameState.skeletons.get(i).getYPos());
+				gauntlet.skeletonList.get(i).setHealth(newGameState.skeletons.get(i).getHealth());
+			}
+
 			// Update teammates projectiles
 			gauntlet.rangerProjectiles = newGameState.rangerProjectiles;
 			for (Projectile projectile : gauntlet.rangerProjectiles) {
@@ -140,11 +185,17 @@ public class GameStartUp extends BasicGameState{
 			}
 		}
 		
-		gauntlet.skeleton.update(delta);
+		for (Skeleton s : gauntlet.skeletonList) {
+			s.update(delta);
+		}
+		
 		gauntlet.ranger.update(delta);
 		gauntlet.warrior.update(delta);
+		
+		//updates the camera as Warrior moves.
+		gauntlet.warriorCamera.update(gauntlet.warrior.getPosition().getX(), gauntlet.warrior.getPosition().getY());
 	}
-	
+
 	/*
 	 *  handleServer
 	 * 
@@ -154,97 +205,120 @@ public class GameStartUp extends BasicGameState{
 	 *  Note: Server is also handling client state on a seperate thread.
 	 */
 	public void handleServer(GameContainer container, StateBasedGame game, int delta) {
-		
+
 		Input input = container.getInput();
 		Gauntlet gauntlet = (Gauntlet)game;
-		
+
 		// Move skeletons
 		for (Skeleton skeleton : gauntlet.skeletonList) {
 			skeleton.moveGhost(gauntlet, delta);
-			skeleton.setXPos((int)skeleton.getX());
-			skeleton.setYPos((int)skeleton.getY());
 			skeleton.update(delta);
 		}
 		
 		gauntlet.gameState.skeletons = gauntlet.skeletonList;
+		int row = gauntlet.ranger.getRow();
+		int col = gauntlet.ranger.getColumn();
 		
 		// Up movement
 		if (input.isKeyDown(Input.KEY_UP)) {
-			if (gauntlet.ranger.getRow() > 0) {
-				gauntlet.ranger.northAnimation();
-				gauntlet.ranger.setDirection(GameState.Direction.UP);
-				gauntlet.gameState.setRangerDirection(GameState.Direction.UP);
+			gauntlet.ranger.northAnimation();
+			gauntlet.ranger.setDirection(GameState.Direction.UP);
+			gauntlet.gameState.setRangerDirection(GameState.Direction.UP);
+			
+			if (Gauntlet.map[row][col] == 1) {
+				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
+			}
+			
+			else if (row > 0 && Gauntlet.map[row-1][col] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
 				gauntlet.ranger.setVelocity(new Vector(0, -0.1f));
 			} 
 		}
-		
+
 		// Down movement
 		else if (input.isKeyDown(Input.KEY_DOWN)) {
-			if (gauntlet.ranger.getRow() < Gauntlet.maxRow-1) {
-				gauntlet.ranger.southAnimation();
-				gauntlet.ranger.setDirection(GameState.Direction.DOWN);
-				gauntlet.gameState.setRangerDirection(GameState.Direction.DOWN);
+			gauntlet.ranger.southAnimation();
+			gauntlet.ranger.setDirection(GameState.Direction.DOWN);
+			gauntlet.gameState.setRangerDirection(GameState.Direction.DOWN);
+			
+			if (Gauntlet.map[row][col] == 1) {
+				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
+			}
+			
+			else if (row < Gauntlet.maxRow-1 && Gauntlet.map[row+1][col] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
 				gauntlet.ranger.setVelocity(new Vector(0, 0.1f));
 			}
 		}
-		
+
 		// Right movement
 		else if (input.isKeyDown(Input.KEY_RIGHT)) {
-			if (gauntlet.ranger.getColumn() < Gauntlet.maxColumn) {
-				gauntlet.ranger.eastAnimation();
-				gauntlet.ranger.setDirection(GameState.Direction.RIGHT);
-				gauntlet.gameState.setRangerDirection(GameState.Direction.RIGHT);
+			gauntlet.ranger.eastAnimation();
+			gauntlet.ranger.setDirection(GameState.Direction.RIGHT);
+			gauntlet.gameState.setRangerDirection(GameState.Direction.RIGHT);
+			
+			if (Gauntlet.map[row][col] == 1) {
+				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
+			}
+			
+			else if (col < Gauntlet.maxColumn && Gauntlet.map[row][col+1] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
 				gauntlet.ranger.setVelocity(new Vector(0.1f, 0));
 			}
 		}
-		
+
 		// Left movement
 		else if (input.isKeyDown(Input.KEY_LEFT)) {
-			if (gauntlet.ranger.getColumn() > 0) {
-				gauntlet.ranger.westAnimation();
-				gauntlet.ranger.setDirection(GameState.Direction.LEFT);
-				gauntlet.gameState.setRangerDirection(GameState.Direction.LEFT);
+			gauntlet.ranger.westAnimation();
+			gauntlet.ranger.setDirection(GameState.Direction.LEFT);
+			gauntlet.gameState.setRangerDirection(GameState.Direction.LEFT);
+			
+			if (Gauntlet.map[row][col] == 1) {
+				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
+			}
+			
+			else if (col > 0 && Gauntlet.map[row][col-1] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
 				gauntlet.ranger.setVelocity(new Vector(-0.1f, 0));
 			}
 		} 
-		
+
 		// Projectile
-		else if (input.isKeyPressed(Input.KEY_SPACE)) {
+		else if (input.isKeyPressed(Input.KEY_M)) {
 			Projectile projectile = new Projectile(gauntlet.ranger.getPosition().getX(),
 					gauntlet.ranger.getPosition().getY(), gauntlet.ranger.getDirection());
 			gauntlet.rangerProjectiles.add(projectile);
 			gauntlet.gameState.setRangerDirection(GameState.Direction.STOP);
-			
 		}
-		
+
+		// If no input stop the ranger
 		else {
 			gauntlet.gameState.setRangerMovement(false);
 			gauntlet.ranger.setVelocity(new Vector(0f, 0f));
 		}
-		
+
 		// Update server's game state before sending to client
 		gauntlet.gameState.setRangerPosition((int)gauntlet.ranger.getX(), (int)gauntlet.ranger.getY());
-		updateProjectiles(gauntlet.rangerProjectiles, delta);
+		updateProjectiles(gauntlet.skeletonList, gauntlet.rangerProjectiles, delta);
 		gauntlet.gameState.rangerProjectiles = gauntlet.rangerProjectiles;
-		
+		gauntlet.gameState.skeletons = gauntlet.skeletonList;
+
 		// Update teammate
 		gauntlet.warrior.setPosition(gauntlet.gameState.getWarriorX(), gauntlet.gameState.getWarriorY());
 		gauntlet.warrior.updateAnimation();
-		
+
 		// Update teammate projectiles
 		gauntlet.warriorProjectiles = gauntlet.gameState.warriorProjectiles;
 		for (Projectile projectile : gauntlet.warriorProjectiles) {
 			projectile.addImage();
 			projectile.setPosition(projectile.getXPos(), projectile.getYPos());
 		}
-		
 		gauntlet.ranger.update(delta);
+		
+		//updates the camera as Ranger moves.
+		gauntlet.rangerCamera.update(gauntlet.ranger.getPosition().getX(), gauntlet.ranger.getPosition().getY());
 	}
-	
+
 	/*
 	 *  renderMap
 	 * 
@@ -252,16 +326,21 @@ public class GameStartUp extends BasicGameState{
 	 */
 	public void renderMap(GameContainer container, StateBasedGame game, Graphics g) {
 		Gauntlet gauntlet = (Gauntlet)game;
-		int x = 16;
-		int y = 16;
+		int x = (int) (16);// + gauntlet.warriorCamera.getXoffset()*32);
+		int y = (int) (16);// + gauntlet.warriorCamera.getYoffset()*32);
 		for (int row = 0; row < Gauntlet.maxRow; row++ ) {
 			for (int col = 0; col < Gauntlet.maxColumn; col++) {
-				if ( gauntlet.map[row][col] == 0) {		//equals a 0 is a path
+				if ( Gauntlet.map[row][col] == 0) {		//equals a 0 is a path
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
 					gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.pathTile));
-				} else {							//equals a 1 is a wall
+				} 
+				if (Gauntlet.map[row][col] == 1){							//equals a 1 is a wall
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
 					gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.wallTile));
+				} 
+				if (Gauntlet.map[row][col] == 2){
+					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
+					gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorCEast));
 				}
 				x = x + 32;
 				gauntlet.mapMatrix[row][col].render(g);
@@ -270,25 +349,66 @@ public class GameStartUp extends BasicGameState{
 			x = 16;
 		}
 	}
-	
+
 	/*
 	 *  updateProjectiles
 	 * 
 	 *  updates projectile locations.
 	 */
-	public void updateProjectiles(ArrayList<Projectile> projectiles, int delta) {
+	public void updateProjectiles(ArrayList<Skeleton> skeletonList, java.util.Vector<Projectile> projectiles, int delta) {
+
+		ArrayList<Integer> removeList = new ArrayList<>();
+		
+
 		for (int i = 0; i < projectiles.size(); i++) {
 			projectiles.get(i).update(delta);
 			projectiles.get(i).setXPos((int) projectiles.get(i).getX());
 			projectiles.get(i).setYPos((int) projectiles.get(i).getY());
-			if(projectiles.get(i).getColumn() > Gauntlet.maxColumn 
-					|| projectiles.get(i).getRow() > Gauntlet.maxRow 
-					|| projectiles.get(i).getColumn() < 0
-					|| projectiles.get(i).getRow() < 0) {
-				projectiles.remove(i);
+			
+			int row = projectiles.get(i).getRow();
+			int col = projectiles.get(i).getColumn();
+			
+			if(col >= Gauntlet.maxColumn || row >= Gauntlet.maxRow || col < 0 || row < 0) {
+				removeList.add(i);
+			}
+			
+			else if (Gauntlet.map[row][col] == 1) {
+				removeList.add(i);
+			}
+			
+			// Check if a projectile hits an enemy
+			for (Skeleton s : skeletonList) {
+				if (row == s.getRow() && col == s.getColumn()) {
+					removeList.add(i);
+					s.kill();
+				}
 			}
 		}
+		
+		int offSet = 0;
+		for (int i : removeList) {
+			projectiles.remove(i - offSet);
+			offSet += 1;
+		}
 	}
+	
+	public void flushEnemies(ArrayList<Skeleton> skeletonList) {
+		ArrayList<Integer> removeList = new ArrayList<>();
+		int lastRemoved = 0;
+		for (int i = skeletonList.size(); i > lastRemoved; i--) {
+			if (skeletonList.get(i).isDead()) {
+				removeList.add(i);
+				lastRemoved = i;
+			}
+		}
+		
+		int offSet = 0;
+		for (int i : removeList) {			
+			skeletonList.remove(i - offSet);
+			offSet += 1;
+		}
+	}
+
 
 	@Override
 	public int getID() {

@@ -5,6 +5,8 @@ import jig.ResourceManager;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Vector;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -14,17 +16,17 @@ public class Gauntlet extends StateBasedGame {
 	public static final int LOBBYSTATE = 0;
 	public static final int GAMESTARTSTATE = 1;
 
-	public final static int maxRow = 25;
-	public final static int maxColumn = 25;
+	public final static int maxRow = 75;
+	public final static int maxColumn = 75;
 	public final static int windowWidth = 800;
 	public final static int windowHeight = 800;
 	
-	public final int  warriorX= 200;
-	public final int  warriorY= 200;
-	public final int  rangerX= 280;
-	public final int  rangerY= 200;
-	public final int  skeletonX= 500;
-	public final int  skeletonY= 500;
+	public final int  warriorX= 64;
+	public final int  warriorY= 128;
+	public final int  rangerX= 128;
+	public final int  rangerY= 128;
+	public final int  skeletonX= 300;
+	public final int  skeletonY= 300;
 	
 	public static final String pathTile = "gauntlet/resources/WalkingTile.png";
 	public static final String wallTile = "gauntlet/resources/WallTile.png";
@@ -49,13 +51,38 @@ public class Gauntlet extends StateBasedGame {
 	public static final String skeletonS = "gauntlet/resources/skeletonS.png";
 	public static final String skeletonE = "gauntlet/resources/skeletonE.png";
 	public static final String skeletonW = "gauntlet/resources/skeletonW.png";
+	
+	public static final String LobbyPic = "gauntlet/resources/LobbyPic.png";
+	
+	public static final String KeyHUp = "gauntlet/resources/KeyHUp.png";
+	public static final String KeyHDown = "gauntlet/resources/KeyHDown.png";
+	public static final String KeyVLeft = "gauntlet/resources/KeyVLeft.png";
+	public static final String KeyVRight = "gauntlet/resources/KeyVRight.png";
+
+	public static final String LowerHealthPotion = "gauntlet/resources/LowerHealthPotion.png";
+	public static final String HealthPotion = "gauntlet/resources/HealthPotion.png";
+	public static final String HigherHealthPotion = "gauntlet/resources/HigherHealthPotion.png";
+
+	public static final String doorCNorth = "gauntlet/resources/doorCNorth.png";
+	public static final String doorCSouth = "gauntlet/resources/doorCSouth.png";
+	public static final String doorCEast = "gauntlet/resources/doorCEast.png";
+	public static final String doorCWest = "gauntlet/resources/doorCWest.png";
+	public static final String doorONorth = "gauntlet/resources/doorONorth.png";
+	public static final String doorOSouth = "gauntlet/resources/doorOSouth.png";
+	public static final String doorOEast = "gauntlet/resources/doorOEast.png";
+	public static final String doorOWest = "gauntlet/resources/doorOWest.png";
+
 
 	public final int ScreenWidth;
-	public final int ScreenHeight;
+	public final int ScreenHeight; 
+	
+	
+	public final float clientCamX;
+	public final float clientCamY;
 	
 	public static AppGameContainer app;
 	
-	int[][] map;
+	static int[][] map;
 	MapMatrix[][] mapMatrix;
 	Warrior warrior;
 	Ranger ranger;
@@ -64,16 +91,24 @@ public class Gauntlet extends StateBasedGame {
 	Client client;
 	GameThread clientThread;
 	GameState gameState;
-	ArrayList<Projectile> warriorProjectiles;
-	ArrayList<Projectile> rangerProjectiles;
+	Vector<Projectile> warriorProjectiles;
+	Vector<Projectile> rangerProjectiles;
 	ArrayList<Skeleton> skeletonList;
+    ArrayList<Powerups> potions;
 
+	
+	//Camera class determines what the player is looking at.
+	Camera warriorCamera;
+    Camera rangerCamera;
 	
 	public Gauntlet(String title, int width, int height) {
 		super(title);
 		ScreenHeight = height;
 		ScreenWidth = width;
 
+		clientCamX = 0;
+		clientCamY = 0;
+		
 		Entity.setCoarseGrainedCollisionBoundary(Entity.AABB);
 		map = new int[maxRow][maxColumn];
 		mapMatrix = new MapMatrix[maxRow][maxColumn];
@@ -110,13 +145,40 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(skeletonE);
 		ResourceManager.loadImage(skeletonW);
 		
+		ResourceManager.loadImage(LobbyPic);
+		ResourceManager.loadImage(KeyHUp);
+		ResourceManager.loadImage(KeyHDown);
+		ResourceManager.loadImage(KeyVRight);
+		ResourceManager.loadImage(KeyVLeft);
+		
+		ResourceManager.loadImage(HigherHealthPotion);
+		ResourceManager.loadImage(HealthPotion);
+		ResourceManager.loadImage(LowerHealthPotion);
+		
+		ResourceManager.loadImage(doorCNorth);
+		ResourceManager.loadImage(doorCSouth);
+		ResourceManager.loadImage(doorCEast);
+		ResourceManager.loadImage(doorCWest);
+		ResourceManager.loadImage(doorONorth);
+		ResourceManager.loadImage(doorOSouth);
+		ResourceManager.loadImage(doorOEast);
+		ResourceManager.loadImage(doorOWest);
+		
 		warrior = new Warrior(warriorX, warriorY, 0f, 0f);
 		ranger = new Ranger(rangerX, rangerY, 0f, 0f);
 		skeleton = new Skeleton(skeletonX, skeletonY, 0f, 0f);
 		
-		warriorProjectiles = new ArrayList<>();
-		rangerProjectiles = new ArrayList<>();
+		warriorProjectiles = new Vector<>();
+		rangerProjectiles = new Vector<>();
+		
+		//Cameras start centered so the characters are on the center of the viewing screen.
+		warriorCamera = new Camera(ScreenWidth/2,ScreenHeight/2);
+		rangerCamera = new Camera(ScreenWidth/2,ScreenHeight/2);
+		
 		skeletonList = new ArrayList<Skeleton>();
+		
+		potions = new ArrayList<Powerups>();
+		
 		skeletonList.add(skeleton);
 		
 		int rowB = 0;
@@ -141,10 +203,14 @@ public class Gauntlet extends StateBasedGame {
         }
 		for (int row=0; row<maxRow; row++ ) {
 			for (int col=0; col<maxColumn; col++) {
-				if ( map[row][col] == 48) {		//equals a 0 is a path
+				if (map[row][col] == 48) {		//equals a 0 is a path
 					map[row][col] = 0;
-				} else {
+				}
+				if (map[row][col] == 49) {		//equals a 1 is a wall
 					map[row][col] = 1;
+				}
+				if (map[row][col] == 50) {	
+					map[row][col] = 2;			//a door facing 
 				}
 			}
 		}
@@ -154,7 +220,8 @@ public class Gauntlet extends StateBasedGame {
 		try {
 			app = new AppGameContainer(new Gauntlet("Gauntlet", windowWidth, windowHeight));		//(x,y)
 			app.setDisplayMode(windowWidth, windowHeight, false);
-			app.setVSync(true);
+			app.setClearEachFrame(false);
+			app.setTargetFrameRate(35);
 			app.start();
 		} catch (SlickException e) {
 			e.printStackTrace();
