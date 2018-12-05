@@ -7,6 +7,7 @@ import jig.Vector;
 class Warrior extends Entity {
 	
 	private int health;
+	private int maxHealth;
 	private GameState.Direction direction;
 	public Vector velocity;
 	private int countdown;
@@ -14,8 +15,8 @@ class Warrior extends Entity {
 	public Warrior(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorS));
-		
-		this.health = 100;
+		this.maxHealth = 100;
+		this.health = 1;
 		this.direction = GameState.Direction.DOWN;
 		this.velocity = new Vector(vx, vy);
 		countdown = 0;
@@ -39,6 +40,27 @@ class Warrior extends Entity {
 		if (!this.isDead()) {
 			this.health -= 5;
 		}
+	}
+	
+	public void potion(String type) {
+		if(type == "lower") {
+			System.out.println("Health increase 25%");
+		    this.health += this.maxHealth * .25;
+		}
+		else if (type == "normal") {
+			this.health += this.maxHealth * .50;
+		     System.out.println("Health increase 50%");
+		}
+		else if (type == "max") {
+	        this.health = this.maxHealth;
+			System.out.println("Health increase 100%");
+		}
+		if(this.health > this.maxHealth)
+			this.health = this.maxHealth;
+	}
+	
+	public int getHealth() {
+		return this.health;
 	}
 	
 	public void setVelocity(final Vector v) {

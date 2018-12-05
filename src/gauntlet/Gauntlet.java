@@ -61,13 +61,17 @@ public class Gauntlet extends StateBasedGame {
 	
 	public static final String DoorOpen = "gauntlet/resources/DoorOpen.png";
 	public static final String DoorClosed = "gauntlet/resources/DoorClosed.png";
-	public static final String DoorODown = "gauntlet/resources/DoorOpenDown.png";
-	public static final String DoorCDown = "gauntlet/resources/DoorClosedDown.png";
+	public static final String DoorCDown = "gauntlet/resources/DoorOpenDown.png";
+	public static final String DoorODown = "gauntlet/resources/DoorClosedDown.png";
 	public static final String DoorORight = "gauntlet/resources/DoorOpenRight.png";
 	public static final String DoorCRight = "gauntlet/resources/DoorClosedRight.png";
-	public static final String DoorCLeft = "gauntlet/resources/DoorClosedLeft.png";
-	public static final String DoorOLeft = "gauntlet/resources/DoorOpenLeft.png";
+	public static final String DoorOLeft = "gauntlet/resources/DoorClosedLeft.png";
+	public static final String DoorCLeft = "gauntlet/resources/DoorOpenLeft.png";
 
+	public static final String LowerHealthPotion = "gauntlet/resources/LowerHealthPotion.png";
+	public static final String HealthPotion = "gauntlet/resources/HealthPotion.png";
+	public static final String HigherHealthPotion = "gauntlet/resources/HigherHealthPotion.png";
+	
 	public final int ScreenWidth;
 	public final int ScreenHeight;
 	
@@ -85,7 +89,7 @@ public class Gauntlet extends StateBasedGame {
 	Vector<Projectile> warriorProjectiles;
 	Vector<Projectile> rangerProjectiles;
 	ArrayList<Skeleton> skeletonList;
-
+    ArrayList<Powerups> potions;
 	
 	public Gauntlet(String title, int width, int height) {
 		super(title);
@@ -143,6 +147,11 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(DoorODown);
 		ResourceManager.loadImage(DoorCDown);
 		
+		ResourceManager.loadImage(HigherHealthPotion);
+		ResourceManager.loadImage(HealthPotion);
+		ResourceManager.loadImage(LowerHealthPotion);
+		
+		
 		warrior = new Warrior(warriorX, warriorY, 0f, 0f);
 		ranger = new Ranger(rangerX, rangerY, 0f, 0f);
 		skeleton = new Skeleton(skeletonX, skeletonY, 0f, 0f);
@@ -150,6 +159,9 @@ public class Gauntlet extends StateBasedGame {
 		warriorProjectiles = new Vector<>();
 		rangerProjectiles = new Vector<>();
 		skeletonList = new ArrayList<Skeleton>();
+		
+		potions = new ArrayList<Powerups>();
+		
 		skeletonList.add(skeleton);
 		
 		int rowB = 0;
@@ -176,8 +188,12 @@ public class Gauntlet extends StateBasedGame {
 			for (int col=0; col<maxColumn; col++) {
 				if ( map[row][col] == 48) {		//equals a 0 is a path
 					map[row][col] = 0;
-				} else {
+				}
+				if ( map[row][col] == 49) {		//equals a 1 is a wall
 					map[row][col] = 1;
+				}
+				if ( map[row][col] == 50) {	
+					map[row][col] = 2;			//a door facing 
 				}
 			}
 		}
