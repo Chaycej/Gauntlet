@@ -1,3 +1,4 @@
+
 package gauntlet;
 
 public class Camera {
@@ -22,5 +23,4 @@ public class Camera {
 	public float getYoffset() {
 		return yOffset;
 	}	
-
 }
