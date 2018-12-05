@@ -69,7 +69,8 @@ public class Gauntlet extends StateBasedGame {
 	public static final String doorOWest = "gauntlet/resources/doorOWest.png";
 
 	public final int ScreenWidth;
-	public final int ScreenHeight;
+	public final int ScreenHeight; 
+	
 	
 	public final float clientCamX;
 	public final float clientCamY;
