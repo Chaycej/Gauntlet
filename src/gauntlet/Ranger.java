@@ -7,6 +7,7 @@ import jig.Vector;
 class Ranger extends Entity {
 	
 	private int health;
+	private int maxHealth;
 	private GameState.Direction direction;
 	public Vector velocity;
 	private int countdown;
@@ -15,7 +16,8 @@ class Ranger extends Entity {
 		super(x, y);
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.rangerS));
 		
-		this.health = 100;
+		this.maxHealth = 100;
+		this.health = maxHealth;
 		this.direction = GameState.Direction.DOWN;
 		this.velocity = new Vector(vx, vy);
 		this.countdown = 0;
@@ -30,6 +32,10 @@ class Ranger extends Entity {
 		return this.health <= 0;
 	}
 	
+	public int getHealth() {
+		return this.health;
+	}
+	
 	/*
 	 *  takeHit
 	 * 
@@ -39,6 +45,23 @@ class Ranger extends Entity {
 		if (!this.isDead()) {
 			this.health -= 10;
 		}
+	}
+	
+	public void potion(String type) {
+		if(type == "lower") {
+			System.out.println("Health increase 25%");
+		    this.health += this.maxHealth * .25;
+		}
+		else if (type == "normal") {
+			this.health += this.maxHealth * .50;
+		     System.out.println("Health increase 50%");
+		}
+		else if (type == "max") {
+	        this.health = this.maxHealth;
+			System.out.println("Health increase 100%");
+		}
+		if(this.health > this.maxHealth)
+			this.health = this.maxHealth;
 	}
 	
 	public void setVelocity(final Vector v) {
