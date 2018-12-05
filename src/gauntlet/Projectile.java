@@ -41,7 +41,7 @@ class Projectile extends Entity implements java.io.Serializable {
 	}
 	
 	public int getRow() {
-		int row = (int) ((this.getY())/32);	
+		int row = (int) ((this.getY())/32);
 		return row;
 	}
 	

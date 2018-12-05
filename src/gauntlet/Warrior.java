@@ -16,7 +16,7 @@ class Warrior extends Entity {
 		super(x, y);
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorS));
 		this.maxHealth = 100;
-		this.health = 1;
+		this.health = 100;
 		this.direction = GameState.Direction.DOWN;
 		this.velocity = new Vector(vx, vy);
 		countdown = 0;
@@ -44,18 +44,15 @@ class Warrior extends Entity {
 	
 	public void potion(String type) {
 		if(type == "lower") {
-			System.out.println("Health increase 25%");
 		    this.health += this.maxHealth * .25;
 		}
 		else if (type == "normal") {
 			this.health += this.maxHealth * .50;
-		     System.out.println("Health increase 50%");
 		}
 		else if (type == "max") {
 	        this.health = this.maxHealth;
-			System.out.println("Health increase 100%");
 		}
-		if(this.health > this.maxHealth)
+		if (this.health > this.maxHealth)
 			this.health = this.maxHealth;
 	}
 	
