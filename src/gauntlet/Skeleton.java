@@ -27,7 +27,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		velocity = new Vector(vx, vy);
 		countdown = 0;
 		path = new double[Gauntlet.maxRow][Gauntlet.maxColumn];
-		visited = new double[Gauntlet.maxRow][Gauntlet.maxColumn];;
+		visited = new double[Gauntlet.maxRow][Gauntlet.maxColumn];
 		isDead = false;
 		moves = 0;
 		direction = 0;
@@ -210,7 +210,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
 				this.direction = 1;
 			}
 		}
-		if (col+1 <= 25 ) {
+		if (col+1 <= Gauntlet.maxColumn ) {
 			if (this.path[row][col+1] < min) {
 				min = this.path[row][col+1];
 				this.direction = 4;
@@ -222,7 +222,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
 				this.direction = 2;
 			}
 		}
-		if (row+1 <= 25) {
+		if (row+1 <= Gauntlet.maxRow) {
 			if (this.path[row+1][col] < min) {
 				min = this.path[row+1][col];
 				this.direction = 3;
@@ -280,25 +280,25 @@ public class Skeleton extends Entity implements java.io.Serializable {
 		// Moving left
 		if (direction == 2) {
 			this.eastAnimation();
-			this.setVelocity(new Vector(-0.06f, 0f));
+			this.setVelocity(new Vector(-0.04f, 0f));
 		}
 		
 		//going right
 		if (direction == 4) {
 			this.westAnimation();
-			this.setVelocity(new Vector(0.06f, 0f));
+			this.setVelocity(new Vector(0.04f, 0f));
 		}
 		
 		//going down
 		if (direction == 3) {
 			this.southAnimation();
-			this.setVelocity(new Vector(0f, 0.06f));
+			this.setVelocity(new Vector(0f, 0.04f));
 		}
 		
 		//going up
 		if (direction == 1) {
 			this.northAnimation();
-			this.setVelocity(new Vector(0f, -0.06f));
+			this.setVelocity(new Vector(0f, -0.04f));
 		}
 		
 		if (row-1 < 0 || row+1 > Gauntlet.maxRow-1 || col-1 < 0 || col+1 > Gauntlet.maxColumn-1) {

@@ -189,13 +189,13 @@ public class Gauntlet extends StateBasedGame {
         }
 		for (int row=0; row<maxRow; row++ ) {
 			for (int col=0; col<maxColumn; col++) {
-				if ( map[row][col] == 48) {		//equals a 0 is a path
+				if (map[row][col] == 48) {		//equals a 0 is a path
 					map[row][col] = 0;
 				}
-				if ( map[row][col] == 49) {		//equals a 1 is a wall
+				if (map[row][col] == 49) {		//equals a 1 is a wall
 					map[row][col] = 1;
 				}
-				if ( map[row][col] == 50) {	
+				if (map[row][col] == 50) {	
 					map[row][col] = 2;			//a door facing 
 				}
 			}
