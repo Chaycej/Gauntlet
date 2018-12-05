@@ -16,8 +16,8 @@ public class Gauntlet extends StateBasedGame {
 	public static final int LOBBYSTATE = 0;
 	public static final int GAMESTARTSTATE = 1;
 
-	public final static int maxRow = 50;
-	public final static int maxColumn = 50;
+	public final static int maxRow = 75;
+	public final static int maxColumn = 75;
 	public final static int windowWidth = 800;
 	public final static int windowHeight = 800;
 	
