@@ -88,7 +88,7 @@ class Ranger extends Entity {
 	 *  Removes all images from the ranger entity.
 	 */
 	private void flush() {
-		removeImage(ResourceManager.getImage(Gauntlet.rangerS));
+		removeImage(ResourceManager.getImage(Gauntlet.rangerN));
 		removeImage(ResourceManager.getImage(Gauntlet.rangerS));
 		removeImage(ResourceManager.getImage(Gauntlet.rangerE));
 		removeImage(ResourceManager.getImage(Gauntlet.rangerW));
