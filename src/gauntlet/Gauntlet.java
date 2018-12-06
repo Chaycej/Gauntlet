@@ -62,6 +62,8 @@ public class Gauntlet extends StateBasedGame {
 	public static final String LowerHealthPotion = "gauntlet/resources/LowerHealthPotion.png";
 	public static final String HealthPotion = "gauntlet/resources/HealthPotion.png";
 	public static final String HigherHealthPotion = "gauntlet/resources/HigherHealthPotion.png";
+	public static final String IncreaseHealth = "gauntlet/resources/IncreaseHealth.png";
+	public static final String IncreaseFire = "gauntlet/resources/IncreaseFireRate.png";
 
 	public static final String doorCNorth = "gauntlet/resources/doorCNorth.png";
 	public static final String doorCSouth = "gauntlet/resources/doorCSouth.png";
@@ -154,6 +156,8 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(HigherHealthPotion);
 		ResourceManager.loadImage(HealthPotion);
 		ResourceManager.loadImage(LowerHealthPotion);
+		ResourceManager.loadImage(IncreaseHealth);
+		ResourceManager.loadImage(IncreaseFire);
 		
 		ResourceManager.loadImage(doorCNorth);
 		ResourceManager.loadImage(doorCSouth);

@@ -21,9 +21,15 @@ class Powerups extends Entity implements java.io.Serializable {
 		}else if(i==1) {
 			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.HealthPotion));
 			type = "normal";
-		}else {
+		}else if(i==2){
 			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.HigherHealthPotion));
 		    type = "max";
+		}else if(i==3){
+			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.IncreaseHealth));
+		    type = "increaseMax";
+		}else {
+			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.IncreaseFire));
+		    type = "increaseFireRate";
 		}
 		
 		this.xPos = (int)x;

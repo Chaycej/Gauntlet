@@ -8,6 +8,7 @@ class Ranger extends Entity {
 	
 	private int health;
 	private int maxHealth;
+	private float fireRate;
 	private GameState.Direction direction;
 	public Vector velocity;
 	private int countdown;
@@ -15,7 +16,7 @@ class Ranger extends Entity {
 	public Ranger(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.rangerS));
-		
+		this.fireRate = 0.1f;
 		this.maxHealth = 100;
 		this.health = maxHealth;
 		this.direction = GameState.Direction.DOWN;
@@ -46,19 +47,29 @@ class Ranger extends Entity {
 			this.health -= 10;
 		}
 	}
-	
+	public float getFireRate() {
+		return this.fireRate;
+	}
+	private void increaseFireRate() {
+		this.fireRate += 0.1f;
+	}
 	public void potion(String type) {
 		if(type == "lower") {
-			System.out.println("Health increase 25%");
 		    this.health += this.maxHealth * .25;
 		}
 		else if (type == "normal") {
 			this.health += this.maxHealth * .50;
-		     System.out.println("Health increase 50%");
 		}
 		else if (type == "max") {
 	        this.health = this.maxHealth;
-			System.out.println("Health increase 100%");
+		}
+		else if (type == "increaseMax") {
+			this.maxHealth += 20;
+			this.health = this.maxHealth;
+		}
+		else if(type == "increaseFireRate") {
+			if (this.getFireRate() <= 0.5f)
+				this.increaseFireRate();
 		}
 		if(this.health > this.maxHealth)
 			this.health = this.maxHealth;

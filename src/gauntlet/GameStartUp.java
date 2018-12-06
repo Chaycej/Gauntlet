@@ -19,9 +19,10 @@ public class GameStartUp extends BasicGameState{
 
 		Gauntlet gauntlet = (Gauntlet)game;
 		
-		for (int i = 0; i < 3; i++) {
-		    gauntlet.potions.add(new Powerups(32.0f+32.0f*i,32.0f+32.0f*i, i));
+		for (int i = 0; i < 5; i++) {
+		    gauntlet.potions.add(new Powerups(128.0f+32.0f*i,128.0f+32.0f*i, i));
 		}
+		
 	}
 
 	@Override
@@ -61,17 +62,17 @@ public class GameStartUp extends BasicGameState{
 		for (Projectile projectile : gauntlet.rangerProjectiles) {
 			projectile.render(g);
 		}
-
 		
 		for (Powerups potions : gauntlet.potions) {
 			potions.render(g);
 		}
+		
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 		Gauntlet gauntlet = (Gauntlet)game;
-
+		//System.out.println(gauntlet.skeleton.getPosition());
 		if (gauntlet.client != null) {
 			handleClient(container, game, delta);
 		} else {
@@ -140,7 +141,7 @@ public class GameStartUp extends BasicGameState{
 		else if (input.isKeyPressed(Input.KEY_M)) {
 
 			Projectile projectile = new Projectile(gauntlet.warrior.getPosition().getX(),
-					gauntlet.warrior.getPosition().getY(), gauntlet.warrior.getDirection());
+					gauntlet.warrior.getPosition().getY(), gauntlet.warrior.getFireRate(), gauntlet.warrior.getDirection());
 			gauntlet.warriorProjectiles.add(projectile);
 			gauntlet.gameState.setWarriorDirection(GameState.Direction.STOP);
 		}
@@ -286,7 +287,7 @@ public class GameStartUp extends BasicGameState{
 		// Projectile
 		else if (input.isKeyPressed(Input.KEY_M)) {
 			Projectile projectile = new Projectile(gauntlet.ranger.getPosition().getX(),
-					gauntlet.ranger.getPosition().getY(), gauntlet.ranger.getDirection());
+					gauntlet.ranger.getPosition().getY(), gauntlet.ranger.getFireRate(), gauntlet.ranger.getDirection());
 			gauntlet.rangerProjectiles.add(projectile);
 			gauntlet.gameState.setRangerDirection(GameState.Direction.STOP);
 		}
