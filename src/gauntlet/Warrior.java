@@ -16,7 +16,7 @@ class Warrior extends Entity {
 		super(x, y);
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorS));
 		this.maxHealth = 100;
-		this.health = 1;
+		this.health = 100;
 		this.direction = GameState.Direction.DOWN;
 		this.velocity = new Vector(vx, vy);
 		countdown = 0;
@@ -28,7 +28,12 @@ class Warrior extends Entity {
 	 *  Returns true if the warrior has no more health.
 	 */
 	public boolean isDead() {
-		return this.health <= 0;
+		if(this.health <= 0) {
+			this.flush();
+			return true;
+		} else
+		    return false;
+		
 	}
 	
 	/*
@@ -38,24 +43,21 @@ class Warrior extends Entity {
 	 */
 	public void takeHit() {
 		if (!this.isDead()) {
-			this.health -= 5;
+			this.health -= 1;
 		}
 	}
 	
 	public void potion(String type) {
 		if(type == "lower") {
-			System.out.println("Health increase 25%");
 		    this.health += this.maxHealth * .25;
 		}
 		else if (type == "normal") {
 			this.health += this.maxHealth * .50;
-		     System.out.println("Health increase 50%");
 		}
 		else if (type == "max") {
 	        this.health = this.maxHealth;
-			System.out.println("Health increase 100%");
 		}
-		if(this.health > this.maxHealth)
+		if (this.health > this.maxHealth)
 			this.health = this.maxHealth;
 	}
 	
@@ -87,7 +89,7 @@ class Warrior extends Entity {
 	 *  Removes all images from the warrior entity.
 	 */
 	private void flush() {
-		removeImage(ResourceManager.getImage(Gauntlet.warriorW));
+		removeImage(ResourceManager.getImage(Gauntlet.warriorN));
 		removeImage(ResourceManager.getImage(Gauntlet.warriorS));
 		removeImage(ResourceManager.getImage(Gauntlet.warriorE));
 		removeImage(ResourceManager.getImage(Gauntlet.warriorW));
