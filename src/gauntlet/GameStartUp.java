@@ -100,10 +100,10 @@ public class GameStartUp extends BasicGameState{
 		}
 				
 		for (Skeleton s : gauntlet.skeletonList) {
-			if (s.collides(gauntlet.warrior) != null) {
+			if (s.collides(gauntlet.warrior) != null && !s.isDead()) {
 				gauntlet.warrior.takeHit();
 			}
-			if (s.collides(gauntlet.ranger) != null) {
+			if (s.collides(gauntlet.ranger) != null && !s.isDead()) {
 				gauntlet.ranger.takeHit();
 			}
 		}
@@ -122,9 +122,11 @@ public class GameStartUp extends BasicGameState{
 		Gauntlet gauntlet = (Gauntlet)game;
 
 		gauntlet.gameState.setWarriorPosition((int)gauntlet.warrior.getX(), (int)gauntlet.warrior.getY());
-        // Check if dead
+        
+		// Check if dead
 		if (gauntlet.warrior.isDead()) {
 			gauntlet.gameState.setWarriorDirection(GameState.Direction.STOP);
+			gauntlet.warrior.setPosition(-30, -30);
 		}
 		
 		// Up movement
@@ -244,6 +246,7 @@ public class GameStartUp extends BasicGameState{
 		
 		if (gauntlet.ranger.isDead()) {
 			gauntlet.gameState.setRangerDirection(GameState.Direction.STOP);
+			gauntlet.ranger.setPosition(-30, -30);
 		}
 		
 		// Up movement
