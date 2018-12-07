@@ -15,10 +15,10 @@ class Powerups extends Entity implements java.io.Serializable {
 	public Powerups(final float x, final float y, int i) {
 		super(x, y);
         
-		if (i == 0) {
+		if (i <= 50) {
 			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.LowerHealthPotion));
 			type = "lower";
-		}else if(i==1) {
+		}else if(50 < i && i <= 85) {
 			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.HealthPotion));
 			type = "normal";
 		}else {
@@ -60,7 +60,7 @@ class Powerups extends Entity implements java.io.Serializable {
 	synchronized public void setYPos(int newY) {
 		this.yPos = newY;
 	}
-		
+	
 	public void update(final int delta) {
 		//translate(velocity.scale(delta));
 		if (countdown > 0) {

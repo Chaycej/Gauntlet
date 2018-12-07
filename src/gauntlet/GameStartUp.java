@@ -1,6 +1,7 @@
 package gauntlet;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -18,9 +19,27 @@ public class GameStartUp extends BasicGameState{
 		container.setSoundOn(true);
 
 		Gauntlet gauntlet = (Gauntlet)game;
+		int xMax = Gauntlet.maxColumn;
+		int yMax = Gauntlet.maxRow;
+		int numberofPotionTypes = 100;
+		int potionSetup = 0; 
+		int potionsInGame = 10;
 		
-		for (int i = 0; i < 3; i++) {
-		    gauntlet.potions.add(new Powerups(32.0f+32.0f*i,32.0f+32.0f*i, i));
+		while (potionSetup < potionsInGame) {
+			Random randx = new Random(); 
+			Random randy = new Random(); 
+			Random randPotion = new Random(); 
+
+			int x = randx.nextInt(xMax);
+			int y = randy.nextInt(yMax);
+			int potion = randPotion.nextInt(numberofPotionTypes);
+			if(Gauntlet.map[x][y] == 0) {
+				System.out.print(x);
+				System.out.print(" ");
+				System.out.println(y);
+		        gauntlet.potions.add(new Powerups(16 + x*32,16+y*32,potion));
+		        potionSetup++;
+			}
 		}
 	}
 
@@ -326,8 +345,8 @@ public class GameStartUp extends BasicGameState{
 	 */
 	public void renderMap(GameContainer container, StateBasedGame game, Graphics g) {
 		Gauntlet gauntlet = (Gauntlet)game;
-		int x = (int) (16);// + gauntlet.warriorCamera.getXoffset()*32);
-		int y = (int) (16);// + gauntlet.warriorCamera.getYoffset()*32);
+		int x = (int) (16);
+		int y = (int) (16);
 		for (int row = 0; row < Gauntlet.maxRow; row++ ) {
 			for (int col = 0; col < Gauntlet.maxColumn; col++) {
 				if ( Gauntlet.map[row][col] == 0) {		//equals a 0 is a path
