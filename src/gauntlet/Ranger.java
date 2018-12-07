@@ -29,7 +29,11 @@ class Ranger extends Entity {
 	 *  Returns true if the ranger has no more health.
 	 */
 	public boolean isDead() {
-		return this.health <= 0;
+		if(this.health <= 0) {
+			this.flush();
+			return true;
+		} else
+		    return false;
 	}
 	
 	public int getHealth() {
@@ -43,7 +47,7 @@ class Ranger extends Entity {
 	 */
 	public void takeHit() {
 		if (!this.isDead()) {
-			this.health -= 10;
+			this.health -= 1;
 		}
 	}
 	
