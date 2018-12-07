@@ -370,6 +370,14 @@ public class GameStartUp extends BasicGameState{
 				} 
 				if (Gauntlet.map[row][col] == 2){
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
+					gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorCSouth));
+				}
+				if (Gauntlet.map[row][col] == 3){
+					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
+					gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorCWest));
+				}
+				if (Gauntlet.map[row][col] == 4){
+					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
 					gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorCEast));
 				}
 				x = x + 32;
