@@ -32,22 +32,24 @@ public class GameStartUp extends BasicGameState{
 		g.clear();
 		
 		// Moves the map in accordance to the character both are needed.
-		g.translate(gauntlet.ScreenWidth/2-gauntlet.warriorCamera.getXoffset(), gauntlet.ScreenHeight/2-gauntlet.warriorCamera.getYoffset());
-		g.translate(gauntlet.ScreenWidth/2-gauntlet.rangerCamera.getXoffset(), gauntlet.ScreenHeight/2-gauntlet.rangerCamera.getYoffset());
-		
+		g.translate(gauntlet.ScreenWidth/2-gauntlet.warriorCamera.getXoffset(), 
+				gauntlet.ScreenHeight/2-gauntlet.warriorCamera.getYoffset());
+		g.translate(gauntlet.ScreenWidth/2-gauntlet.rangerCamera.getXoffset(), 
+				gauntlet.ScreenHeight/2-gauntlet.rangerCamera.getYoffset());
+
 		renderMap(container, game, g);
-		gauntlet.warrior.render(g);
-		gauntlet.ranger.render(g);
 		
 		if (gauntlet.client != null) {
-			g.drawString("Warrior health: " + String.valueOf(gauntlet.warrior.getHealth()), gauntlet.warriorCamera.getXoffset() - 100, gauntlet.warriorCamera.getYoffset() - 400);
-			g.drawString("Ranger health: " + String.valueOf(gauntlet.ranger.getHealth()), gauntlet.warriorCamera.getXoffset() - 300, gauntlet.warriorCamera.getYoffset() - 400);
+			g.drawString("Warrior health: " + String.valueOf(gauntlet.warrior.getHealth()),
+					gauntlet.warriorCamera.getXoffset() - 100, gauntlet.warriorCamera.getYoffset() - 400);
+			g.drawString("Ranger health: " + String.valueOf(gauntlet.ranger.getHealth()),
+					gauntlet.warriorCamera.getXoffset() - 300, gauntlet.warriorCamera.getYoffset() - 400);
 		} else {
-			g.drawString("Warrior health: " + String.valueOf(gauntlet.warrior.getHealth()), gauntlet.rangerCamera.getXoffset() - 100, gauntlet.rangerCamera.getYoffset() - 400);
-			g.drawString("Ranger health: " + String.valueOf(gauntlet.ranger.getHealth()), gauntlet.rangerCamera.getXoffset() - 300, gauntlet.rangerCamera.getYoffset() - 400);
+			g.drawString("Warrior health: " + String.valueOf(gauntlet.warrior.getHealth()),
+					gauntlet.rangerCamera.getXoffset() - 100, gauntlet.rangerCamera.getYoffset() - 400);
+			g.drawString("Ranger health: " + String.valueOf(gauntlet.ranger.getHealth()),
+					gauntlet.rangerCamera.getXoffset() - 300, gauntlet.rangerCamera.getYoffset() - 400);
 		}
-		
-		renderMap(container, game, g);
 		
 		// Don't render a dead guy
 		if(!gauntlet.warrior.isDead()) {
