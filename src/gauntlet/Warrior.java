@@ -28,7 +28,12 @@ class Warrior extends Entity {
 	 *  Returns true if the warrior has no more health.
 	 */
 	public boolean isDead() {
-		return this.health <= 0;
+		if(this.health <= 0) {
+			this.flush();
+			return true;
+		} else
+		    return false;
+		
 	}
 	
 	/*
@@ -38,7 +43,7 @@ class Warrior extends Entity {
 	 */
 	public void takeHit() {
 		if (!this.isDead()) {
-			this.health -= 5;
+			this.health -= 1;
 		}
 	}
 	
