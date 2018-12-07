@@ -47,6 +47,16 @@ public class GameStartUp extends BasicGameState{
 			g.drawString("Ranger health: " + String.valueOf(gauntlet.ranger.getHealth()), gauntlet.rangerCamera.getXoffset() - 300, gauntlet.rangerCamera.getYoffset() - 400);
 		}
 		
+		renderMap(container, game, g);
+		
+		// Don't render a dead guy
+		if(!gauntlet.warrior.isDead()) {
+		    gauntlet.warrior.render(g);
+		}
+		// Don't render a dead guy
+		if(!gauntlet.ranger.isDead()) {
+		    gauntlet.ranger.render(g);
+		}
 
 		for (Skeleton s : gauntlet.skeletonList) {
 			if (!s.isDead()) {
@@ -88,6 +98,15 @@ public class GameStartUp extends BasicGameState{
 				gauntlet.potions.remove(i);
 			}
 		}
+				
+		for (Skeleton s : gauntlet.skeletonList) {
+			if (s.collides(gauntlet.warrior) != null && !s.isDead()) {
+				gauntlet.warrior.takeHit();
+			}
+			if (s.collides(gauntlet.ranger) != null && !s.isDead()) {
+				gauntlet.ranger.takeHit();
+			}
+		}
 		
 	}
 
@@ -103,9 +122,15 @@ public class GameStartUp extends BasicGameState{
 		Gauntlet gauntlet = (Gauntlet)game;
 
 		gauntlet.gameState.setWarriorPosition((int)gauntlet.warrior.getX(), (int)gauntlet.warrior.getY());
-
+        
+		// Check if dead
+		if (gauntlet.warrior.isDead()) {
+			gauntlet.gameState.setWarriorDirection(GameState.Direction.STOP);
+			gauntlet.warrior.setPosition(-30, -30);
+		}
+		
 		// Up movement
-		if (input.isKeyDown(Input.KEY_UP)) {
+		else if (input.isKeyDown(Input.KEY_UP)) {
 			if (gauntlet.warrior.getRow() > 0) {
 				gauntlet.warrior.setDirection(GameState.Direction.UP);
 				gauntlet.gameState.setWarriorDirection(GameState.Direction.UP);
@@ -194,10 +219,6 @@ public class GameStartUp extends BasicGameState{
 		
 		//updates the camera as Warrior moves.
 		gauntlet.warriorCamera.update(gauntlet.warrior.getPosition().getX(), gauntlet.warrior.getPosition().getY());
-		
-		for (Projectile p : gauntlet.warriorProjectiles) {
-			p.update(delta);
-		}
 	}
 
 	/*
@@ -223,8 +244,13 @@ public class GameStartUp extends BasicGameState{
 		int row = gauntlet.ranger.getRow();
 		int col = gauntlet.ranger.getColumn();
 		
+		if (gauntlet.ranger.isDead()) {
+			gauntlet.gameState.setRangerDirection(GameState.Direction.STOP);
+			gauntlet.ranger.setPosition(-30, -30);
+		}
+		
 		// Up movement
-		if (input.isKeyDown(Input.KEY_UP)) {
+		else if (input.isKeyDown(Input.KEY_UP)) {
 			gauntlet.ranger.northAnimation();
 			gauntlet.ranger.setDirection(GameState.Direction.UP);
 			gauntlet.gameState.setRangerDirection(GameState.Direction.UP);
@@ -321,10 +347,6 @@ public class GameStartUp extends BasicGameState{
 		
 		//updates the camera as Ranger moves.
 		gauntlet.rangerCamera.update(gauntlet.ranger.getPosition().getX(), gauntlet.ranger.getPosition().getY());
-		
-		for (Projectile p : gauntlet.rangerProjectiles) {
-			p.update(delta);
-		}
 	}
 
 	/*
@@ -369,6 +391,7 @@ public class GameStartUp extends BasicGameState{
 		
 
 		for (int i = 0; i < projectiles.size(); i++) {
+			projectiles.get(i).update(delta);
 			projectiles.get(i).setXPos((int) projectiles.get(i).getX());
 			projectiles.get(i).setYPos((int) projectiles.get(i).getY());
 			
