@@ -429,19 +429,13 @@ public class GameStartUp extends BasicGameState{
 			y = y + 32;
 			x = 16;
 		}
-		if (gauntlet.key1.keyUsed == false) {
-			gauntlet.key1.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.KeyHDown));
-		} else {
+		if (gauntlet.key1.keyUsed) {
 			gauntlet.key1.removeImage(ResourceManager.getImage(Gauntlet.KeyHDown));
 		}
-		if (gauntlet.key2.keyUsed == false) {
-			gauntlet.key2.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.KeyHDown));
-		} else {
+		if (gauntlet.key2.keyUsed) {
 			gauntlet.key2.removeImage(ResourceManager.getImage(Gauntlet.KeyHDown));
 		}
-		if (gauntlet.key3.keyUsed == false) {
-			gauntlet.key3.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.KeyHDown));
-		} else {
+		if (gauntlet.key3.keyUsed ) {
 			gauntlet.key3.removeImage(ResourceManager.getImage(Gauntlet.KeyHDown));
 		}
 	}
