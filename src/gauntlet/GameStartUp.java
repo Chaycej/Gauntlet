@@ -83,6 +83,7 @@ public class GameStartUp extends BasicGameState{
 		gauntlet.key1.render(g);
 		gauntlet.key2.render(g);
 		gauntlet.key3.render(g);
+		gauntlet.treasure.render(g);
 	}
 
 	@Override
