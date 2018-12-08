@@ -180,11 +180,12 @@ public class Gauntlet extends StateBasedGame {
 		potions = new ArrayList<Powerups>();
 		
 		skeletonList.add(skeleton);
+		skeletonList.add(new Skeleton(500, 500, 0f, 0f));
 		
 		int rowB = 0;
         int colB = 0;
         try {
-            FileInputStream inputStream = new FileInputStream("../Gauntlet/src/gauntlet/map.txt");
+            FileInputStream inputStream = new FileInputStream("../Gauntlet/src/gauntlet/map2.txt");
             while (inputStream.available() > 0) {
                 int numRead = inputStream.read();
                 if (!Character.isDigit(numRead)){
@@ -210,7 +211,13 @@ public class Gauntlet extends StateBasedGame {
 					map[row][col] = 1;
 				}
 				if (map[row][col] == 50) {	
-					map[row][col] = 2;			//a door facing 
+					map[row][col] = 2;			//equals a 2 is a door facing south  
+				}
+				if (map[row][col] == 51) {	
+					map[row][col] = 3;			//equals a 3 is a door facing west  
+				}
+				if (map[row][col] == 52) {	
+					map[row][col] = 4;			//equals a 4 is a door facing east  
 				}
 			}
 		}
