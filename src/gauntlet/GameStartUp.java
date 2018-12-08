@@ -177,6 +177,10 @@ public class GameStartUp extends BasicGameState{
 		GameState newGameState = gauntlet.client.readGameState();
 		if (newGameState != null) {
 			
+			if (newGameState.getWarriorHealth() == 0) {
+				gauntlet.warrior.setPosition(gauntlet.warriorSpawnX, gauntlet.warriorSpawnY);
+			}
+			
 			// Update warrior and ranger health
 			gauntlet.warrior.setHealth(newGameState.getWarriorHealth());
 			gauntlet.ranger.setHealth(newGameState.getRangerHealth());
@@ -248,6 +252,7 @@ public class GameStartUp extends BasicGameState{
 		if (gauntlet.warrior.isDead()) {
 			gauntlet.gameState.setWarriorDirection(GameState.Direction.STOP);
 			gauntlet.warrior.setPosition(gauntlet.warriorSpawnX, gauntlet.warriorSpawnY);
+			gauntlet.gameState.setWarriorPosition(gauntlet.warriorSpawnX, gauntlet.warriorSpawnY);
 			gauntlet.warrior.setHealth(100);
 		}
 		
@@ -347,7 +352,7 @@ public class GameStartUp extends BasicGameState{
 		gauntlet.gameState.rangerProjectiles = gauntlet.rangerProjectiles;
 		gauntlet.gameState.skeletons = gauntlet.skeletonList;
 
-		// Update teammate
+		// Update teammate's position
 		gauntlet.warrior.setPosition(gauntlet.gameState.getWarriorX(), gauntlet.gameState.getWarriorY());
 		gauntlet.warrior.updateAnimation();
 

@@ -132,6 +132,7 @@ public class GameThread extends Thread {
 			commandTrue = 0;
 			
 			// Update client's position and projectiles
+			
 			this.gameState.setWarriorPosition(clientState.getWarriorX(), clientState.getWarriorY());
 			this.gameState.warriorProjectiles = clientState.warriorProjectiles;
 			this.gameState.setWarriorHealth(gauntlet.warrior.getHealth());
