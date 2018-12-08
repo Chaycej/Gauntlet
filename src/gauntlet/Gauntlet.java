@@ -35,6 +35,9 @@ public class Gauntlet extends StateBasedGame {
 	public final int  key3X= 75;
 	public final int  key3Y= 2360;
 	
+	public final int  treasureX= 1980;
+	public final int  treasureY= 1980;
+	
 	public static final String pathTile = "gauntlet/resources/WalkingTile.png";
 	public static final String wallTile = "gauntlet/resources/WallTile.png";
 	public static final String JOIN_GAME_RSC = "gauntlet/resources/joinGame.png";
@@ -78,6 +81,8 @@ public class Gauntlet extends StateBasedGame {
 	public static final String doorOSouth = "gauntlet/resources/doorOSouth.png";
 	public static final String doorOEast = "gauntlet/resources/doorOEast.png";
 	public static final String doorOWest = "gauntlet/resources/doorOWest.png";
+	
+	public static final String treasureChest = "gauntlet/resources/chest.png";
 
 
 	public final int ScreenWidth;
@@ -101,6 +106,8 @@ public class Gauntlet extends StateBasedGame {
 	Keys key1;
 	Keys key2;
 	Keys key3;
+	
+	Treasure treasure;
 	
 	Vector<Projectile> warriorProjectiles;
 	Vector<Projectile> rangerProjectiles;
@@ -175,12 +182,16 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(doorOEast);
 		ResourceManager.loadImage(doorOWest);
 		
+		ResourceManager.loadImage(treasureChest);
+		
 		warrior = new Warrior(warriorSpawnX, warriorSpawnY, 0f, 0f);
 		ranger = new Ranger(rangerSpawnX, rangerSpawnY, 0f, 0f);
 		
 		key1 = new Keys(key1X, key1Y, 0f, 0f);
 		key2 = new Keys(key2X, key2Y, 0f, 0f);
 		key3 = new Keys(key3X, key3Y, 0f, 0f);
+		
+		treasure = new Treasure(treasureX,treasureY,0f,0f);
 		
 		warriorProjectiles = new Vector<>();
 		rangerProjectiles = new Vector<>();
@@ -195,6 +206,10 @@ public class Gauntlet extends StateBasedGame {
 	
 		skeletonList.add(new Skeleton(300, 300, 0f, 0f));
 		skeletonList.add(new Skeleton(500, 500, 0f, 0f));
+		skeletonList.add(new Skeleton(800, 500, 0f, 0f));
+		skeletonList.add(new Skeleton(300, 800, 0f, 0f));
+		skeletonList.add(new Skeleton(300, 2000, 0f, 0f));
+		skeletonList.add(new Skeleton(600, 2000, 0f, 0f));
 		
 		int rowB = 0;
         int colB = 0;
