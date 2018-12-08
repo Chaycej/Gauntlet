@@ -105,7 +105,6 @@ class Warrior extends Entity {
 	}
 	
 	public void southAnimation() {
-		this.flush();
 		this.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorS));
 	}
 	

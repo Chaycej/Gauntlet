@@ -123,7 +123,8 @@ public class GameStartUp extends BasicGameState{
 		// Check if dead
 		if (gauntlet.warrior.isDead()) {
 			gauntlet.gameState.setWarriorDirection(GameState.Direction.STOP);
-			gauntlet.warrior.setPosition(-30, -30);
+			gauntlet.warrior.setPosition(gauntlet.warriorSpawnX, gauntlet.warriorSpawnY);
+			gauntlet.warrior.setHealth(100);
 		}
 		
 		// Up movement
@@ -247,7 +248,8 @@ public class GameStartUp extends BasicGameState{
 		
 		if (gauntlet.ranger.isDead()) {
 			gauntlet.gameState.setRangerDirection(GameState.Direction.STOP);
-			gauntlet.ranger.setPosition(-30, -30);
+			gauntlet.ranger.setPosition(gauntlet.rangerSpawnX, gauntlet.rangerSpawnY);
+			gauntlet.ranger.setHealth(100);
 		}
 		
 		// Up movement
