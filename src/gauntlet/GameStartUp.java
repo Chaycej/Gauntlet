@@ -80,9 +80,22 @@ public class GameStartUp extends BasicGameState{
 			potions.render(g);
 		}
 		
-		gauntlet.key1.render(g);
-		gauntlet.key2.render(g);
-		gauntlet.key3.render(g);
+		if (gauntlet.key1.keyUsed) {
+			gauntlet.key1.removeImage(ResourceManager.getImage(Gauntlet.KeyHDown));
+		} else {
+			gauntlet.key1.render(g);
+		}
+		if (gauntlet.key2.keyUsed ) {
+			gauntlet.key2.removeImage(ResourceManager.getImage(Gauntlet.KeyHDown));
+		} else {
+			gauntlet.key2.render(g);
+		}
+		if (gauntlet.key3.keyUsed) {
+			gauntlet.key3.removeImage(ResourceManager.getImage(Gauntlet.KeyHDown));
+		} else {
+			gauntlet.key3.render(g);
+		}
+		
 		gauntlet.treasure.render(g);
 	}
 
@@ -210,6 +223,8 @@ public class GameStartUp extends BasicGameState{
 		for (Skeleton s : gauntlet.skeletonList) {
 			s.update(delta);
 		}
+		
+		
 		
 		gauntlet.ranger.update(delta);
 		gauntlet.warrior.update(delta);
@@ -429,15 +444,7 @@ public class GameStartUp extends BasicGameState{
 			y = y + 32;
 			x = 16;
 		}
-		if (gauntlet.key1.keyUsed) {
-			gauntlet.key1.removeImage(ResourceManager.getImage(Gauntlet.KeyHDown));
-		}
-		if (gauntlet.key2.keyUsed) {
-			gauntlet.key2.removeImage(ResourceManager.getImage(Gauntlet.KeyHDown));
-		}
-		if (gauntlet.key3.keyUsed ) {
-			gauntlet.key3.removeImage(ResourceManager.getImage(Gauntlet.KeyHDown));
-		}
+		
 	}
 
 	/*
