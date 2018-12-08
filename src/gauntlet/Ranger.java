@@ -36,10 +36,6 @@ class Ranger extends Entity {
 		    return false;
 	}
 	
-	public int getHealth() {
-		return this.health;
-	}
-	
 	/*
 	 *  takeHit
 	 * 
@@ -66,6 +62,14 @@ class Ranger extends Entity {
 		}
 		if(this.health > this.maxHealth)
 			this.health = this.maxHealth;
+	}
+	
+	public void setHealth(int newHealth) {
+		this.health = newHealth;
+	}
+	
+	public int getHealth() {
+		return this.health;
 	}
 	
 	public void setVelocity(final Vector v) {
