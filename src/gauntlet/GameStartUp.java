@@ -19,9 +19,9 @@ public class GameStartUp extends BasicGameState{
 
 		Gauntlet gauntlet = (Gauntlet)game;
 		
-		for (int i = 0; i < 3; i++) {
-		    gauntlet.potions.add(new Powerups(32.0f+32.0f*i,32.0f+32.0f*i, i));
-		}
+		gauntlet.potions.add(new Powerups(500, 500, Powerups.PowerupType.normal));
+		gauntlet.potions.add(new Powerups(1000, 1000, Powerups.PowerupType.normal));
+		gauntlet.potions.add(new Powerups(2000, 2000, Powerups.PowerupType.normal));
 	}
 
 	@Override
