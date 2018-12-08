@@ -7,6 +7,7 @@ import jig.Vector;
 class Ranger extends Entity {
 	
 	private int health;
+	private int maxHealth;
 	private GameState.Direction direction;
 	public Vector velocity;
 	private int countdown;
@@ -15,7 +16,8 @@ class Ranger extends Entity {
 		super(x, y);
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.rangerS));
 		
-		this.health = 100;
+		this.maxHealth = 100;
+		this.health = maxHealth;
 		this.direction = GameState.Direction.DOWN;
 		this.velocity = new Vector(vx, vy);
 		this.countdown = 0;
@@ -27,7 +29,15 @@ class Ranger extends Entity {
 	 *  Returns true if the ranger has no more health.
 	 */
 	public boolean isDead() {
-		return this.health <= 0;
+		if(this.health <= 0) {
+			this.flush();
+			return true;
+		} else
+		    return false;
+	}
+	
+	public int getHealth() {
+		return this.health;
 	}
 	
 	/*
@@ -37,8 +47,25 @@ class Ranger extends Entity {
 	 */
 	public void takeHit() {
 		if (!this.isDead()) {
-			this.health -= 10;
+			this.health -= 1;
 		}
+	}
+	
+	public void potion(String type) {
+		if(type == "lower") {
+			System.out.println("Health increase 25%");
+		    this.health += this.maxHealth * .25;
+		}
+		else if (type == "normal") {
+			this.health += this.maxHealth * .50;
+		     System.out.println("Health increase 50%");
+		}
+		else if (type == "max") {
+	        this.health = this.maxHealth;
+			System.out.println("Health increase 100%");
+		}
+		if(this.health > this.maxHealth)
+			this.health = this.maxHealth;
 	}
 	
 	public void setVelocity(final Vector v) {
@@ -65,7 +92,7 @@ class Ranger extends Entity {
 	 *  Removes all images from the ranger entity.
 	 */
 	private void flush() {
-		removeImage(ResourceManager.getImage(Gauntlet.rangerS));
+		removeImage(ResourceManager.getImage(Gauntlet.rangerN));
 		removeImage(ResourceManager.getImage(Gauntlet.rangerS));
 		removeImage(ResourceManager.getImage(Gauntlet.rangerE));
 		removeImage(ResourceManager.getImage(Gauntlet.rangerW));

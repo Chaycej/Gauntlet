@@ -16,15 +16,15 @@ public class Gauntlet extends StateBasedGame {
 	public static final int LOBBYSTATE = 0;
 	public static final int GAMESTARTSTATE = 1;
 
-	public final static int maxRow = 25;
-	public final static int maxColumn = 25;
+	public final static int maxRow = 75;
+	public final static int maxColumn = 75;
 	public final static int windowWidth = 800;
 	public final static int windowHeight = 800;
 	
-	public final int  warriorX= 100;
-	public final int  warriorY= 750;
-	public final int  rangerX= 150;
-	public final int  rangerY= 750;
+	public final int  warriorX= 64;
+	public final int  warriorY= 128;
+	public final int  rangerX= 128;
+	public final int  rangerY= 128;
 	public final int  skeletonX= 300;
 	public final int  skeletonY= 300;
 	
@@ -58,18 +58,27 @@ public class Gauntlet extends StateBasedGame {
 	public static final String KeyHDown = "gauntlet/resources/KeyHDown.png";
 	public static final String KeyVLeft = "gauntlet/resources/KeyVLeft.png";
 	public static final String KeyVRight = "gauntlet/resources/KeyVRight.png";
-	
-	public static final String DoorOpen = "gauntlet/resources/DoorOpen.png";
-	public static final String DoorClosed = "gauntlet/resources/DoorClosed.png";
-	public static final String DoorCDown = "gauntlet/resources/DoorOpenDown.png";
-	public static final String DoorODown = "gauntlet/resources/DoorClosedDown.png";
-	public static final String DoorORight = "gauntlet/resources/DoorOpenRight.png";
-	public static final String DoorCRight = "gauntlet/resources/DoorClosedRight.png";
-	public static final String DoorOLeft = "gauntlet/resources/DoorClosedLeft.png";
-	public static final String DoorCLeft = "gauntlet/resources/DoorOpenLeft.png";
+
+	public static final String LowerHealthPotion = "gauntlet/resources/LowerHealthPotion.png";
+	public static final String HealthPotion = "gauntlet/resources/HealthPotion.png";
+	public static final String HigherHealthPotion = "gauntlet/resources/HigherHealthPotion.png";
+
+	public static final String doorCNorth = "gauntlet/resources/doorCNorth.png";
+	public static final String doorCSouth = "gauntlet/resources/doorCSouth.png";
+	public static final String doorCEast = "gauntlet/resources/doorCEast.png";
+	public static final String doorCWest = "gauntlet/resources/doorCWest.png";
+	public static final String doorONorth = "gauntlet/resources/doorONorth.png";
+	public static final String doorOSouth = "gauntlet/resources/doorOSouth.png";
+	public static final String doorOEast = "gauntlet/resources/doorOEast.png";
+	public static final String doorOWest = "gauntlet/resources/doorOWest.png";
+
 
 	public final int ScreenWidth;
-	public final int ScreenHeight;
+	public final int ScreenHeight; 
+	
+	
+	public final float clientCamX;
+	public final float clientCamY;
 	
 	public static AppGameContainer app;
 	
@@ -85,13 +94,21 @@ public class Gauntlet extends StateBasedGame {
 	Vector<Projectile> warriorProjectiles;
 	Vector<Projectile> rangerProjectiles;
 	ArrayList<Skeleton> skeletonList;
+    ArrayList<Powerups> potions;
 
+	
+	//Camera class determines what the player is looking at.
+	Camera warriorCamera;
+    Camera rangerCamera;
 	
 	public Gauntlet(String title, int width, int height) {
 		super(title);
 		ScreenHeight = height;
 		ScreenWidth = width;
 
+		clientCamX = 0;
+		clientCamY = 0;
+		
 		Entity.setCoarseGrainedCollisionBoundary(Entity.AABB);
 		map = new int[maxRow][maxColumn];
 		mapMatrix = new MapMatrix[maxRow][maxColumn];
@@ -134,14 +151,18 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(KeyVRight);
 		ResourceManager.loadImage(KeyVLeft);
 		
-		ResourceManager.loadImage(DoorOpen);
-		ResourceManager.loadImage(DoorClosed);
-		ResourceManager.loadImage(DoorORight);
-		ResourceManager.loadImage(DoorCRight);
-		ResourceManager.loadImage(DoorOLeft);
-		ResourceManager.loadImage(DoorCLeft);
-		ResourceManager.loadImage(DoorODown);
-		ResourceManager.loadImage(DoorCDown);
+		ResourceManager.loadImage(HigherHealthPotion);
+		ResourceManager.loadImage(HealthPotion);
+		ResourceManager.loadImage(LowerHealthPotion);
+		
+		ResourceManager.loadImage(doorCNorth);
+		ResourceManager.loadImage(doorCSouth);
+		ResourceManager.loadImage(doorCEast);
+		ResourceManager.loadImage(doorCWest);
+		ResourceManager.loadImage(doorONorth);
+		ResourceManager.loadImage(doorOSouth);
+		ResourceManager.loadImage(doorOEast);
+		ResourceManager.loadImage(doorOWest);
 		
 		warrior = new Warrior(warriorX, warriorY, 0f, 0f);
 		ranger = new Ranger(rangerX, rangerY, 0f, 0f);
@@ -149,13 +170,21 @@ public class Gauntlet extends StateBasedGame {
 		
 		warriorProjectiles = new Vector<>();
 		rangerProjectiles = new Vector<>();
+		
+		//Cameras start centered so the characters are on the center of the viewing screen.
+		warriorCamera = new Camera(ScreenWidth/2,ScreenHeight/2);
+		rangerCamera = new Camera(ScreenWidth/2,ScreenHeight/2);
+		
 		skeletonList = new ArrayList<Skeleton>();
+		
+		potions = new ArrayList<Powerups>();
+		
 		skeletonList.add(skeleton);
 		
 		int rowB = 0;
         int colB = 0;
         try {
-            FileInputStream inputStream = new FileInputStream("../Gauntlet/src/gauntlet/map.txt");
+            FileInputStream inputStream = new FileInputStream("../Gauntlet/src/gauntlet/map2.txt");
             while (inputStream.available() > 0) {
                 int numRead = inputStream.read();
                 if (!Character.isDigit(numRead)){
@@ -174,14 +203,20 @@ public class Gauntlet extends StateBasedGame {
         }
 		for (int row=0; row<maxRow; row++ ) {
 			for (int col=0; col<maxColumn; col++) {
-				if ( map[row][col] == 48) {		//equals a 0 is a path
+				if (map[row][col] == 48) {		//equals a 0 is a path
 					map[row][col] = 0;
 				}
-				if ( map[row][col] == 49) {		//equals a 1 is a wall
+				if (map[row][col] == 49) {		//equals a 1 is a wall
 					map[row][col] = 1;
 				}
-				if ( map[row][col] == 50) {	
-					map[row][col] = 2;			//a door facing 
+				if (map[row][col] == 50) {	
+					map[row][col] = 2;			//equals a 2 is a door facing south  
+				}
+				if (map[row][col] == 51) {	
+					map[row][col] = 3;			//equals a 3 is a door facing west  
+				}
+				if (map[row][col] == 52) {	
+					map[row][col] = 4;			//equals a 4 is a door facing east  
 				}
 			}
 		}
