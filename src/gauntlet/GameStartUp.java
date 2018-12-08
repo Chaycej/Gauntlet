@@ -239,6 +239,8 @@ public class GameStartUp extends BasicGameState{
 		gauntlet.gameState.skeletons = gauntlet.skeletonList;
 		int row = gauntlet.ranger.getRow();
 		int col = gauntlet.ranger.getColumn();
+		int tempCol = 0;
+		int tempRow = 0;
 		
 		if (gauntlet.ranger.isDead()) {
 			gauntlet.gameState.setRangerDirection(GameState.Direction.STOP);
@@ -258,14 +260,14 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.ranger.northAnimation();
 			gauntlet.ranger.setDirection(GameState.Direction.UP);
 			gauntlet.gameState.setRangerDirection(GameState.Direction.UP);
-			
-			if (Gauntlet.map[row][col] == 1) {
+			tempRow = (((int) gauntlet.ranger.getY())-20)/32;
+			if (Gauntlet.map[tempRow][col] == 1) {
 				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
 			}
 			
-			else if (row > 0 && Gauntlet.map[row-1][col] == 0) {
+			else if (row > 0 && Gauntlet.map[tempRow-1][col] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
-				gauntlet.ranger.setVelocity(new Vector(0, -0.1f));
+				gauntlet.ranger.setVelocity(new Vector(0, -0.5f));
 			} 
 		}
 
@@ -274,14 +276,15 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.ranger.southAnimation();
 			gauntlet.ranger.setDirection(GameState.Direction.DOWN);
 			gauntlet.gameState.setRangerDirection(GameState.Direction.DOWN);
+			tempRow = (((int) gauntlet.ranger.getY())+20)/32;
 			
-			if (Gauntlet.map[row][col] == 1) {
+			if (Gauntlet.map[tempRow][col] == 1) {
 				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
 			}
 			
-			else if (row < Gauntlet.maxRow-1 && Gauntlet.map[row+1][col] == 0) {
+			else if (row < Gauntlet.maxRow-1 && Gauntlet.map[tempRow+1][col] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
-				gauntlet.ranger.setVelocity(new Vector(0, 0.1f));
+				gauntlet.ranger.setVelocity(new Vector(0, 0.5f));
 			}
 		}
 
@@ -290,14 +293,15 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.ranger.eastAnimation();
 			gauntlet.ranger.setDirection(GameState.Direction.RIGHT);
 			gauntlet.gameState.setRangerDirection(GameState.Direction.RIGHT);
+			tempCol = (((int) gauntlet.ranger.getX())+20)/32;
 			
-			if (Gauntlet.map[row][col] == 1) {
+			if (Gauntlet.map[row][tempCol] == 1) {
 				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
 			}
 			
-			else if (col < Gauntlet.maxColumn && Gauntlet.map[row][col+1] == 0) {
+			else if (col < Gauntlet.maxColumn && Gauntlet.map[row][tempCol+1] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
-				gauntlet.ranger.setVelocity(new Vector(0.1f, 0));
+				gauntlet.ranger.setVelocity(new Vector(0.5f, 0));
 			}
 		}
 
@@ -306,14 +310,15 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.ranger.westAnimation();
 			gauntlet.ranger.setDirection(GameState.Direction.LEFT);
 			gauntlet.gameState.setRangerDirection(GameState.Direction.LEFT);
+			tempCol = (((int) gauntlet.ranger.getX())-20)/32;
 			
-			if (Gauntlet.map[row][col] == 1) {
+			if (Gauntlet.map[row][tempCol] == 1) {
 				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
 			}
 			
-			else if (col > 0 && Gauntlet.map[row][col-1] == 0) {
+			else if (col > 0 && Gauntlet.map[row][tempCol-1] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
-				gauntlet.ranger.setVelocity(new Vector(-0.1f, 0));
+				gauntlet.ranger.setVelocity(new Vector(-0.5f, 0));
 			}
 		} 
 
@@ -426,13 +431,17 @@ public class GameStartUp extends BasicGameState{
 		if (gauntlet.key1.keyUsed == false) {
 			gauntlet.key1.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.KeyHDown));
 		} else {
-			
+			gauntlet.key1.removeImage(ResourceManager.getImage(Gauntlet.KeyHDown));
 		}
 		if (gauntlet.key2.keyUsed == false) {
 			gauntlet.key2.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.KeyHDown));
+		} else {
+			gauntlet.key2.removeImage(ResourceManager.getImage(Gauntlet.KeyHDown));
 		}
 		if (gauntlet.key3.keyUsed == false) {
 			gauntlet.key3.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.KeyHDown));
+		} else {
+			gauntlet.key3.removeImage(ResourceManager.getImage(Gauntlet.KeyHDown));
 		}
 	}
 
