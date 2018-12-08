@@ -143,22 +143,22 @@ class Warrior extends Entity {
 		if (direction == GameState.Direction.UP) {
 			this.northAnimation();
 			if (isMoving) {
-				this.setVelocity(new Vector(0f, -0.1f));
+				this.setVelocity(new Vector(0f, -0.3f));
 			}
 		} else if (direction == GameState.Direction.DOWN) {
 			this.southAnimation();
 			if (isMoving) {
-				this.setVelocity(new Vector(0f, 0.1f));
+				this.setVelocity(new Vector(0f, 0.3f));
 			}
 		} else if (direction == GameState.Direction.LEFT) {
 			this.westAnimation();
 			if (isMoving) {
-				this.setVelocity(new Vector(-0.1f, 0f));
+				this.setVelocity(new Vector(-0.3f, 0f));
 			}
 		} else if (direction == GameState.Direction.RIGHT) {
 			this.eastAnimation();
 			if (isMoving) {
-				this.setVelocity(new Vector(0.1f, 0f));
+				this.setVelocity(new Vector(0.3f, 0f));
 			}
 		}
 	}
