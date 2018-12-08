@@ -55,6 +55,7 @@ public class GameStartUp extends BasicGameState{
 		if(!gauntlet.warrior.isDead()) {
 		    gauntlet.warrior.render(g);
 		}
+		
 		// Don't render a dead guy
 		if(!gauntlet.ranger.isDead()) {
 		    gauntlet.ranger.render(g);

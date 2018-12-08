@@ -180,6 +180,7 @@ public class Gauntlet extends StateBasedGame {
 		potions = new ArrayList<Powerups>();
 		
 		skeletonList.add(skeleton);
+		skeletonList.add(new Skeleton(500, 500, 0f, 0f));
 		
 		int rowB = 0;
         int colB = 0;
