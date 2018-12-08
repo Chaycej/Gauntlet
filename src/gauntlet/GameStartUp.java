@@ -172,14 +172,11 @@ public class GameStartUp extends BasicGameState{
 
 		gauntlet.client.sendGameState(gauntlet.gameState);
 
-
 		// Update new game state
 		GameState newGameState = gauntlet.client.readGameState();
 		if (newGameState != null) {
 			
-			if (newGameState.getWarriorHealth() == 0) {
-				gauntlet.warrior.setPosition(gauntlet.warriorSpawnX, gauntlet.warriorSpawnY);
-			}
+			gauntlet.warrior.setPosition(newGameState.getWarriorX(), newGameState.getWarriorY());
 			
 			// Update warrior and ranger health
 			gauntlet.warrior.setHealth(newGameState.getWarriorHealth());
@@ -253,7 +250,7 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.gameState.setWarriorDirection(GameState.Direction.STOP);
 			gauntlet.warrior.setPosition(gauntlet.warriorSpawnX, gauntlet.warriorSpawnY);
 			gauntlet.gameState.setWarriorPosition(gauntlet.warriorSpawnX, gauntlet.warriorSpawnY);
-			gauntlet.warrior.setHealth(100);
+			//gauntlet.warrior.setHealth(100);
 		}
 		
 		// Up movement
