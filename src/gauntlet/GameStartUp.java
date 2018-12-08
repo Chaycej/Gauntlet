@@ -32,21 +32,33 @@ public class GameStartUp extends BasicGameState{
 		g.clear();
 		
 		// Moves the map in accordance to the character both are needed.
-		g.translate(gauntlet.ScreenWidth/2-gauntlet.warriorCamera.getXoffset(), gauntlet.ScreenHeight/2-gauntlet.warriorCamera.getYoffset());
-		g.translate(gauntlet.ScreenWidth/2-gauntlet.rangerCamera.getXoffset(), gauntlet.ScreenHeight/2-gauntlet.rangerCamera.getYoffset());
-		
+		g.translate(gauntlet.ScreenWidth/2-gauntlet.warriorCamera.getXoffset(), 
+				gauntlet.ScreenHeight/2-gauntlet.warriorCamera.getYoffset());
+		g.translate(gauntlet.ScreenWidth/2-gauntlet.rangerCamera.getXoffset(), 
+				gauntlet.ScreenHeight/2-gauntlet.rangerCamera.getYoffset());
+
 		renderMap(container, game, g);
-		gauntlet.warrior.render(g);
-		gauntlet.ranger.render(g);
 		
 		if (gauntlet.client != null) {
-			g.drawString("Warrior health: " + String.valueOf(gauntlet.warrior.getHealth()), gauntlet.warriorCamera.getXoffset() - 100, gauntlet.warriorCamera.getYoffset() - 400);
-			g.drawString("Ranger health: " + String.valueOf(gauntlet.ranger.getHealth()), gauntlet.warriorCamera.getXoffset() - 300, gauntlet.warriorCamera.getYoffset() - 400);
+			g.drawString("Warrior health: " + String.valueOf(gauntlet.warrior.getHealth()),
+					gauntlet.warriorCamera.getXoffset() - 100, gauntlet.warriorCamera.getYoffset() - 400);
+			g.drawString("Ranger health: " + String.valueOf(gauntlet.ranger.getHealth()),
+					gauntlet.warriorCamera.getXoffset() - 300, gauntlet.warriorCamera.getYoffset() - 400);
 		} else {
-			g.drawString("Warrior health: " + String.valueOf(gauntlet.warrior.getHealth()), gauntlet.rangerCamera.getXoffset() - 100, gauntlet.rangerCamera.getYoffset() - 400);
-			g.drawString("Ranger health: " + String.valueOf(gauntlet.ranger.getHealth()), gauntlet.rangerCamera.getXoffset() - 300, gauntlet.rangerCamera.getYoffset() - 400);
+			g.drawString("Warrior health: " + String.valueOf(gauntlet.warrior.getHealth()),
+					gauntlet.rangerCamera.getXoffset() - 100, gauntlet.rangerCamera.getYoffset() - 400);
+			g.drawString("Ranger health: " + String.valueOf(gauntlet.ranger.getHealth()),
+					gauntlet.rangerCamera.getXoffset() - 300, gauntlet.rangerCamera.getYoffset() - 400);
 		}
 		
+		// Don't render a dead guy
+		if(!gauntlet.warrior.isDead()) {
+		    gauntlet.warrior.render(g);
+		}
+		// Don't render a dead guy
+		if(!gauntlet.ranger.isDead()) {
+		    gauntlet.ranger.render(g);
+		}
 
 		for (Skeleton s : gauntlet.skeletonList) {
 			if (!s.isDead()) {
@@ -88,6 +100,15 @@ public class GameStartUp extends BasicGameState{
 				gauntlet.potions.remove(i);
 			}
 		}
+				
+		for (Skeleton s : gauntlet.skeletonList) {
+			if (s.collides(gauntlet.warrior) != null && !s.isDead()) {
+				gauntlet.warrior.takeHit();
+			}
+			if (s.collides(gauntlet.ranger) != null && !s.isDead()) {
+				gauntlet.ranger.takeHit();
+			}
+		}
 		
 	}
 
@@ -103,9 +124,15 @@ public class GameStartUp extends BasicGameState{
 		Gauntlet gauntlet = (Gauntlet)game;
 
 		gauntlet.gameState.setWarriorPosition((int)gauntlet.warrior.getX(), (int)gauntlet.warrior.getY());
-
+        
+		// Check if dead
+		if (gauntlet.warrior.isDead()) {
+			gauntlet.gameState.setWarriorDirection(GameState.Direction.STOP);
+			gauntlet.warrior.setPosition(-30, -30);
+		}
+		
 		// Up movement
-		if (input.isKeyDown(Input.KEY_UP)) {
+		else if (input.isKeyDown(Input.KEY_UP)) {
 			if (gauntlet.warrior.getRow() > 0) {
 				gauntlet.warrior.setDirection(GameState.Direction.UP);
 				gauntlet.gameState.setWarriorDirection(GameState.Direction.UP);
@@ -219,8 +246,13 @@ public class GameStartUp extends BasicGameState{
 		int row = gauntlet.ranger.getRow();
 		int col = gauntlet.ranger.getColumn();
 		
+		if (gauntlet.ranger.isDead()) {
+			gauntlet.gameState.setRangerDirection(GameState.Direction.STOP);
+			gauntlet.ranger.setPosition(-30, -30);
+		}
+		
 		// Up movement
-		if (input.isKeyDown(Input.KEY_UP)) {
+		else if (input.isKeyDown(Input.KEY_UP)) {
 			gauntlet.ranger.northAnimation();
 			gauntlet.ranger.setDirection(GameState.Direction.UP);
 			gauntlet.gameState.setRangerDirection(GameState.Direction.UP);
@@ -340,6 +372,14 @@ public class GameStartUp extends BasicGameState{
 				} 
 				if (Gauntlet.map[row][col] == 2){
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
+					gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorCSouth));
+				}
+				if (Gauntlet.map[row][col] == 3){
+					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
+					gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorCWest));
+				}
+				if (Gauntlet.map[row][col] == 4){
+					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
 					gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorCEast));
 				}
 				x = x + 32;
@@ -370,10 +410,12 @@ public class GameStartUp extends BasicGameState{
 			
 			if(col >= Gauntlet.maxColumn || row >= Gauntlet.maxRow || col < 0 || row < 0) {
 				removeList.add(i);
+				continue;
 			}
 			
-			else if (Gauntlet.map[row][col] == 1) {
+			if (Gauntlet.map[row][col] == 1) {
 				removeList.add(i);
+				continue;
 			}
 			
 			// Check if a projectile hits an enemy

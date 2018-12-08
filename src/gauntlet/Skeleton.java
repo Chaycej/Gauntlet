@@ -261,6 +261,7 @@ public class Skeleton extends Entity implements java.io.Serializable {
         int diffColR = Math.abs(col - rangerTargetCol);
         int totalDiffWarrior = diffRowW+diffColW;
         int totalDiffRanger = diffRowR+diffColR;
+        
         if (totalDiffRanger <= totalDiffWarrior) {
             previousTargetCol = rangerTargetCol; 
             previousTargetRow = rangerTargetRow;
