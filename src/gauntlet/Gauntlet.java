@@ -21,12 +21,10 @@ public class Gauntlet extends StateBasedGame {
 	public final static int windowWidth = 800;
 	public final static int windowHeight = 800;
 	
-	public final int  warriorX= 64;
-	public final int  warriorY= 128;
-	public final int  rangerX= 128;
-	public final int  rangerY= 128;
-	public final int  skeletonX= 300;
-	public final int  skeletonY= 300;
+	public final int  warriorSpawnX= 64;
+	public final int  warriorSpawnY= 128;
+	public final int  rangerSpawnX= 128;
+	public final int  rangerSpawnY= 128;
 	
 	public final int  key1X= 2080;
 	public final int  key1Y= 1346;
@@ -177,9 +175,8 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(doorOEast);
 		ResourceManager.loadImage(doorOWest);
 		
-		warrior = new Warrior(warriorX, warriorY, 0f, 0f);
-		ranger = new Ranger(rangerX, rangerY, 0f, 0f);
-		skeleton = new Skeleton(skeletonX, skeletonY, 0f, 0f);
+		warrior = new Warrior(warriorSpawnX, warriorSpawnY, 0f, 0f);
+		ranger = new Ranger(rangerSpawnX, rangerSpawnY, 0f, 0f);
 		
 		key1 = new Keys(key1X, key1Y, 0f, 0f);
 		key2 = new Keys(key2X, key2Y, 0f, 0f);
@@ -195,8 +192,8 @@ public class Gauntlet extends StateBasedGame {
 		skeletonList = new ArrayList<Skeleton>();
 		
 		potions = new ArrayList<Powerups>();
-		
-		skeletonList.add(skeleton);
+	
+		skeletonList.add(new Skeleton(300, 300, 0f, 0f));
 		skeletonList.add(new Skeleton(500, 500, 0f, 0f));
 		
 		int rowB = 0;
