@@ -134,6 +134,8 @@ public class GameThread extends Thread {
 			// Update client's position and projectiles
 			this.gameState.setWarriorPosition(clientState.getWarriorX(), clientState.getWarriorY());
 			this.gameState.warriorProjectiles = clientState.warriorProjectiles;
+			this.gameState.setWarriorHealth(gauntlet.warrior.getHealth());
+			this.gameState.setRangerHealth(gauntlet.ranger.getHealth());
 			this.server.sendGameState(this.gameState);
 		}
 	}

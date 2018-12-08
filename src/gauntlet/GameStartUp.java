@@ -105,16 +105,6 @@ public class GameStartUp extends BasicGameState{
 				gauntlet.potions.remove(i);
 			}
 		}
-				
-		for (Skeleton s : gauntlet.skeletonList) {
-			if (s.collides(gauntlet.warrior) != null && !s.isDead()) {
-				gauntlet.warrior.takeHit();
-			}
-			if (s.collides(gauntlet.ranger) != null && !s.isDead()) {
-				gauntlet.ranger.takeHit();
-			}
-		}
-		
 	}
 
 	/*
@@ -192,7 +182,11 @@ public class GameStartUp extends BasicGameState{
 		// Update new game state
 		GameState newGameState = gauntlet.client.readGameState();
 		if (newGameState != null) {
-
+			
+			// Update warrior and ranger health
+			gauntlet.warrior.setHealth(newGameState.getWarriorHealth());
+			gauntlet.ranger.setHealth(newGameState.getRangerHealth());
+			
 			// Update warrior
 			gauntlet.warrior.updateWarriorState(newGameState.getWarriorDirection(), newGameState.warriorIsMoving());
 
@@ -224,7 +218,7 @@ public class GameStartUp extends BasicGameState{
 		gauntlet.ranger.update(delta);
 		gauntlet.warrior.update(delta);
 		
-		//updates the camera as Warrior moves.
+		//updates the camera as Warrior moves
 		gauntlet.warriorCamera.update(gauntlet.warrior.getPosition().getX(), gauntlet.warrior.getPosition().getY());
 	}
 
@@ -332,6 +326,16 @@ public class GameStartUp extends BasicGameState{
 		else {
 			gauntlet.gameState.setRangerMovement(false);
 			gauntlet.ranger.setVelocity(new Vector(0f, 0f));
+		}
+		
+		// Check for character-enemy collisions
+		for (Skeleton s : gauntlet.skeletonList) {
+			if (s.collides(gauntlet.warrior) != null && !s.isDead()) {
+				gauntlet.warrior.takeHit();
+			}
+			if (s.collides(gauntlet.ranger) != null && !s.isDead()) {
+				gauntlet.ranger.takeHit();
+			}
 		}
 
 		// Update server's game state before sending to client

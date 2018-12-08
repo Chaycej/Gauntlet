@@ -61,6 +61,10 @@ class Warrior extends Entity {
 			this.health = this.maxHealth;
 	}
 	
+	public void setHealth(int newHealth) {
+		this.health = newHealth;
+	}
+	
 	public int getHealth() {
 		return this.health;
 	}
