@@ -119,16 +119,9 @@ public class GameStartUp extends BasicGameState{
 		Gauntlet gauntlet = (Gauntlet)game;
 
 		gauntlet.gameState.setWarriorPosition((int)gauntlet.warrior.getX(), (int)gauntlet.warrior.getY());
-        
-		// Check if dead
-		if (gauntlet.warrior.isDead()) {
-			gauntlet.gameState.setWarriorDirection(GameState.Direction.STOP);
-			gauntlet.warrior.setPosition(gauntlet.warriorSpawnX, gauntlet.warriorSpawnY);
-			gauntlet.warrior.setHealth(100);
-		}
 		
 		// Up movement
-		else if (input.isKeyDown(Input.KEY_UP)) {
+		if (input.isKeyDown(Input.KEY_UP)) {
 			if (gauntlet.warrior.getRow() > 0) {
 				gauntlet.warrior.setDirection(GameState.Direction.UP);
 				gauntlet.gameState.setWarriorDirection(GameState.Direction.UP);
@@ -250,6 +243,12 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.gameState.setRangerDirection(GameState.Direction.STOP);
 			gauntlet.ranger.setPosition(gauntlet.rangerSpawnX, gauntlet.rangerSpawnY);
 			gauntlet.ranger.setHealth(100);
+		}
+		
+		if (gauntlet.warrior.isDead()) {
+			gauntlet.gameState.setWarriorDirection(GameState.Direction.STOP);
+			gauntlet.warrior.setPosition(gauntlet.warriorSpawnX, gauntlet.warriorSpawnY);
+			gauntlet.warrior.setHealth(100);
 		}
 		
 		// Up movement
