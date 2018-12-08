@@ -28,6 +28,15 @@ public class Gauntlet extends StateBasedGame {
 	public final int  skeletonX= 300;
 	public final int  skeletonY= 300;
 	
+	public final int  key1X= 2080;
+	public final int  key1Y= 1346;
+	
+	public final int  key2X= 835;
+	public final int  key2Y= 1410;
+	
+	public final int  key3X= 75;
+	public final int  key3Y= 2360;
+	
 	public static final String pathTile = "gauntlet/resources/WalkingTile.png";
 	public static final String wallTile = "gauntlet/resources/WallTile.png";
 	public static final String JOIN_GAME_RSC = "gauntlet/resources/joinGame.png";
@@ -91,6 +100,10 @@ public class Gauntlet extends StateBasedGame {
 	Client client;
 	GameThread clientThread;
 	GameState gameState;
+	Keys key1;
+	Keys key2;
+	Keys key3;
+	
 	Vector<Projectile> warriorProjectiles;
 	Vector<Projectile> rangerProjectiles;
 	ArrayList<Skeleton> skeletonList;
@@ -167,6 +180,10 @@ public class Gauntlet extends StateBasedGame {
 		warrior = new Warrior(warriorX, warriorY, 0f, 0f);
 		ranger = new Ranger(rangerX, rangerY, 0f, 0f);
 		skeleton = new Skeleton(skeletonX, skeletonY, 0f, 0f);
+		
+		key1 = new Keys(key1X, key1Y, 0f, 0f);
+		key2 = new Keys(key2X, key2Y, 0f, 0f);
+		key3 = new Keys(key3X, key3Y, 0f, 0f);
 		
 		warriorProjectiles = new Vector<>();
 		rangerProjectiles = new Vector<>();

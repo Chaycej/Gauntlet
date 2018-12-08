@@ -79,6 +79,10 @@ public class GameStartUp extends BasicGameState{
 		for (Powerups potions : gauntlet.potions) {
 			potions.render(g);
 		}
+		
+		gauntlet.key1.render(g);
+		gauntlet.key2.render(g);
+		gauntlet.key3.render(g);
 	}
 
 	@Override
@@ -389,6 +393,9 @@ public class GameStartUp extends BasicGameState{
 			y = y + 32;
 			x = 16;
 		}
+		gauntlet.key1.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.KeyHDown));
+		gauntlet.key2.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.KeyHDown));
+		gauntlet.key3.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.KeyHDown));
 	}
 
 	/*
