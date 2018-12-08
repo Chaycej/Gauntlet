@@ -369,7 +369,7 @@ public class GameStartUp extends BasicGameState{
 				gauntlet.ranger.takeHit();
 			}
 		}
-		
+		s
 		if (gauntlet.warrior.collides(gauntlet.key1) != null || gauntlet.ranger.collides(gauntlet.key1) != null) {
 			gauntlet.key1.keyUsed = true;
 		}
