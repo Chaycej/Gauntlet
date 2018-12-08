@@ -78,6 +78,8 @@ public class Gauntlet extends StateBasedGame {
 	public static final String doorOSouth = "gauntlet/resources/doorOSouth.png";
 	public static final String doorOEast = "gauntlet/resources/doorOEast.png";
 	public static final String doorOWest = "gauntlet/resources/doorOWest.png";
+	
+	public static final String treasureChest = "gauntlet/resources/chest.png";
 
 
 	public final int ScreenWidth;
@@ -175,6 +177,8 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(doorOEast);
 		ResourceManager.loadImage(doorOWest);
 		
+		ResourceManager.loadImage(treasureChest);
+		
 		warrior = new Warrior(warriorSpawnX, warriorSpawnY, 0f, 0f);
 		ranger = new Ranger(rangerSpawnX, rangerSpawnY, 0f, 0f);
 		
@@ -240,7 +244,7 @@ public class Gauntlet extends StateBasedGame {
 	public static void main(String[] args) {
 		try {
 			app = new AppGameContainer(new Gauntlet("Gauntlet", windowWidth, windowHeight));		//(x,y)
-			app.setDisplayMode(1500, 1500, false);
+			app.setDisplayMode(windowWidth, windowHeight, false);
 			app.setClearEachFrame(false);
 			app.setTargetFrameRate(35);
 			app.start();
