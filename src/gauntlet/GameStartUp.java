@@ -339,7 +339,16 @@ public class GameStartUp extends BasicGameState{
 			}
 		}
 		
-		
+		if (gauntlet.warrior.collides(gauntlet.key1) != null || gauntlet.ranger.collides(gauntlet.key1) != null) {
+			gauntlet.key1.keyUsed = true;
+			System.out.println("collided with key 1");
+		}
+		if (gauntlet.warrior.collides(gauntlet.key2) != null || gauntlet.ranger.collides(gauntlet.key2) != null) {
+			gauntlet.key2.keyUsed = true;
+		}
+		if (gauntlet.warrior.collides(gauntlet.key3) != null  || gauntlet.ranger.collides(gauntlet.key3) != null) {
+			gauntlet.key3.keyUsed = true;
+		}
 		
 		// Update server's game state before sending to client
 		gauntlet.gameState.setRangerPosition((int)gauntlet.ranger.getX(), (int)gauntlet.ranger.getY());
@@ -412,9 +421,17 @@ public class GameStartUp extends BasicGameState{
 			y = y + 32;
 			x = 16;
 		}
-		gauntlet.key1.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.KeyHDown));
-		gauntlet.key2.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.KeyHDown));
-		gauntlet.key3.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.KeyHDown));
+		if (gauntlet.key1.keyUsed == false) {
+			gauntlet.key1.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.KeyHDown));
+		} else {
+			
+		}
+		if (gauntlet.key2.keyUsed == false) {
+			gauntlet.key2.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.KeyHDown));
+		}
+		if (gauntlet.key3.keyUsed == false) {
+			gauntlet.key3.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.KeyHDown));
+		}
 	}
 
 	/*

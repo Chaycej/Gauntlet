@@ -240,7 +240,7 @@ public class Gauntlet extends StateBasedGame {
 	public static void main(String[] args) {
 		try {
 			app = new AppGameContainer(new Gauntlet("Gauntlet", windowWidth, windowHeight));		//(x,y)
-			app.setDisplayMode(windowWidth, windowHeight, false);
+			app.setDisplayMode(1500, 1500, false);
 			app.setClearEachFrame(false);
 			app.setTargetFrameRate(35);
 			app.start();
