@@ -206,6 +206,10 @@ public class Gauntlet extends StateBasedGame {
 	
 		skeletonList.add(new Skeleton(300, 300, 0f, 0f));
 		skeletonList.add(new Skeleton(500, 500, 0f, 0f));
+		skeletonList.add(new Skeleton(800, 500, 0f, 0f));
+		skeletonList.add(new Skeleton(300, 800, 0f, 0f));
+		skeletonList.add(new Skeleton(300, 2000, 0f, 0f));
+		skeletonList.add(new Skeleton(600, 2000, 0f, 0f));
 		
 		int rowB = 0;
         int colB = 0;

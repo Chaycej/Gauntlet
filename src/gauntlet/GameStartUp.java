@@ -219,7 +219,15 @@ public class GameStartUp extends BasicGameState{
 				projectile.setPosition(projectile.getXPos(), projectile.getYPos());
 			}
 		}
-		
+		if (gauntlet.warrior.collides(gauntlet.key1) != null || gauntlet.ranger.collides(gauntlet.key1) != null) {
+			gauntlet.key1.keyUsed = true;
+		}
+		if (gauntlet.warrior.collides(gauntlet.key2) != null || gauntlet.ranger.collides(gauntlet.key2) != null) {
+			gauntlet.key2.keyUsed = true;
+		}
+		if (gauntlet.warrior.collides(gauntlet.key3) != null  || gauntlet.ranger.collides(gauntlet.key3) != null) {
+			gauntlet.key3.keyUsed = true;
+		}
 		for (Skeleton s : gauntlet.skeletonList) {
 			s.update(delta);
 		}
@@ -364,7 +372,6 @@ public class GameStartUp extends BasicGameState{
 		
 		if (gauntlet.warrior.collides(gauntlet.key1) != null || gauntlet.ranger.collides(gauntlet.key1) != null) {
 			gauntlet.key1.keyUsed = true;
-			System.out.println("collided with key 1");
 		}
 		if (gauntlet.warrior.collides(gauntlet.key2) != null || gauntlet.ranger.collides(gauntlet.key2) != null) {
 			gauntlet.key2.keyUsed = true;
