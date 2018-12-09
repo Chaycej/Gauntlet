@@ -29,11 +29,11 @@ class Ranger extends Entity {
 	 *  Returns true if the ranger has no more health.
 	 */
 	public boolean isDead() {
-		return this.health <= 0;
-	}
-	
-	public int getHealth() {
-		return this.health;
+		if(this.health <= 0) {
+			this.flush();
+			return true;
+		} else
+		    return false;
 	}
 	
 	/*
@@ -43,25 +43,29 @@ class Ranger extends Entity {
 	 */
 	public void takeHit() {
 		if (!this.isDead()) {
-			this.health -= 10;
+			this.health -= 1;
 		}
 	}
 	
-	public void potion(String type) {
-		if(type == "lower") {
-			System.out.println("Health increase 25%");
+	public void potion(Powerups.PowerupType type) {
+		if(type == Powerups.PowerupType.lower) {
 		    this.health += this.maxHealth * .25;
-		}
-		else if (type == "normal") {
+		} else if (type == Powerups.PowerupType.normal) {
 			this.health += this.maxHealth * .50;
-		     System.out.println("Health increase 50%");
-		}
-		else if (type == "max") {
+		} else if (type == Powerups.PowerupType.max) {
 	        this.health = this.maxHealth;
-			System.out.println("Health increase 100%");
 		}
+		
 		if(this.health > this.maxHealth)
 			this.health = this.maxHealth;
+	}
+	
+	public void setHealth(int newHealth) {
+		this.health = newHealth;
+	}
+	
+	public int getHealth() {
+		return this.health;
 	}
 	
 	public void setVelocity(final Vector v) {
