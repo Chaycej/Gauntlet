@@ -21,12 +21,22 @@ public class Gauntlet extends StateBasedGame {
 	public final static int windowWidth = 800;
 	public final static int windowHeight = 800;
 	
-	public final int  warriorX= 64;
-	public final int  warriorY= 128;
-	public final int  rangerX= 128;
-	public final int  rangerY= 128;
-	public final int  skeletonX= 300;
-	public final int  skeletonY= 300;
+	public final int  warriorSpawnX= 64;
+	public final int  warriorSpawnY= 128;
+	public final int  rangerSpawnX= 128;
+	public final int  rangerSpawnY= 128;
+	
+	public final int  key1X= 2080;
+	public final int  key1Y= 1346;
+	
+	public final int  key2X= 835;
+	public final int  key2Y= 1410;
+	
+	public final int  key3X= 75;
+	public final int  key3Y= 2360;
+	
+	public final int  treasureX= 1980;
+	public final int  treasureY= 1980;
 	
 	public static final String pathTile = "gauntlet/resources/WalkingTile.png";
 	public static final String wallTile = "gauntlet/resources/WallTile.png";
@@ -73,6 +83,8 @@ public class Gauntlet extends StateBasedGame {
 	public static final String doorOSouth = "gauntlet/resources/doorOSouth.png";
 	public static final String doorOEast = "gauntlet/resources/doorOEast.png";
 	public static final String doorOWest = "gauntlet/resources/doorOWest.png";
+	
+	public static final String treasureChest = "gauntlet/resources/chest.png";
 
 
 	public final int ScreenWidth;
@@ -93,6 +105,12 @@ public class Gauntlet extends StateBasedGame {
 	Client client;
 	GameThread clientThread;
 	GameState gameState;
+	Keys key1;
+	Keys key2;
+	Keys key3;
+	
+	Treasure treasure;
+	
 	Vector<Projectile> warriorProjectiles;
 	Vector<Projectile> rangerProjectiles;
 	ArrayList<Skeleton> skeletonList;
@@ -168,9 +186,16 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(doorOEast);
 		ResourceManager.loadImage(doorOWest);
 		
-		warrior = new Warrior(warriorX, warriorY, 0f, 0f);
-		ranger = new Ranger(rangerX, rangerY, 0f, 0f);
-		skeleton = new Skeleton(skeletonX, skeletonY, 0f, 0f);
+		ResourceManager.loadImage(treasureChest);
+		
+		warrior = new Warrior(warriorSpawnX, warriorSpawnY, 0f, 0f);
+		ranger = new Ranger(rangerSpawnX, rangerSpawnY, 0f, 0f);
+		
+		key1 = new Keys(key1X, key1Y, 0f, 0f);
+		key2 = new Keys(key2X, key2Y, 0f, 0f);
+		key3 = new Keys(key3X, key3Y, 0f, 0f);
+		
+		treasure = new Treasure(treasureX,treasureY,0f,0f);
 		
 		warriorProjectiles = new Vector<>();
 		rangerProjectiles = new Vector<>();
@@ -182,13 +207,18 @@ public class Gauntlet extends StateBasedGame {
 		skeletonList = new ArrayList<Skeleton>();
 		
 		potions = new ArrayList<Powerups>();
-		
-		skeletonList.add(skeleton);
+	
+		skeletonList.add(new Skeleton(300, 300, 0f, 0f));
+		skeletonList.add(new Skeleton(500, 500, 0f, 0f));
+		skeletonList.add(new Skeleton(800, 500, 0f, 0f));
+		skeletonList.add(new Skeleton(300, 800, 0f, 0f));
+		skeletonList.add(new Skeleton(300, 2000, 0f, 0f));
+		skeletonList.add(new Skeleton(600, 2000, 0f, 0f));
 		
 		int rowB = 0;
         int colB = 0;
         try {
-            FileInputStream inputStream = new FileInputStream("../Gauntlet/src/gauntlet/map.txt");
+            FileInputStream inputStream = new FileInputStream("../Gauntlet/src/gauntlet/map2.txt");
             while (inputStream.available() > 0) {
                 int numRead = inputStream.read();
                 if (!Character.isDigit(numRead)){
@@ -214,7 +244,13 @@ public class Gauntlet extends StateBasedGame {
 					map[row][col] = 1;
 				}
 				if (map[row][col] == 50) {	
-					map[row][col] = 2;			//a door facing 
+					map[row][col] = 2;			//equals a 2 is a door facing south  
+				}
+				if (map[row][col] == 51) {	
+					map[row][col] = 3;			//equals a 3 is a door facing west  
+				}
+				if (map[row][col] == 52) {	
+					map[row][col] = 4;			//equals a 4 is a door facing east  
 				}
 			}
 		}

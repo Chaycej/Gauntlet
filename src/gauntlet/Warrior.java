@@ -30,7 +30,11 @@ class Warrior extends Entity {
 	 *  Returns true if the warrior has no more health.
 	 */
 	public boolean isDead() {
-		return this.health <= 0;
+		if(this.health <= 0) {
+			this.flush();
+			return true;
+		} else
+		    return false;
 	}
 	
 	/*
@@ -40,7 +44,7 @@ class Warrior extends Entity {
 	 */
 	public void takeHit() {
 		if (!this.isDead()) {
-			this.health -= 5;
+			this.health -= 1;
 		}
 	}
 	public float getFireRate() {
@@ -49,21 +53,21 @@ class Warrior extends Entity {
 	private void increaseFireRate() {
 		this.fireRate += 0.1f;
 	}
-	public void potion(String type) {
-		if(type == "lower") {
+	public void potion(Powerups.PowerupType type) {
+		if(type == Powerups.PowerupType.lower) {
 		    this.health += this.maxHealth * .25;
 		}
-		else if (type == "normal") {
+		else if (type == Powerups.PowerupType.normal) {
 			this.health += this.maxHealth * .50;
 		}
-		else if (type == "max") {
+		else if (type == Powerups.PowerupType.max) {
 	        this.health = this.maxHealth;
 		}
-		else if (type == "increaseMax") {
+		else if (type == Powerups.PowerupType.maxPlus) {
 			this.maxHealth += 20;
 			this.health = this.maxHealth;
 		}
-		else if(type == "increaseFireRate") {
+		else if(type == Powerups.PowerupType.fireRatePlus) {
 			if (this.getFireRate() <= 0.5f)
 				this.increaseFireRate();
 		}
@@ -71,8 +75,11 @@ class Warrior extends Entity {
 			this.health = this.maxHealth;
 	}
 	
+	public void setHealth(int newHealth) {
+		this.health = newHealth;
+	}
+	
 	public int getHealth() {
-		
 		return this.health;
 	}
 	
