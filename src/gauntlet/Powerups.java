@@ -2,12 +2,11 @@ package gauntlet;
 
 import jig.Entity;
 import jig.ResourceManager;
-//import jig.Vector;
 
 class Powerups extends Entity implements java.io.Serializable {
 	
 	public enum PowerupType {
-		lower, normal, max;
+		lower, normal, max, maxPlus, fireRatePlus;
 	}
 	
 	private static final long serialVersionUID = 1L;
@@ -23,9 +22,14 @@ class Powerups extends Entity implements java.io.Serializable {
 			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.LowerHealthPotion));
 		} else if (type == PowerupType.normal) {
 			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.HealthPotion));
-		}else {
+
+		}else if(type == PowerupType.max){
 			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.HigherHealthPotion));
-	    }
+	    } else if(type == PowerupType.maxPlus){
+			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.IncreaseHealth));
+		}else {
+			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.IncreaseFire));
+		}
 		
 		this.type = type;
 		this.xPos = (int)x;
@@ -61,18 +65,6 @@ class Powerups extends Entity implements java.io.Serializable {
 	
 	synchronized public void setYPos(int newY) {
 		this.yPos = newY;
-	}
-	
-	public static PowerupType getRandomPowerUp(int random) {
-		PowerupType newType;
-		if (random <= 50) 
-			newType = PowerupType.lower;
-		else if (50 < random && random <= 85)
-		    newType = PowerupType.normal;
-		else
-		    newType = PowerupType.max;
-		
-		return newType;
 	}
 	
 	public void update(final int delta) {

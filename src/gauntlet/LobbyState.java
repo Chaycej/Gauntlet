@@ -25,7 +25,7 @@ public class LobbyState extends BasicGameState{
 	    	try {
 	    		uc.loadGlyphs();
 	    } catch (SlickException e) {};
-		tf = new TextField(container, uc, 312, 650, 175, 50, new ComponentListener() {
+		tf = new TextField(container, uc, 312, 575, 175, 50, new ComponentListener() {
 			public void componentActivated(AbstractComponent source) {
 	            tf.setFocus(true);
 	         }
@@ -46,7 +46,7 @@ public class LobbyState extends BasicGameState{
 		Input input = container.getInput();
 
 		// Start server
-		if (input.isKeyDown(Input.KEY_SPACE)) {
+		if (input.isKeyDown(Input.KEY_S)) {
 			if (gauntlet.server == null) {
 				gauntlet.server = new Server(gauntlet);
 				gauntlet.server.run(container, game, delta);

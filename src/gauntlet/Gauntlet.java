@@ -19,7 +19,7 @@ public class Gauntlet extends StateBasedGame {
 	public final static int maxRow = 75;
 	public final static int maxColumn = 75;
 	public final static int windowWidth = 800;
-	public final static int windowHeight = 800;
+	public final static int windowHeight = 750;
 	
 	public final int  warriorSpawnX= 64;
 	public final int  warriorSpawnY= 128;
@@ -72,12 +72,14 @@ public class Gauntlet extends StateBasedGame {
 	public static final String LowerHealthPotion = "gauntlet/resources/LowerHealthPotion.png";
 	public static final String HealthPotion = "gauntlet/resources/HealthPotion.png";
 	public static final String HigherHealthPotion = "gauntlet/resources/HigherHealthPotion.png";
+	public static final String IncreaseHealth = "gauntlet/resources/IncreaseHealth.png";
+	public static final String IncreaseFire = "gauntlet/resources/IncreaseFireRate.png";
 
-	public static final String doorCNorth = "gauntlet/resources/doorCNorth.png";
+	
 	public static final String doorCSouth = "gauntlet/resources/doorCSouth.png";
 	public static final String doorCEast = "gauntlet/resources/doorCEast.png";
 	public static final String doorCWest = "gauntlet/resources/doorCWest.png";
-	public static final String doorONorth = "gauntlet/resources/doorONorth.png";
+	
 	public static final String doorOSouth = "gauntlet/resources/doorOSouth.png";
 	public static final String doorOEast = "gauntlet/resources/doorOEast.png";
 	public static final String doorOWest = "gauntlet/resources/doorOWest.png";
@@ -164,20 +166,18 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(skeletonW);
 		
 		ResourceManager.loadImage(LobbyPic);
-		ResourceManager.loadImage(KeyHUp);
+	
 		ResourceManager.loadImage(KeyHDown);
-		ResourceManager.loadImage(KeyVRight);
-		ResourceManager.loadImage(KeyVLeft);
 		
 		ResourceManager.loadImage(HigherHealthPotion);
 		ResourceManager.loadImage(HealthPotion);
 		ResourceManager.loadImage(LowerHealthPotion);
+		ResourceManager.loadImage(IncreaseHealth);
+		ResourceManager.loadImage(IncreaseFire);
 		
-		ResourceManager.loadImage(doorCNorth);
 		ResourceManager.loadImage(doorCSouth);
 		ResourceManager.loadImage(doorCEast);
 		ResourceManager.loadImage(doorCWest);
-		ResourceManager.loadImage(doorONorth);
 		ResourceManager.loadImage(doorOSouth);
 		ResourceManager.loadImage(doorOEast);
 		ResourceManager.loadImage(doorOWest);
@@ -201,16 +201,14 @@ public class Gauntlet extends StateBasedGame {
 		rangerCamera = new Camera(ScreenWidth/2,ScreenHeight/2);
 		
 		skeletonList = new ArrayList<Skeleton>();
-		
-		potions = new ArrayList<Powerups>();
-	
+			
 		skeletonList.add(new Skeleton(300, 300, 0f, 0f));
 		skeletonList.add(new Skeleton(500, 500, 0f, 0f));
 		skeletonList.add(new Skeleton(800, 500, 0f, 0f));
 		skeletonList.add(new Skeleton(300, 800, 0f, 0f));
 		skeletonList.add(new Skeleton(300, 2000, 0f, 0f));
 		skeletonList.add(new Skeleton(600, 2000, 0f, 0f));
-		
+				
 		int rowB = 0;
         int colB = 0;
         try {
@@ -250,6 +248,21 @@ public class Gauntlet extends StateBasedGame {
 				}
 			}
 		}
+		
+		potions = new ArrayList<Powerups>();
+		potions.add(new Powerups(1056, 160, Powerups.PowerupType.lower));
+		potions.add(new Powerups(2368, 64, Powerups.PowerupType.lower));
+		potions.add(new Powerups(64, 672, Powerups.PowerupType.lower));
+		
+		potions.add(new Powerups(992, 928, Powerups.PowerupType.normal));
+		potions.add(new Powerups(768, 2176, Powerups.PowerupType.normal));
+		potions.add(new Powerups(1568, 2016, Powerups.PowerupType.max));
+
+		potions.add(new Powerups(448, 1760, Powerups.PowerupType.maxPlus));
+		potions.add(new Powerups(544, 1760, Powerups.PowerupType.maxPlus));
+		potions.add(new Powerups(64, 2336, Powerups.PowerupType.fireRatePlus));
+		potions.add(new Powerups(64, 2368, Powerups.PowerupType.fireRatePlus));
+
 	}
 	
 	public static void main(String[] args) {
@@ -257,7 +270,7 @@ public class Gauntlet extends StateBasedGame {
 			app = new AppGameContainer(new Gauntlet("Gauntlet", windowWidth, windowHeight));		//(x,y)
 			app.setDisplayMode(windowWidth, windowHeight, false);
 			app.setClearEachFrame(false);
-			app.setTargetFrameRate(35);
+			app.setTargetFrameRate(45);
 			app.start();
 		} catch (SlickException e) {
 			e.printStackTrace();
