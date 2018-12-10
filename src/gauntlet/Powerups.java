@@ -2,7 +2,7 @@ package gauntlet;
 
 import jig.Entity;
 import jig.ResourceManager;
-//import jig.Vector;
+
 
 class Powerups extends Entity implements java.io.Serializable {
 	
