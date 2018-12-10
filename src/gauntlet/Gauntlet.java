@@ -81,10 +81,6 @@ public class Gauntlet extends StateBasedGame {
 	public static final String doorCEast = "gauntlet/resources/doorCEast.png";
 	public static final String doorCWest = "gauntlet/resources/doorCWest.png";
 	
-	public static final String doorOSouth = "gauntlet/resources/doorOSouth.png";
-	public static final String doorOEast = "gauntlet/resources/doorOEast.png";
-	public static final String doorOWest = "gauntlet/resources/doorOWest.png";
-	
 	public static final String treasureChest = "gauntlet/resources/chest.png";
 
 
@@ -179,9 +175,6 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(doorCSouth);
 		ResourceManager.loadImage(doorCEast);
 		ResourceManager.loadImage(doorCWest);
-		ResourceManager.loadImage(doorOSouth);
-		ResourceManager.loadImage(doorOEast);
-		ResourceManager.loadImage(doorOWest);
 		
 		ResourceManager.loadImage(treasureChest);
 		
