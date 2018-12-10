@@ -484,25 +484,19 @@ public class GameStartUp extends BasicGameState{
 				} 
 				if (Gauntlet.map[row][col] == 2){
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
-					if (gauntlet.key2.keyUsed == true) {
-						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorOSouth));
-					} else {
+					if (gauntlet.key2.keyUsed == false) {
 						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorCSouth));
 					}
 				}
 				if (Gauntlet.map[row][col] == 3){
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
-					if (gauntlet.key1.keyUsed == true) {
-						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorOWest));
-					} else {
+					if (gauntlet.key1.keyUsed == false) {
 						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorCWest));
 					}
 				}
 				if (Gauntlet.map[row][col] == 4){
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
-					if (gauntlet.key3.keyUsed == true) {
-						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorOEast));
-					} else {
+					if (gauntlet.key3.keyUsed == false) {
 						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorCEast));
 					}
 				}
