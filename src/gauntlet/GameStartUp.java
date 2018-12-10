@@ -15,8 +15,6 @@ public class GameStartUp extends BasicGameState{
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
-		//Gauntlet gauntlet = (Gauntlet)game;
-
 
 	}
 

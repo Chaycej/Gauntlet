@@ -33,7 +33,7 @@ public class Gauntlet extends StateBasedGame {
 	public final int  key2X= 835;
 	public final int  key2Y= 1410;
 	
-	public final int  key3X= 75;
+	public final int  key3X= 85;
 	public final int  key3Y= 2360;
 	
 	public final int  treasureX= 1980;
@@ -254,7 +254,7 @@ public class Gauntlet extends StateBasedGame {
 
 		potions.add(new Powerups(448, 1760, Powerups.PowerupType.maxPlus));
 		potions.add(new Powerups(544, 1760, Powerups.PowerupType.maxPlus));
-		potions.add(new Powerups(64, 2336, Powerups.PowerupType.fireRatePlus));
+		potions.add(new Powerups(1300, 925, Powerups.PowerupType.fireRatePlus));
 		potions.add(new Powerups(64, 2368, Powerups.PowerupType.fireRatePlus));
 
 	}
