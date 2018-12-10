@@ -33,7 +33,6 @@ class Warrior extends Entity {
 			return true;
 		} else
 		    return false;
-		
 	}
 	
 	/*
@@ -47,14 +46,14 @@ class Warrior extends Entity {
 		}
 	}
 	
-	public void potion(String type) {
-		if(type == "lower") {
+	public void potion(Powerups.PowerupType type) {
+		if(type == Powerups.PowerupType.lower) {
 		    this.health += this.maxHealth * .25;
 		}
-		else if (type == "normal") {
+		else if (type == Powerups.PowerupType.normal) {
 			this.health += this.maxHealth * .50;
 		}
-		else if (type == "max") {
+		else if (type == Powerups.PowerupType.max) {
 	        this.health = this.maxHealth;
 		}
 		if (this.health > this.maxHealth)
