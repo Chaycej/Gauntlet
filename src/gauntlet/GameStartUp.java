@@ -15,10 +15,7 @@ public class GameStartUp extends BasicGameState{
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
-		container.setSoundOn(true);
-
 		Gauntlet gauntlet = (Gauntlet)game;
-		
 		gauntlet.potions.add(new Powerups(500, 500, Powerups.PowerupType.normal));
 		gauntlet.potions.add(new Powerups(1000, 1000, Powerups.PowerupType.normal));
 		gauntlet.potions.add(new Powerups(2000, 2000, Powerups.PowerupType.normal));
@@ -41,14 +38,14 @@ public class GameStartUp extends BasicGameState{
 		
 		if (gauntlet.client != null) {
 			g.drawString("Warrior health: " + String.valueOf(gauntlet.warrior.getHealth()),
-					gauntlet.warriorCamera.getXoffset() - 100, gauntlet.warriorCamera.getYoffset() - 400);
+					gauntlet.warriorCamera.getXoffset() - 100, gauntlet.warriorCamera.getYoffset() - 365);
 			g.drawString("Ranger health: " + String.valueOf(gauntlet.ranger.getHealth()),
-					gauntlet.warriorCamera.getXoffset() - 300, gauntlet.warriorCamera.getYoffset() - 400);
+					gauntlet.warriorCamera.getXoffset() - 300, gauntlet.warriorCamera.getYoffset() - 365);
 		} else {
 			g.drawString("Warrior health: " + String.valueOf(gauntlet.warrior.getHealth()),
-					gauntlet.rangerCamera.getXoffset() - 100, gauntlet.rangerCamera.getYoffset() - 400);
+					gauntlet.rangerCamera.getXoffset() - 100, gauntlet.rangerCamera.getYoffset() - 365);
 			g.drawString("Ranger health: " + String.valueOf(gauntlet.ranger.getHealth()),
-					gauntlet.rangerCamera.getXoffset() - 300, gauntlet.rangerCamera.getYoffset() - 400);
+					gauntlet.rangerCamera.getXoffset() - 300, gauntlet.rangerCamera.getYoffset() - 365);
 		}
 		
 		// Don't render a dead guy
@@ -167,7 +164,7 @@ public class GameStartUp extends BasicGameState{
 		}
 
 		// Projectile
-		else if (input.isKeyPressed(Input.KEY_M)) {
+		else if (input.isKeyPressed(Input.KEY_SPACE)) {
 
 			Projectile projectile = new Projectile(gauntlet.warrior.getPosition().getX(),
 					gauntlet.warrior.getPosition().getY(), gauntlet.warrior.getDirection());
@@ -232,8 +229,6 @@ public class GameStartUp extends BasicGameState{
 			s.update(delta);
 		}
 		
-		
-		
 		gauntlet.ranger.update(delta);
 		gauntlet.warrior.update(delta);
 		
@@ -284,7 +279,7 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.ranger.northAnimation();
 			gauntlet.ranger.setDirection(GameState.Direction.UP);
 			gauntlet.gameState.setRangerDirection(GameState.Direction.UP);
-			tempRow = (((int) gauntlet.ranger.getY())-20)/32;
+			tempRow = (((int) gauntlet.ranger.getY())-14)/32;
 			if (Gauntlet.map[tempRow][col] == 1) {
 				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
 			}
@@ -300,7 +295,7 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.ranger.southAnimation();
 			gauntlet.ranger.setDirection(GameState.Direction.DOWN);
 			gauntlet.gameState.setRangerDirection(GameState.Direction.DOWN);
-			tempRow = (((int) gauntlet.ranger.getY())+20)/32;
+			tempRow = (((int) gauntlet.ranger.getY())+14)/32;
 			
 			if (Gauntlet.map[tempRow][col] == 1) {
 				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
@@ -317,7 +312,7 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.ranger.eastAnimation();
 			gauntlet.ranger.setDirection(GameState.Direction.RIGHT);
 			gauntlet.gameState.setRangerDirection(GameState.Direction.RIGHT);
-			tempCol = (((int) gauntlet.ranger.getX())+20)/32;
+			tempCol = (((int) gauntlet.ranger.getX())+14)/32;
 			
 			if (Gauntlet.map[row][tempCol] == 1) {
 				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
@@ -334,7 +329,7 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.ranger.westAnimation();
 			gauntlet.ranger.setDirection(GameState.Direction.LEFT);
 			gauntlet.gameState.setRangerDirection(GameState.Direction.LEFT);
-			tempCol = (((int) gauntlet.ranger.getX())-20)/32;
+			tempCol = (((int) gauntlet.ranger.getX())-14)/32;
 			
 			if (Gauntlet.map[row][tempCol] == 1) {
 				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
@@ -347,7 +342,7 @@ public class GameStartUp extends BasicGameState{
 		} 
 
 		// Projectile
-		else if (input.isKeyPressed(Input.KEY_M)) {
+		else if (input.isKeyPressed(Input.KEY_SPACE)) {
 			Projectile projectile = new Projectile(gauntlet.ranger.getPosition().getX(),
 					gauntlet.ranger.getPosition().getY(), gauntlet.ranger.getDirection());
 			gauntlet.rangerProjectiles.add(projectile);
