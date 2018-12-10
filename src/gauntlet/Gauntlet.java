@@ -171,11 +171,9 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(HealthPotion);
 		ResourceManager.loadImage(LowerHealthPotion);
 		
-		ResourceManager.loadImage(doorCNorth);
 		ResourceManager.loadImage(doorCSouth);
 		ResourceManager.loadImage(doorCEast);
 		ResourceManager.loadImage(doorCWest);
-		ResourceManager.loadImage(doorONorth);
 		ResourceManager.loadImage(doorOSouth);
 		ResourceManager.loadImage(doorOEast);
 		ResourceManager.loadImage(doorOWest);
