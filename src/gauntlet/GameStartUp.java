@@ -1,7 +1,6 @@
 package gauntlet;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -16,31 +15,8 @@ public class GameStartUp extends BasicGameState{
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
-		Gauntlet gauntlet = (Gauntlet)game;
+		//Gauntlet gauntlet = (Gauntlet)game;
 
-		gauntlet.potions.add(new Powerups(500, 500, Powerups.PowerupType.normal));
-		gauntlet.potions.add(new Powerups(1000, 1000, Powerups.PowerupType.normal));
-		gauntlet.potions.add(new Powerups(2000, 2000, Powerups.PowerupType.normal));
-
-		int xMax = Gauntlet.maxColumn;
-		int yMax = Gauntlet.maxRow;
-		int numberofPotionTypes = 100;
-		int potionSetup = 0; 
-		int potionsInGame = 10;
-		
-		while (potionSetup < potionsInGame) {
-			Random randx = new Random(); 
-			Random randy = new Random(); 
-			Random randPotion = new Random(); 
-
-			int x = randx.nextInt(xMax);
-			int y = randy.nextInt(yMax);
-			Powerups.PowerupType potion = Powerups.getRandomPowerUp(randPotion.nextInt(numberofPotionTypes));
-			if(Gauntlet.map[x][y] == 0) {
-		        gauntlet.potions.add(new Powerups(16 + x*32,16+y*32,potion));
-		        potionSetup++;
-			}
-		}
 
 	}
 
@@ -52,11 +28,9 @@ public class GameStartUp extends BasicGameState{
 		g.clear();
 		
 		// Moves the map in accordance to the character both are needed.
-		g.translate(gauntlet.ScreenWidth/2-gauntlet.warriorCamera.getXoffset(), 
-				gauntlet.ScreenHeight/2-gauntlet.warriorCamera.getYoffset());
-		g.translate(gauntlet.ScreenWidth/2-gauntlet.rangerCamera.getXoffset(), 
-				gauntlet.ScreenHeight/2-gauntlet.rangerCamera.getYoffset());
-
+		g.translate(gauntlet.ScreenWidth/2-gauntlet.warriorCamera.getXoffset(), gauntlet.ScreenHeight/2-gauntlet.warriorCamera.getYoffset());
+		g.translate(gauntlet.ScreenWidth/2-gauntlet.rangerCamera.getXoffset(), gauntlet.ScreenHeight/2-gauntlet.rangerCamera.getYoffset());
+		
 		renderMap(container, game, g);
 		
 		if (gauntlet.client != null) {
@@ -99,6 +73,7 @@ public class GameStartUp extends BasicGameState{
 		for (Powerups potions : gauntlet.potions) {
 			potions.render(g);
 		}
+		
 		
 		if (gauntlet.key1.keyUsed) {
 			gauntlet.key1.removeImage(ResourceManager.getImage(Gauntlet.KeyHDown));
@@ -190,7 +165,7 @@ public class GameStartUp extends BasicGameState{
 		else if (input.isKeyPressed(Input.KEY_SPACE)) {
 
 			Projectile projectile = new Projectile(gauntlet.warrior.getPosition().getX(),
-					gauntlet.warrior.getPosition().getY(), gauntlet.warrior.getDirection());
+					gauntlet.warrior.getPosition().getY(), gauntlet.warrior.getFireRate(), gauntlet.warrior.getDirection());
 			gauntlet.warriorProjectiles.add(projectile);
 			gauntlet.gameState.setWarriorDirection(GameState.Direction.STOP);
 		}
@@ -203,6 +178,7 @@ public class GameStartUp extends BasicGameState{
 		updateProjectiles(gauntlet.skeletonList, gauntlet.warriorProjectiles, delta);
 		gauntlet.gameState.warriorProjectiles = gauntlet.warriorProjectiles;
 		gauntlet.gameState.skeletons = gauntlet.skeletonList;
+		gauntlet.gameState.potions = gauntlet.potions;
 
 		gauntlet.client.sendGameState(gauntlet.gameState);
 
@@ -241,12 +217,33 @@ public class GameStartUp extends BasicGameState{
 		}
 		if (gauntlet.warrior.collides(gauntlet.key1) != null || gauntlet.ranger.collides(gauntlet.key1) != null) {
 			gauntlet.key1.keyUsed = true;
+			for (int row=0; row<Gauntlet.maxRow; row++ ) {
+				for (int col=0; col<Gauntlet.maxColumn; col++) {
+					if (Gauntlet.map[row][col] == 3) {
+						Gauntlet.map[row][col] = 0;
+					}
+				}
+			}
 		}
 		if (gauntlet.warrior.collides(gauntlet.key2) != null || gauntlet.ranger.collides(gauntlet.key2) != null) {
 			gauntlet.key2.keyUsed = true;
+			for (int row=0; row<Gauntlet.maxRow; row++ ) {
+				for (int col=0; col<Gauntlet.maxColumn; col++) {
+					if (Gauntlet.map[row][col] == 2) {
+						Gauntlet.map[row][col] = 0;
+					}
+				}
+			}
 		}
 		if (gauntlet.warrior.collides(gauntlet.key3) != null  || gauntlet.ranger.collides(gauntlet.key3) != null) {
 			gauntlet.key3.keyUsed = true;
+			for (int row=0; row<Gauntlet.maxRow; row++ ) {
+				for (int col=0; col<Gauntlet.maxColumn; col++) {
+					if (Gauntlet.map[row][col] == 4) {
+						Gauntlet.map[row][col] = 0;
+					}
+				}
+			}
 		}
 		for (Skeleton s : gauntlet.skeletonList) {
 			s.update(delta);
@@ -277,8 +274,12 @@ public class GameStartUp extends BasicGameState{
 			skeleton.moveGhost(gauntlet, delta);
 			skeleton.update(delta);
 		}
-		
+		// Update Powerups
+		for (Powerups potions : gauntlet.potions) {
+			potions.update(delta);
+		}
 		gauntlet.gameState.skeletons = gauntlet.skeletonList;
+		gauntlet.gameState.potions = gauntlet.potions;
 		int row = gauntlet.ranger.getRow();
 		int col = gauntlet.ranger.getColumn();
 		int tempCol = 0;
@@ -303,13 +304,13 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.ranger.setDirection(GameState.Direction.UP);
 			gauntlet.gameState.setRangerDirection(GameState.Direction.UP);
 			tempRow = (((int) gauntlet.ranger.getY())-14)/32;
-			if (Gauntlet.map[tempRow][col] == 1) {
+			if (Gauntlet.map[tempRow][col] != 0) {
 				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
 			}
 			
 			else if (row > 0 && Gauntlet.map[tempRow-1][col] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
-				gauntlet.ranger.setVelocity(new Vector(0, -0.1f));
+				gauntlet.ranger.setVelocity(new Vector(0, -0.4f));
 			} 
 		}
 
@@ -320,13 +321,13 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.gameState.setRangerDirection(GameState.Direction.DOWN);
 			tempRow = (((int) gauntlet.ranger.getY())+14)/32;
 			
-			if (Gauntlet.map[tempRow][col] == 1) {
+			if (Gauntlet.map[tempRow][col] !=0 ) {
 				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
 			}
 			
 			else if (row < Gauntlet.maxRow-1 && Gauntlet.map[tempRow+1][col] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
-				gauntlet.ranger.setVelocity(new Vector(0, 0.1f));
+				gauntlet.ranger.setVelocity(new Vector(0, 0.4f));
 			}
 		}
 
@@ -337,13 +338,13 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.gameState.setRangerDirection(GameState.Direction.RIGHT);
 			tempCol = (((int) gauntlet.ranger.getX())+14)/32;
 			
-			if (Gauntlet.map[row][tempCol] == 1) {
+			if (Gauntlet.map[row][tempCol] != 0) {
 				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
 			}
 			
 			else if (col < Gauntlet.maxColumn && Gauntlet.map[row][tempCol+1] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
-				gauntlet.ranger.setVelocity(new Vector(0.1f, 0));
+				gauntlet.ranger.setVelocity(new Vector(0.4f, 0));
 			}
 		}
 
@@ -354,20 +355,20 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.gameState.setRangerDirection(GameState.Direction.LEFT);
 			tempCol = (((int) gauntlet.ranger.getX())-14)/32;
 			
-			if (Gauntlet.map[row][tempCol] == 1) {
+			if (Gauntlet.map[row][tempCol] != 0) {
 				gauntlet.ranger.setVelocity(new Vector(0f, 0f));
 			}
 			
 			else if (col > 0 && Gauntlet.map[row][tempCol-1] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
-				gauntlet.ranger.setVelocity(new Vector(-0.1f, 0));
+				gauntlet.ranger.setVelocity(new Vector(-0.4f, 0));
 			}
 		} 
 
 		// Projectile
 		else if (input.isKeyPressed(Input.KEY_SPACE)) {
 			Projectile projectile = new Projectile(gauntlet.ranger.getPosition().getX(),
-					gauntlet.ranger.getPosition().getY(), gauntlet.ranger.getDirection());
+					gauntlet.ranger.getPosition().getY(), gauntlet.ranger.getFireRate(), gauntlet.ranger.getDirection());
 			gauntlet.rangerProjectiles.add(projectile);
 			gauntlet.gameState.setRangerDirection(GameState.Direction.STOP);
 		}
@@ -390,12 +391,33 @@ public class GameStartUp extends BasicGameState{
 		
 		if (gauntlet.warrior.collides(gauntlet.key1) != null || gauntlet.ranger.collides(gauntlet.key1) != null) {
 			gauntlet.key1.keyUsed = true;
+			for (int trow=0; trow<Gauntlet.maxRow; trow++ ) {
+				for (int tcol=0; tcol<Gauntlet.maxColumn; tcol++) {
+					if (Gauntlet.map[trow][tcol] == 3) {
+						Gauntlet.map[trow][tcol] = 0;
+					}
+				}
+			}
 		}
 		if (gauntlet.warrior.collides(gauntlet.key2) != null || gauntlet.ranger.collides(gauntlet.key2) != null) {
 			gauntlet.key2.keyUsed = true;
+			for (int trow=0; trow<Gauntlet.maxRow; trow++ ) {
+				for (int tcol=0; tcol<Gauntlet.maxColumn; tcol++) {
+					if (Gauntlet.map[trow][tcol] == 2) {
+						Gauntlet.map[trow][tcol] = 0;
+					}
+				}
+			}
 		}
 		if (gauntlet.warrior.collides(gauntlet.key3) != null  || gauntlet.ranger.collides(gauntlet.key3) != null) {
 			gauntlet.key3.keyUsed = true;
+			for (int trow=0; trow<Gauntlet.maxRow; trow++ ) {
+				for (int tcol=0; tcol<Gauntlet.maxColumn; tcol++) {
+					if (Gauntlet.map[trow][tcol] == 4) {
+						Gauntlet.map[trow][tcol] = 0;
+					}
+				}
+			}
 		}
 		
 		// Update server's game state before sending to client
@@ -403,7 +425,8 @@ public class GameStartUp extends BasicGameState{
 		updateProjectiles(gauntlet.skeletonList, gauntlet.rangerProjectiles, delta);
 		gauntlet.gameState.rangerProjectiles = gauntlet.rangerProjectiles;
 		gauntlet.gameState.skeletons = gauntlet.skeletonList;
-
+        gauntlet.gameState.potions = gauntlet.potions;
+        
 		// Update teammate's position
 		gauntlet.warrior.setPosition(gauntlet.gameState.getWarriorX(), gauntlet.gameState.getWarriorY());
 		gauntlet.warrior.updateAnimation();
@@ -441,25 +464,19 @@ public class GameStartUp extends BasicGameState{
 				} 
 				if (Gauntlet.map[row][col] == 2){
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
-					if (gauntlet.key2.keyUsed == true) {
-						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorOSouth));
-					} else {
+					if (gauntlet.key2.keyUsed == false) {
 						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorCSouth));
 					}
 				}
 				if (Gauntlet.map[row][col] == 3){
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
-					if (gauntlet.key1.keyUsed == true) {
-						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorOWest));
-					} else {
+					if (gauntlet.key1.keyUsed == false) {
 						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorCWest));
 					}
 				}
 				if (Gauntlet.map[row][col] == 4){
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
-					if (gauntlet.key3.keyUsed == true) {
-						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorOEast));
-					} else {
+					if (gauntlet.key3.keyUsed == false) {
 						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorCEast));
 					}
 				}
