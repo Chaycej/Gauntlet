@@ -1,6 +1,7 @@
 package gauntlet;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -16,9 +17,35 @@ public class GameStartUp extends BasicGameState{
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		Gauntlet gauntlet = (Gauntlet)game;
+
 		gauntlet.potions.add(new Powerups(500, 500, Powerups.PowerupType.normal));
 		gauntlet.potions.add(new Powerups(1000, 1000, Powerups.PowerupType.normal));
 		gauntlet.potions.add(new Powerups(2000, 2000, Powerups.PowerupType.normal));
+
+		int xMax = Gauntlet.maxColumn;
+		int yMax = Gauntlet.maxRow;
+		int numberofPotionTypes = 100;
+		int potionSetup = 0; 
+		int potionsInGame = 10;
+		
+		while (potionSetup < potionsInGame) {
+			Random randx = new Random(); 
+			Random randy = new Random(); 
+			Random randPotion = new Random(); 
+
+			int x = randx.nextInt(xMax);
+			int y = randy.nextInt(yMax);
+			Powerups.PowerupType potion = Powerups.getRandomPowerUp(randPotion.nextInt(numberofPotionTypes));
+			if(Gauntlet.map[x][y] == 0) {
+		        gauntlet.potions.add(new Powerups(16 + x*32,16+y*32,potion));
+		        potionSetup++;
+			}
+		}
+		
+		for (int i = 0; i < 5; i++) {
+			
+		    gauntlet.potions.add(new Powerups(128.0f+32.0f*i,128.0f+32.0f*i, Powerups.PowerupType.lower));
+		}
 	}
 
 	@Override
@@ -29,11 +56,9 @@ public class GameStartUp extends BasicGameState{
 		g.clear();
 		
 		// Moves the map in accordance to the character both are needed.
-		g.translate(gauntlet.ScreenWidth/2-gauntlet.warriorCamera.getXoffset(), 
-				gauntlet.ScreenHeight/2-gauntlet.warriorCamera.getYoffset());
-		g.translate(gauntlet.ScreenWidth/2-gauntlet.rangerCamera.getXoffset(), 
-				gauntlet.ScreenHeight/2-gauntlet.rangerCamera.getYoffset());
-
+		g.translate(gauntlet.ScreenWidth/2-gauntlet.warriorCamera.getXoffset(), gauntlet.ScreenHeight/2-gauntlet.warriorCamera.getYoffset());
+		g.translate(gauntlet.ScreenWidth/2-gauntlet.rangerCamera.getXoffset(), gauntlet.ScreenHeight/2-gauntlet.rangerCamera.getYoffset());
+		
 		renderMap(container, game, g);
 		
 		if (gauntlet.client != null) {
@@ -76,6 +101,7 @@ public class GameStartUp extends BasicGameState{
 		for (Powerups potions : gauntlet.potions) {
 			potions.render(g);
 		}
+		
 		
 		if (gauntlet.key1.keyUsed) {
 			gauntlet.key1.removeImage(ResourceManager.getImage(Gauntlet.KeyHDown));
@@ -167,7 +193,7 @@ public class GameStartUp extends BasicGameState{
 		else if (input.isKeyPressed(Input.KEY_SPACE)) {
 
 			Projectile projectile = new Projectile(gauntlet.warrior.getPosition().getX(),
-					gauntlet.warrior.getPosition().getY(), gauntlet.warrior.getDirection());
+					gauntlet.warrior.getPosition().getY(), gauntlet.warrior.getFireRate(), gauntlet.warrior.getDirection());
 			gauntlet.warriorProjectiles.add(projectile);
 			gauntlet.gameState.setWarriorDirection(GameState.Direction.STOP);
 		}
@@ -344,7 +370,7 @@ public class GameStartUp extends BasicGameState{
 		// Projectile
 		else if (input.isKeyPressed(Input.KEY_SPACE)) {
 			Projectile projectile = new Projectile(gauntlet.ranger.getPosition().getX(),
-					gauntlet.ranger.getPosition().getY(), gauntlet.ranger.getDirection());
+					gauntlet.ranger.getPosition().getY(), gauntlet.ranger.getFireRate(), gauntlet.ranger.getDirection());
 			gauntlet.rangerProjectiles.add(projectile);
 			gauntlet.gameState.setRangerDirection(GameState.Direction.STOP);
 		}
@@ -404,8 +430,8 @@ public class GameStartUp extends BasicGameState{
 	 */
 	public void renderMap(GameContainer container, StateBasedGame game, Graphics g) {
 		Gauntlet gauntlet = (Gauntlet)game;
-		int x = (int) (16);// + gauntlet.warriorCamera.getXoffset()*32);
-		int y = (int) (16);// + gauntlet.warriorCamera.getYoffset()*32);
+		int x = (int) (16);
+		int y = (int) (16);
 		for (int row = 0; row < Gauntlet.maxRow; row++ ) {
 			for (int col = 0; col < Gauntlet.maxColumn; col++) {
 				if ( Gauntlet.map[row][col] == 0) {		//equals a 0 is a path
@@ -446,7 +472,6 @@ public class GameStartUp extends BasicGameState{
 			y = y + 32;
 			x = 16;
 		}
-		
 	}
 
 	/*

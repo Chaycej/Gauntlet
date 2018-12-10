@@ -8,6 +8,7 @@ class Warrior extends Entity {
 	
 	private int health;
 	private int maxHealth;
+	private float fireRate;
 	private GameState.Direction direction;
 	public Vector velocity;
 	private int countdown;
@@ -15,8 +16,9 @@ class Warrior extends Entity {
 	public Warrior(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorS));
+		this.fireRate = 0.1f;
 		this.maxHealth = 100;
-		this.health = 100;
+		this.health = this.maxHealth;
 		this.direction = GameState.Direction.DOWN;
 		this.velocity = new Vector(vx, vy);
 		countdown = 0;
@@ -45,7 +47,12 @@ class Warrior extends Entity {
 			this.health -= 1;
 		}
 	}
-	
+	public float getFireRate() {
+		return this.fireRate;
+	}
+	private void increaseFireRate() {
+		this.fireRate += 0.1f;
+	}
 	public void potion(Powerups.PowerupType type) {
 		if(type == Powerups.PowerupType.lower) {
 		    this.health += this.maxHealth * .25;
@@ -55,6 +62,14 @@ class Warrior extends Entity {
 		}
 		else if (type == Powerups.PowerupType.max) {
 	        this.health = this.maxHealth;
+		}
+		else if (type == Powerups.PowerupType.maxPlus) {
+			this.maxHealth += 20;
+			this.health = this.maxHealth;
+		}
+		else if(type == Powerups.PowerupType.fireRatePlus) {
+			if (this.getFireRate() <= 0.5f)
+				this.increaseFireRate();
 		}
 		if (this.health > this.maxHealth)
 			this.health = this.maxHealth;
@@ -104,6 +119,7 @@ class Warrior extends Entity {
 	}
 	
 	public void southAnimation() {
+		this.flush();
 		this.addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorS));
 	}
 	
