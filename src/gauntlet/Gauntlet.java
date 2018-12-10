@@ -19,7 +19,7 @@ public class Gauntlet extends StateBasedGame {
 	public final static int maxRow = 75;
 	public final static int maxColumn = 75;
 	public final static int windowWidth = 800;
-	public final static int windowHeight = 800;
+	public final static int windowHeight = 750;
 	
 	public final int  warriorSpawnX= 64;
 	public final int  warriorSpawnY= 128;
@@ -164,10 +164,8 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(skeletonW);
 		
 		ResourceManager.loadImage(LobbyPic);
-		ResourceManager.loadImage(KeyHUp);
+	
 		ResourceManager.loadImage(KeyHDown);
-		ResourceManager.loadImage(KeyVRight);
-		ResourceManager.loadImage(KeyVLeft);
 		
 		ResourceManager.loadImage(HigherHealthPotion);
 		ResourceManager.loadImage(HealthPotion);
@@ -257,7 +255,7 @@ public class Gauntlet extends StateBasedGame {
 			app = new AppGameContainer(new Gauntlet("Gauntlet", windowWidth, windowHeight));		//(x,y)
 			app.setDisplayMode(windowWidth, windowHeight, false);
 			app.setClearEachFrame(false);
-			app.setTargetFrameRate(35);
+			app.setTargetFrameRate(45);
 			app.start();
 		} catch (SlickException e) {
 			e.printStackTrace();
