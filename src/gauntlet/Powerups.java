@@ -2,37 +2,43 @@ package gauntlet;
 
 import jig.Entity;
 import jig.ResourceManager;
-//import jig.Vector;
 
 class Powerups extends Entity implements java.io.Serializable {
+	
+	public enum PowerupType {
+		lower, normal, max, maxPlus, fireRatePlus;
+	}
 	
 	private static final long serialVersionUID = 1L;
 	private int countdown;
 	private int xPos;
 	private int yPos;
-	private String type;
+	private PowerupType type;
 	
-	public Powerups(final float x, final float y, int i) {
+	public Powerups(final float x, final float y, PowerupType type) {
 		super(x, y);
         
-		if (i == 0) {
+		if (type == PowerupType.lower) {
 			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.LowerHealthPotion));
-			type = "lower";
-		}else if(i==1) {
+		} else if (type == PowerupType.normal) {
 			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.HealthPotion));
-			type = "normal";
-		}else {
+
+		}else if(type == PowerupType.max){
 			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.HigherHealthPotion));
-		    type = "max";
+	    } else if(type == PowerupType.maxPlus){
+			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.IncreaseHealth));
+		}else {
+			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.IncreaseFire));
 		}
 		
+		this.type = type;
 		this.xPos = (int)x;
 		this.yPos = (int)y;
 		
 	}
 	
-	public String getType() {
-		return type;
+	public PowerupType getType() {
+		return this.type;
 	}
 	
 	public int getRow() {
@@ -60,7 +66,19 @@ class Powerups extends Entity implements java.io.Serializable {
 	synchronized public void setYPos(int newY) {
 		this.yPos = newY;
 	}
+	
+	public static PowerupType getRandomPowerUp(int random) {
+		PowerupType newType;
+		if (random <= 50) 
+			newType = PowerupType.lower;
+		else if (50 < random && random <= 85)
+		    newType = PowerupType.normal;
+		else
+		    newType = PowerupType.max;
 		
+		return newType;
+	}
+	
 	public void update(final int delta) {
 		//translate(velocity.scale(delta));
 		if (countdown > 0) {

@@ -19,7 +19,7 @@ public class Gauntlet extends StateBasedGame {
 	public final static int maxRow = 75;
 	public final static int maxColumn = 75;
 	public final static int windowWidth = 800;
-	public final static int windowHeight = 800;
+	public final static int windowHeight = 750;
 	
 	public final int  warriorSpawnX= 64;
 	public final int  warriorSpawnY= 128;
@@ -72,12 +72,14 @@ public class Gauntlet extends StateBasedGame {
 	public static final String LowerHealthPotion = "gauntlet/resources/LowerHealthPotion.png";
 	public static final String HealthPotion = "gauntlet/resources/HealthPotion.png";
 	public static final String HigherHealthPotion = "gauntlet/resources/HigherHealthPotion.png";
+	public static final String IncreaseHealth = "gauntlet/resources/IncreaseHealth.png";
+	public static final String IncreaseFire = "gauntlet/resources/IncreaseFireRate.png";
 
-	public static final String doorCNorth = "gauntlet/resources/doorCNorth.png";
+	
 	public static final String doorCSouth = "gauntlet/resources/doorCSouth.png";
 	public static final String doorCEast = "gauntlet/resources/doorCEast.png";
 	public static final String doorCWest = "gauntlet/resources/doorCWest.png";
-	public static final String doorONorth = "gauntlet/resources/doorONorth.png";
+	
 	public static final String doorOSouth = "gauntlet/resources/doorOSouth.png";
 	public static final String doorOEast = "gauntlet/resources/doorOEast.png";
 	public static final String doorOWest = "gauntlet/resources/doorOWest.png";
@@ -164,20 +166,18 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(skeletonW);
 		
 		ResourceManager.loadImage(LobbyPic);
-		ResourceManager.loadImage(KeyHUp);
+	
 		ResourceManager.loadImage(KeyHDown);
-		ResourceManager.loadImage(KeyVRight);
-		ResourceManager.loadImage(KeyVLeft);
 		
 		ResourceManager.loadImage(HigherHealthPotion);
 		ResourceManager.loadImage(HealthPotion);
 		ResourceManager.loadImage(LowerHealthPotion);
+		ResourceManager.loadImage(IncreaseHealth);
+		ResourceManager.loadImage(IncreaseFire);
 		
-		ResourceManager.loadImage(doorCNorth);
 		ResourceManager.loadImage(doorCSouth);
 		ResourceManager.loadImage(doorCEast);
 		ResourceManager.loadImage(doorCWest);
-		ResourceManager.loadImage(doorONorth);
 		ResourceManager.loadImage(doorOSouth);
 		ResourceManager.loadImage(doorOEast);
 		ResourceManager.loadImage(doorOWest);
@@ -257,7 +257,7 @@ public class Gauntlet extends StateBasedGame {
 			app = new AppGameContainer(new Gauntlet("Gauntlet", windowWidth, windowHeight));		//(x,y)
 			app.setDisplayMode(windowWidth, windowHeight, false);
 			app.setClearEachFrame(false);
-			app.setTargetFrameRate(35);
+			app.setTargetFrameRate(45);
 			app.start();
 		} catch (SlickException e) {
 			e.printStackTrace();
