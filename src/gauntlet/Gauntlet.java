@@ -73,11 +73,11 @@ public class Gauntlet extends StateBasedGame {
 	public static final String HealthPotion = "gauntlet/resources/HealthPotion.png";
 	public static final String HigherHealthPotion = "gauntlet/resources/HigherHealthPotion.png";
 
-	public static final String doorCNorth = "gauntlet/resources/doorCNorth.png";
+	
 	public static final String doorCSouth = "gauntlet/resources/doorCSouth.png";
 	public static final String doorCEast = "gauntlet/resources/doorCEast.png";
 	public static final String doorCWest = "gauntlet/resources/doorCWest.png";
-	public static final String doorONorth = "gauntlet/resources/doorONorth.png";
+	
 	public static final String doorOSouth = "gauntlet/resources/doorOSouth.png";
 	public static final String doorOEast = "gauntlet/resources/doorOEast.png";
 	public static final String doorOWest = "gauntlet/resources/doorOWest.png";
