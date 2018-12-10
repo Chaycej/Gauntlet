@@ -44,7 +44,7 @@ public class GameStartUp extends BasicGameState{
 		        potionSetup++;
 			}
 		}
->>>>>>> branch 'feat/powerUpPlacement' of https://github.com/Chaycej/Gauntlet.git
+
 	}
 
 	@Override
