@@ -9,15 +9,15 @@ class Projectile extends Entity implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	public Vector velocity;
 	private int countdown;
-	private float speed = 0.5f;
+	private float speed;
 	private int xPos;
 	private int yPos;
 	private GameState.Direction direction;
 	private boolean imageMounted;
 	
-	public Projectile(final float x, final float y, GameState.Direction direction) {
+	public Projectile(final float x, final float y, final float charactersFireRate, GameState.Direction direction) {
 		super(x, y);
-		
+		speed = charactersFireRate;
 		if (direction == GameState.Direction.UP) {
 			addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.arrowN));
 			this.velocity = new Vector(0.0f, -speed);
