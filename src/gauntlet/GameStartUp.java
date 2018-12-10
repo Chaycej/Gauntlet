@@ -37,9 +37,6 @@ public class GameStartUp extends BasicGameState{
 			int y = randy.nextInt(yMax);
 			Powerups.PowerupType potion = Powerups.getRandomPowerUp(randPotion.nextInt(numberofPotionTypes));
 			if(Gauntlet.map[x][y] == 0) {
-				System.out.print(x);
-				System.out.print(" ");
-				System.out.println(y);
 		        gauntlet.potions.add(new Powerups(16 + x*32,16+y*32,potion));
 		        potionSetup++;
 			}
