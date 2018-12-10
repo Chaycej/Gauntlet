@@ -41,7 +41,11 @@ public class GameStartUp extends BasicGameState{
 		        potionSetup++;
 			}
 		}
-
+		
+		for (int i = 0; i < 5; i++) {
+			
+		    gauntlet.potions.add(new Powerups(128.0f+32.0f*i,128.0f+32.0f*i, Powerups.PowerupType.lower));
+		}
 	}
 
 	@Override
@@ -52,11 +56,9 @@ public class GameStartUp extends BasicGameState{
 		g.clear();
 		
 		// Moves the map in accordance to the character both are needed.
-		g.translate(gauntlet.ScreenWidth/2-gauntlet.warriorCamera.getXoffset(), 
-				gauntlet.ScreenHeight/2-gauntlet.warriorCamera.getYoffset());
-		g.translate(gauntlet.ScreenWidth/2-gauntlet.rangerCamera.getXoffset(), 
-				gauntlet.ScreenHeight/2-gauntlet.rangerCamera.getYoffset());
-
+		g.translate(gauntlet.ScreenWidth/2-gauntlet.warriorCamera.getXoffset(), gauntlet.ScreenHeight/2-gauntlet.warriorCamera.getYoffset());
+		g.translate(gauntlet.ScreenWidth/2-gauntlet.rangerCamera.getXoffset(), gauntlet.ScreenHeight/2-gauntlet.rangerCamera.getYoffset());
+		
 		renderMap(container, game, g);
 		
 		if (gauntlet.client != null) {
@@ -99,6 +101,7 @@ public class GameStartUp extends BasicGameState{
 		for (Powerups potions : gauntlet.potions) {
 			potions.render(g);
 		}
+		
 		
 		if (gauntlet.key1.keyUsed) {
 			gauntlet.key1.removeImage(ResourceManager.getImage(Gauntlet.KeyHDown));
@@ -190,7 +193,7 @@ public class GameStartUp extends BasicGameState{
 		else if (input.isKeyPressed(Input.KEY_SPACE)) {
 
 			Projectile projectile = new Projectile(gauntlet.warrior.getPosition().getX(),
-					gauntlet.warrior.getPosition().getY(), gauntlet.warrior.getDirection());
+					gauntlet.warrior.getPosition().getY(), gauntlet.warrior.getFireRate(), gauntlet.warrior.getDirection());
 			gauntlet.warriorProjectiles.add(projectile);
 			gauntlet.gameState.setWarriorDirection(GameState.Direction.STOP);
 		}
@@ -367,7 +370,7 @@ public class GameStartUp extends BasicGameState{
 		// Projectile
 		else if (input.isKeyPressed(Input.KEY_SPACE)) {
 			Projectile projectile = new Projectile(gauntlet.ranger.getPosition().getX(),
-					gauntlet.ranger.getPosition().getY(), gauntlet.ranger.getDirection());
+					gauntlet.ranger.getPosition().getY(), gauntlet.ranger.getFireRate(), gauntlet.ranger.getDirection());
 			gauntlet.rangerProjectiles.add(projectile);
 			gauntlet.gameState.setRangerDirection(GameState.Direction.STOP);
 		}
