@@ -6,7 +6,7 @@ import jig.ResourceManager;
 class Powerups extends Entity implements java.io.Serializable {
 	
 	public enum PowerupType {
-		lower, normal, max, maxPlus, fireRatePlus;
+		lower, normal, max, maxPlus, fireRatePlus; 
 	}
 	
 	private static final long serialVersionUID = 1L;
