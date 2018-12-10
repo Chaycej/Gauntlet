@@ -1,7 +1,7 @@
 package gauntlet;
 
 import java.util.ArrayList;
-import java.util.Random;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -15,35 +15,7 @@ public class GameStartUp extends BasicGameState{
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
-		Gauntlet gauntlet = (Gauntlet)game;
 
-		gauntlet.potions.add(new Powerups(500, 500, Powerups.PowerupType.normal));
-		gauntlet.potions.add(new Powerups(1000, 1000, Powerups.PowerupType.normal));
-		gauntlet.potions.add(new Powerups(2000, 2000, Powerups.PowerupType.normal));
-
-		int xMax = Gauntlet.maxColumn;
-		int yMax = Gauntlet.maxRow;
-		int numberofPotionTypes = 100;
-		int potionSetup = 0; 
-		int potionsInGame = 10;
-		
-		while (potionSetup < potionsInGame) {
-			Random randx = new Random(); 
-			Random randy = new Random(); 
-			Random randPotion = new Random(); 
-
-			int x = randx.nextInt(xMax);
-			int y = randy.nextInt(yMax);
-			Powerups.PowerupType potion = Powerups.getRandomPowerUp(randPotion.nextInt(numberofPotionTypes));
-			if(Gauntlet.map[x][y] == 0) {
-		        gauntlet.potions.add(new Powerups(16 + x*32,16+y*32,potion));
-		        potionSetup++;
-			}
-		}
-		
-		for (int i = 0; i < 5; i++) {
-		    gauntlet.potions.add(new Powerups(128.0f+32.0f*i,128.0f+32.0f*i, Powerups.PowerupType.lower));
-		}
 	}
 
 	@Override
@@ -204,6 +176,7 @@ public class GameStartUp extends BasicGameState{
 		updateProjectiles(gauntlet.skeletonList, gauntlet.warriorProjectiles, delta);
 		gauntlet.gameState.warriorProjectiles = gauntlet.warriorProjectiles;
 		gauntlet.gameState.skeletons = gauntlet.skeletonList;
+		gauntlet.gameState.potions = gauntlet.potions;
 
 		gauntlet.client.sendGameState(gauntlet.gameState);
 
@@ -299,8 +272,12 @@ public class GameStartUp extends BasicGameState{
 			skeleton.moveGhost(gauntlet, delta);
 			skeleton.update(delta);
 		}
-		
+		// Update Powerups
+		for (Powerups potions : gauntlet.potions) {
+			potions.update(delta);
+		}
 		gauntlet.gameState.skeletons = gauntlet.skeletonList;
+		gauntlet.gameState.potions = gauntlet.potions;
 		int row = gauntlet.ranger.getRow();
 		int col = gauntlet.ranger.getColumn();
 		int tempCol = 0;
@@ -446,7 +423,8 @@ public class GameStartUp extends BasicGameState{
 		updateProjectiles(gauntlet.skeletonList, gauntlet.rangerProjectiles, delta);
 		gauntlet.gameState.rangerProjectiles = gauntlet.rangerProjectiles;
 		gauntlet.gameState.skeletons = gauntlet.skeletonList;
-
+        gauntlet.gameState.potions = gauntlet.potions;
+        
 		// Update teammate's position
 		gauntlet.warrior.setPosition(gauntlet.gameState.getWarriorX(), gauntlet.gameState.getWarriorY());
 		gauntlet.warrior.updateAnimation();
