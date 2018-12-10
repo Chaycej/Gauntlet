@@ -15,6 +15,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public class Gauntlet extends StateBasedGame {
 	public static final int LOBBYSTATE = 0;
 	public static final int GAMESTARTSTATE = 1;
+	public static final int RESTARTGAME = 2;
 
 	public final static int maxRow = 75;
 	public final static int maxColumn = 75;
