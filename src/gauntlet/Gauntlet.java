@@ -33,7 +33,7 @@ public class Gauntlet extends StateBasedGame {
 	public final int  key2X= 835;
 	public final int  key2Y= 1410;
 	
-	public final int  key3X= 75;
+	public final int  key3X= 85;
 	public final int  key3Y= 2360;
 	
 	public final int  treasureX= 1980;
@@ -195,16 +195,14 @@ public class Gauntlet extends StateBasedGame {
 		rangerCamera = new Camera(ScreenWidth/2,ScreenHeight/2);
 		
 		skeletonList = new ArrayList<Skeleton>();
-		
-		potions = new ArrayList<Powerups>();
-	
+			
 		skeletonList.add(new Skeleton(300, 300, 0f, 0f));
 		skeletonList.add(new Skeleton(500, 500, 0f, 0f));
 		skeletonList.add(new Skeleton(800, 500, 0f, 0f));
 		skeletonList.add(new Skeleton(300, 800, 0f, 0f));
 		skeletonList.add(new Skeleton(300, 2000, 0f, 0f));
 		skeletonList.add(new Skeleton(600, 2000, 0f, 0f));
-		
+				
 		int rowB = 0;
         int colB = 0;
         try {
@@ -244,6 +242,21 @@ public class Gauntlet extends StateBasedGame {
 				}
 			}
 		}
+		
+		potions = new ArrayList<Powerups>();
+		potions.add(new Powerups(1056, 160, Powerups.PowerupType.lower));
+		potions.add(new Powerups(2368, 64, Powerups.PowerupType.lower));
+		potions.add(new Powerups(64, 672, Powerups.PowerupType.lower));
+		
+		potions.add(new Powerups(992, 928, Powerups.PowerupType.normal));
+		potions.add(new Powerups(768, 2176, Powerups.PowerupType.normal));
+		potions.add(new Powerups(1568, 2016, Powerups.PowerupType.max));
+
+		potions.add(new Powerups(448, 1760, Powerups.PowerupType.maxPlus));
+		potions.add(new Powerups(544, 1760, Powerups.PowerupType.maxPlus));
+		potions.add(new Powerups(1300, 925, Powerups.PowerupType.fireRatePlus));
+		potions.add(new Powerups(64, 2368, Powerups.PowerupType.fireRatePlus));
+
 	}
 	
 	public static void main(String[] args) {

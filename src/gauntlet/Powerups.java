@@ -67,18 +67,6 @@ class Powerups extends Entity implements java.io.Serializable {
 		this.yPos = newY;
 	}
 	
-	public static PowerupType getRandomPowerUp(int random) {
-		PowerupType newType;
-		if (random <= 50) 
-			newType = PowerupType.lower;
-		else if (50 < random && random <= 85)
-		    newType = PowerupType.normal;
-		else
-		    newType = PowerupType.max;
-		
-		return newType;
-	}
-	
 	public void update(final int delta) {
 		//translate(velocity.scale(delta));
 		if (countdown > 0) {
