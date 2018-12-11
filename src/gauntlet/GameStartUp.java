@@ -76,7 +76,6 @@ public class GameStartUp extends BasicGameState{
 			potions.render(g);
 		}
 		
-		
 		if (gauntlet.key1.keyUsed) {
 			gauntlet.key1.removeImage(ResourceManager.getImage(Gauntlet.KeyHDown));
 		} else {
@@ -194,6 +193,10 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.warrior.setHealth(newGameState.getWarriorHealth());
 			gauntlet.ranger.setHealth(newGameState.getRangerHealth());
 			gauntlet.lives = (newGameState.getWarriorLives());
+			if (gauntlet.lives == 0 ) {
+				System.out.println("Game ended warrior");
+				gauntlet.enterState(Gauntlet.LOSEGAME);
+			}
 			
 			// Update warrior
 			gauntlet.warrior.updateWarriorState(newGameState.getWarriorDirection(), newGameState.warriorIsMoving());
@@ -253,7 +256,10 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.treasure.treasureFound = true;
 			System.out.println("Found the treasure");
 		}
-		
+		if (gauntlet.treasure.treasureFound == true) {
+			System.out.println("Game ended warrior");
+			gauntlet.enterState(Gauntlet.WINGAME);
+		}
 		for (Skeleton s : gauntlet.skeletonList) {
 			s.update(delta);
 		}
@@ -296,17 +302,23 @@ public class GameStartUp extends BasicGameState{
 		
 		if (gauntlet.ranger.isDead()) {
 			gauntlet.lives--;
+			
 			gauntlet.gameState.setRangerDirection(GameState.Direction.STOP);
 			gauntlet.ranger.setPosition(gauntlet.rangerSpawnX, gauntlet.rangerSpawnY);
 			gauntlet.ranger.setHealth(100);
 		}
 		
 		if (gauntlet.warrior.isDead()) {
-			gauntlet.gameState.setLives(gauntlet.lives--);
+			gauntlet.gameState.setLives(gauntlet.lives);
 			gauntlet.gameState.setWarriorDirection(GameState.Direction.STOP);
 			gauntlet.warrior.setPosition(gauntlet.warriorSpawnX, gauntlet.warriorSpawnY);
 			gauntlet.gameState.setWarriorPosition(gauntlet.warriorSpawnX, gauntlet.warriorSpawnY);
 			//gauntlet.warrior.setHealth(100);
+			
+		}
+		if (gauntlet.lives == 0 ) {
+			System.out.println("Game ended warrior");
+			gauntlet.enterState(Gauntlet.LOSEGAME);
 		}
 		
 		// Up movement
@@ -434,6 +446,10 @@ public class GameStartUp extends BasicGameState{
 		if (gauntlet.warrior.collides(gauntlet.treasure) != null  || gauntlet.ranger.collides(gauntlet.treasure) != null) {
 			gauntlet.treasure.treasureFound = true;
 			System.out.println("Found the treasure");
+		}
+		if (gauntlet.treasure.treasureFound == true) {
+			System.out.println("Game ended warrior");
+			gauntlet.enterState(Gauntlet.WINGAME);
 		}
 		
 		// Update server's game state before sending to client

@@ -40,7 +40,6 @@ public class GameThread extends Thread {
 			int tempRow = -1;
 			int commandTrue = 0;
 			
-			
 			if (clientState.getWarriorDirection() == GameState.Direction.DOWN) {
 				tempRow = (clientState.getWarriorY()-14)/32;
 				if (this.gameState.getWarriorY() < (Gauntlet.maxRow * 32) && Gauntlet.map[tempRow+1][warriorCol] == 0) {
@@ -134,6 +133,7 @@ public class GameThread extends Thread {
 			// Update client's position and projectiles
 			
 			if (gauntlet.warrior.isDead()) {
+				gauntlet.lives--;
 				gauntlet.warrior.setHealth(100);
 				this.gameState.setWarriorPosition(gauntlet.warriorSpawnX, gauntlet.warriorSpawnY);
 			} else {
