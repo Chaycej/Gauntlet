@@ -248,6 +248,12 @@ public class GameStartUp extends BasicGameState{
 				}
 			}
 		}
+		
+		if (gauntlet.warrior.collides(gauntlet.treasure) != null  || gauntlet.ranger.collides(gauntlet.treasure) != null) {
+			gauntlet.treasure.treasureFound = true;
+			System.out.println("Found the treasure");
+		}
+		
 		for (Skeleton s : gauntlet.skeletonList) {
 			s.update(delta);
 		}
@@ -423,6 +429,11 @@ public class GameStartUp extends BasicGameState{
 					}
 				}
 			}
+		}
+		
+		if (gauntlet.warrior.collides(gauntlet.treasure) != null  || gauntlet.ranger.collides(gauntlet.treasure) != null) {
+			gauntlet.treasure.treasureFound = true;
+			System.out.println("Found the treasure");
 		}
 		
 		// Update server's game state before sending to client
