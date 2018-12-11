@@ -27,6 +27,7 @@ public class GameState implements java.io.Serializable {
 	private AtomicInteger rangerHealth;
 	
 	public ArrayList<Skeleton> skeletons;
+	public ArrayList<Powerups> potions;
 	
 	public GameState() {
 		warriorProjectiles = new Vector<>();
@@ -44,6 +45,7 @@ public class GameState implements java.io.Serializable {
 		this.rangerHealth = new AtomicInteger(100);
 		
 		skeletons = new ArrayList<>();
+		potions = new ArrayList<>();
 	}
 	
 	/*
