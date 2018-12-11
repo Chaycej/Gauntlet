@@ -8,6 +8,7 @@ class Ranger extends Entity {
 	
 	private int health;
 	private int maxHealth;
+	private float fireRate;
 	private GameState.Direction direction;
 	public Vector velocity;
 	private int countdown;
@@ -15,7 +16,7 @@ class Ranger extends Entity {
 	public Ranger(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.rangerS));
-		
+		this.fireRate = 0.1f;
 		this.maxHealth = 100;
 		this.health = maxHealth;
 		this.direction = GameState.Direction.DOWN;
@@ -29,13 +30,12 @@ class Ranger extends Entity {
 	 *  Returns true if the ranger has no more health.
 	 */
 	public boolean isDead() {
-		return this.health <= 0;
+		if(this.health <= 0) {
+			this.flush();
+			return true;
+		} else
+		    return false;
 	}
-	
-	public int getHealth() {
-		return this.health;
-	}
-	
 	/*
 	 *  takeHit
 	 * 
@@ -43,25 +43,41 @@ class Ranger extends Entity {
 	 */
 	public void takeHit() {
 		if (!this.isDead()) {
-			this.health -= 10;
+			this.health -= 1;
 		}
 	}
+	public float getFireRate() {
+		return this.fireRate;
+	}
+	private void increaseFireRate() {
+		this.fireRate += 0.1f;
+	}
 	
-	public void potion(String type) {
-		if(type == "lower") {
-			System.out.println("Health increase 25%");
+	public void potion(Powerups.PowerupType type) {
+		if(type == Powerups.PowerupType.lower) {
 		    this.health += this.maxHealth * .25;
-		}
-		else if (type == "normal") {
+		} else if (type == Powerups.PowerupType.normal) {
 			this.health += this.maxHealth * .50;
-		     System.out.println("Health increase 50%");
-		}
-		else if (type == "max") {
+		} else if (type == Powerups.PowerupType.max) {
 	        this.health = this.maxHealth;
-			System.out.println("Health increase 100%");
+		} else if (type == Powerups.PowerupType.maxPlus) {
+			this.maxHealth += 20;
+			this.health = this.maxHealth;
+		}else if(type == Powerups.PowerupType.fireRatePlus) {
+			if (this.getFireRate() <= 0.5f)
+				this.increaseFireRate();
 		}
+		
 		if(this.health > this.maxHealth)
 			this.health = this.maxHealth;
+	}
+	
+	public void setHealth(int newHealth) {
+		this.health = newHealth;
+	}
+	
+	public int getHealth() {
+		return this.health;
 	}
 	
 	public void setVelocity(final Vector v) {

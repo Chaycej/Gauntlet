@@ -12,33 +12,40 @@ public class GameState implements java.io.Serializable {
 		UP, DOWN, RIGHT, LEFT, STOP;
 	}
 	
+	public Vector<Projectile> warriorProjectiles;
 	private Direction warriorDirection;
 	private boolean warriorIsMoving;
-	private Direction rangerDirection;
-	private boolean rangerIsMoving;
 	private AtomicInteger warriorX;
 	private AtomicInteger warriorY;
+	private AtomicInteger warriorHealth;
+	
+	public Vector<Projectile> rangerProjectiles;
+	private Direction rangerDirection;
+	private boolean rangerIsMoving;
 	private AtomicInteger rangerX;
 	private AtomicInteger rangerY;
+	private AtomicInteger rangerHealth;
 	
 	public ArrayList<Skeleton> skeletons;
-	public Vector<Projectile> warriorProjectiles;
-	public Vector<Projectile> rangerProjectiles;
+	public ArrayList<Powerups> potions;
 	
 	public GameState() {
-		this.warriorX = new AtomicInteger(200);
-		this.warriorY = new AtomicInteger(200);
+		warriorProjectiles = new Vector<>();
 		this.warriorDirection = Direction.DOWN;
 		this.warriorIsMoving = false;
+		this.warriorX = new AtomicInteger(200);
+		this.warriorY = new AtomicInteger(200);
+		this.warriorHealth = new AtomicInteger(100);
 		
-		this.rangerX = new AtomicInteger(280);
-		this.rangerY = new AtomicInteger(200);
+		rangerProjectiles = new Vector<>();
 		this.rangerDirection = Direction.DOWN;
 		this.rangerIsMoving = false;
+		this.rangerX = new AtomicInteger(280);
+		this.rangerY = new AtomicInteger(200);
+		this.rangerHealth = new AtomicInteger(100);
 		
 		skeletons = new ArrayList<>();
-		warriorProjectiles = new Vector<>();
-		rangerProjectiles = new Vector<>();
+		potions = new ArrayList<>();
 	}
 	
 	/*
@@ -154,4 +161,33 @@ public class GameState implements java.io.Serializable {
 	synchronized int getRangerY() {
 		return this.rangerY.intValue();
 	}
+	
+	/*
+	 *  Sets the rangers's health
+	 */
+	synchronized void setRangerHealth(int health) {
+		this.rangerHealth.set(health);
+	}
+	
+	/*
+	 *  Gets the rangers's health
+	 */
+	synchronized int getRangerHealth() {
+		return this.rangerHealth.intValue();
+	}
+
+	/*
+	 *  Sets the warrior's health
+	 */
+	synchronized void setWarriorHealth(int health) {
+		this.warriorHealth.set(health);
+	}
+	
+	/*
+	 *  Gets the warrior's health
+	 */
+	synchronized int getWarriorHealth() {
+		return this.warriorHealth.intValue();
+	}
+
 }

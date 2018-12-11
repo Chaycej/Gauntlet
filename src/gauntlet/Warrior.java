@@ -8,6 +8,7 @@ class Warrior extends Entity {
 	
 	private int health;
 	private int maxHealth;
+	private float fireRate;
 	private GameState.Direction direction;
 	public Vector velocity;
 	private int countdown;
@@ -15,8 +16,9 @@ class Warrior extends Entity {
 	public Warrior(final float x, final float y, final float vx, final float vy) {
 		super(x, y);
 		addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.warriorS));
+		this.fireRate = 0.1f;
 		this.maxHealth = 100;
-		this.health = 100;
+		this.health = this.maxHealth;
 		this.direction = GameState.Direction.DOWN;
 		this.velocity = new Vector(vx, vy);
 		countdown = 0;
@@ -28,7 +30,11 @@ class Warrior extends Entity {
 	 *  Returns true if the warrior has no more health.
 	 */
 	public boolean isDead() {
-		return this.health <= 0;
+		if(this.health <= 0) {
+			this.flush();
+			return true;
+		} else
+		    return false;
 	}
 	
 	/*
@@ -38,22 +44,39 @@ class Warrior extends Entity {
 	 */
 	public void takeHit() {
 		if (!this.isDead()) {
-			this.health -= 5;
+			this.health -= 1;
 		}
 	}
-	
-	public void potion(String type) {
-		if(type == "lower") {
+	public float getFireRate() {
+		return this.fireRate;
+	}
+	private void increaseFireRate() {
+		this.fireRate += 0.1f;
+	}
+	public void potion(Powerups.PowerupType type) {
+		if(type == Powerups.PowerupType.lower) {
 		    this.health += this.maxHealth * .25;
 		}
-		else if (type == "normal") {
+		else if (type == Powerups.PowerupType.normal) {
 			this.health += this.maxHealth * .50;
 		}
-		else if (type == "max") {
+		else if (type == Powerups.PowerupType.max) {
 	        this.health = this.maxHealth;
+		}
+		else if (type == Powerups.PowerupType.maxPlus) {
+			this.maxHealth += 20;
+			this.health = this.maxHealth;
+		}
+		else if(type == Powerups.PowerupType.fireRatePlus) {
+			if (this.getFireRate() <= 0.5f)
+				this.increaseFireRate();
 		}
 		if (this.health > this.maxHealth)
 			this.health = this.maxHealth;
+	}
+	
+	public void setHealth(int newHealth) {
+		this.health = newHealth;
 	}
 	
 	public int getHealth() {
@@ -135,22 +158,22 @@ class Warrior extends Entity {
 		if (direction == GameState.Direction.UP) {
 			this.northAnimation();
 			if (isMoving) {
-				this.setVelocity(new Vector(0f, -0.1f));
+				this.setVelocity(new Vector(0f, -0.4f));
 			}
 		} else if (direction == GameState.Direction.DOWN) {
 			this.southAnimation();
 			if (isMoving) {
-				this.setVelocity(new Vector(0f, 0.1f));
+				this.setVelocity(new Vector(0f, 0.4f));
 			}
 		} else if (direction == GameState.Direction.LEFT) {
 			this.westAnimation();
 			if (isMoving) {
-				this.setVelocity(new Vector(-0.1f, 0f));
+				this.setVelocity(new Vector(-0.4f, 0f));
 			}
 		} else if (direction == GameState.Direction.RIGHT) {
 			this.eastAnimation();
 			if (isMoving) {
-				this.setVelocity(new Vector(0.1f, 0f));
+				this.setVelocity(new Vector(0.4f, 0f));
 			}
 		}
 	}
