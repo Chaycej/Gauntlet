@@ -65,10 +65,8 @@ public class Gauntlet extends StateBasedGame {
 	
 	public static final String LobbyPic = "gauntlet/resources/LobbyPic.png";
 	
-	public static final String KeyHUp = "gauntlet/resources/KeyHUp.png";
 	public static final String KeyHDown = "gauntlet/resources/KeyHDown.png";
-	public static final String KeyVLeft = "gauntlet/resources/KeyVLeft.png";
-	public static final String KeyVRight = "gauntlet/resources/KeyVRight.png";
+
 
 	public static final String LowerHealthPotion = "gauntlet/resources/LowerHealthPotion.png";
 	public static final String HealthPotion = "gauntlet/resources/HealthPotion.png";
@@ -77,9 +75,10 @@ public class Gauntlet extends StateBasedGame {
 	public static final String IncreaseFire = "gauntlet/resources/IncreaseFireRate.png";
 
 	
-	public static final String doorCSouth = "gauntlet/resources/doorCSouth.png";
-	public static final String doorCEast = "gauntlet/resources/doorCEast.png";
-	public static final String doorCWest = "gauntlet/resources/doorCWest.png";
+	public static final String doorHRight = "gauntlet/resources/RightHDoor.png";
+	public static final String doorHLeft = "gauntlet/resources/LeftHDoor.png";
+	public static final String doorVTop = "gauntlet/resources/TopVDoor.png";
+	public static final String doorVBottom = "gauntlet/resources/BottomVDoor.png";
 	
 	public static final String treasureChest = "gauntlet/resources/chest.png";
 
@@ -172,9 +171,10 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(IncreaseHealth);
 		ResourceManager.loadImage(IncreaseFire);
 		
-		ResourceManager.loadImage(doorCSouth);
-		ResourceManager.loadImage(doorCEast);
-		ResourceManager.loadImage(doorCWest);
+		ResourceManager.loadImage(doorHRight);
+		ResourceManager.loadImage(doorHLeft);
+		ResourceManager.loadImage(doorVTop);
+		ResourceManager.loadImage(doorVBottom);
 		
 		ResourceManager.loadImage(treasureChest);
 		
@@ -240,6 +240,15 @@ public class Gauntlet extends StateBasedGame {
 				if (map[row][col] == 52) {	
 					map[row][col] = 4;			//equals a 4 is a door facing east  
 				}
+				if (map[row][col] == 53) {	
+					map[row][col] = 5;			//equals a 4 is a door facing east  
+				}
+				if (map[row][col] == 54) {	
+					map[row][col] = 6;			//equals a 4 is a door facing east  
+				}
+				if (map[row][col] == 55) {	
+					map[row][col] = 7;			//equals a 4 is a door facing east  
+				}
 			}
 		}
 		
@@ -262,7 +271,7 @@ public class Gauntlet extends StateBasedGame {
 	public static void main(String[] args) {
 		try {
 			app = new AppGameContainer(new Gauntlet("Gauntlet", windowWidth, windowHeight));		//(x,y)
-			app.setDisplayMode(windowWidth, windowHeight, false);
+			app.setDisplayMode(1800, 1800, false);
 			app.setClearEachFrame(false);
 			app.setTargetFrameRate(45);
 			app.start();
