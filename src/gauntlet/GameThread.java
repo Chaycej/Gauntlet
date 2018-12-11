@@ -141,6 +141,7 @@ public class GameThread extends Thread {
 			}
 		
 			this.gameState.warriorProjectiles = clientState.warriorProjectiles;
+			this.gameState.setLives(gauntlet.lives);
 			this.gameState.setWarriorHealth(gauntlet.warrior.getHealth());
 			this.gameState.setRangerHealth(gauntlet.ranger.getHealth());
 			this.server.sendGameState(this.gameState);

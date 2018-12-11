@@ -39,6 +39,8 @@ public class Gauntlet extends StateBasedGame {
 	public final int  treasureX= 1980;
 	public final int  treasureY= 1980;
 	
+	public int lives = 4;
+	
 	public static final String pathTile = "gauntlet/resources/WalkingTile.png";
 	public static final String wallTile = "gauntlet/resources/WallTile.png";
 	public static final String JOIN_GAME_RSC = "gauntlet/resources/joinGame.png";
