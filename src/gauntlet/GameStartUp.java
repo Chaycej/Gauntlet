@@ -217,7 +217,7 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.key1.keyUsed = true;
 			for (int row=0; row<Gauntlet.maxRow; row++ ) {
 				for (int col=0; col<Gauntlet.maxColumn; col++) {
-					if (Gauntlet.map[row][col] == 3) {
+					if (Gauntlet.map[row][col] == 4 || Gauntlet.map[row][col] == 5) {
 						Gauntlet.map[row][col] = 0;
 					}
 				}
@@ -227,7 +227,7 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.key2.keyUsed = true;
 			for (int row=0; row<Gauntlet.maxRow; row++ ) {
 				for (int col=0; col<Gauntlet.maxColumn; col++) {
-					if (Gauntlet.map[row][col] == 2) {
+					if (Gauntlet.map[row][col] == 2 || Gauntlet.map[row][col] == 3) {
 						Gauntlet.map[row][col] = 0;
 					}
 				}
@@ -237,7 +237,7 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.key3.keyUsed = true;
 			for (int row=0; row<Gauntlet.maxRow; row++ ) {
 				for (int col=0; col<Gauntlet.maxColumn; col++) {
-					if (Gauntlet.map[row][col] == 4) {
+					if (Gauntlet.map[row][col] == 6 || Gauntlet.map[row][col] == 7) {
 						Gauntlet.map[row][col] = 0;
 					}
 				}
@@ -308,7 +308,7 @@ public class GameStartUp extends BasicGameState{
 			
 			else if (row > 0 && Gauntlet.map[tempRow-1][col] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
-				gauntlet.ranger.setVelocity(new Vector(0, -0.1f));
+				gauntlet.ranger.setVelocity(new Vector(0, -0.15f));
 			} 
 		}
 
@@ -325,7 +325,7 @@ public class GameStartUp extends BasicGameState{
 			
 			else if (row < Gauntlet.maxRow-1 && Gauntlet.map[tempRow+1][col] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
-				gauntlet.ranger.setVelocity(new Vector(0, 0.1f));
+				gauntlet.ranger.setVelocity(new Vector(0, 0.15f));
 			}
 		}
 
@@ -342,7 +342,7 @@ public class GameStartUp extends BasicGameState{
 			
 			else if (col < Gauntlet.maxColumn && Gauntlet.map[row][tempCol+1] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
-				gauntlet.ranger.setVelocity(new Vector(0.1f, 0));
+				gauntlet.ranger.setVelocity(new Vector(0.15f, 0));
 			}
 		}
 
@@ -359,7 +359,7 @@ public class GameStartUp extends BasicGameState{
 			
 			else if (col > 0 && Gauntlet.map[row][tempCol-1] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
-				gauntlet.ranger.setVelocity(new Vector(-0.1f, 0));
+				gauntlet.ranger.setVelocity(new Vector(-0.15f, 0));
 			}
 		} 
 
@@ -391,7 +391,7 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.key1.keyUsed = true;
 			for (int trow=0; trow<Gauntlet.maxRow; trow++ ) {
 				for (int tcol=0; tcol<Gauntlet.maxColumn; tcol++) {
-					if (Gauntlet.map[trow][tcol] == 3) {
+					if (Gauntlet.map[trow][tcol] == 4 || Gauntlet.map[trow][tcol] == 5) {
 						Gauntlet.map[trow][tcol] = 0;
 					}
 				}
@@ -401,7 +401,7 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.key2.keyUsed = true;
 			for (int trow=0; trow<Gauntlet.maxRow; trow++ ) {
 				for (int tcol=0; tcol<Gauntlet.maxColumn; tcol++) {
-					if (Gauntlet.map[trow][tcol] == 2) {
+					if (Gauntlet.map[trow][tcol] == 2 || Gauntlet.map[trow][tcol] == 3) {
 						Gauntlet.map[trow][tcol] = 0;
 					}
 				}
@@ -411,7 +411,7 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.key3.keyUsed = true;
 			for (int trow=0; trow<Gauntlet.maxRow; trow++ ) {
 				for (int tcol=0; tcol<Gauntlet.maxColumn; tcol++) {
-					if (Gauntlet.map[trow][tcol] == 4) {
+					if (Gauntlet.map[trow][tcol] == 6 || Gauntlet.map[trow][tcol] == 7) {
 						Gauntlet.map[trow][tcol] = 0;
 					}
 				}
@@ -463,19 +463,37 @@ public class GameStartUp extends BasicGameState{
 				if (Gauntlet.map[row][col] == 2){
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
 					if (gauntlet.key2.keyUsed == false) {
-						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorCSouth));
+						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorHLeft));
 					}
 				}
 				if (Gauntlet.map[row][col] == 3){
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
-					if (gauntlet.key1.keyUsed == false) {
-						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorCWest));
+					if (gauntlet.key2.keyUsed == false) {
+						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorHRight));
 					}
 				}
 				if (Gauntlet.map[row][col] == 4){
 					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
+					if (gauntlet.key1.keyUsed == false) {
+						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorVTop));
+					}
+				}
+				if (Gauntlet.map[row][col] == 5){
+					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
+					if (gauntlet.key1.keyUsed == false) {
+						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorVBottom));
+					}
+				}
+				if (Gauntlet.map[row][col] == 6){
+					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
 					if (gauntlet.key3.keyUsed == false) {
-						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorCEast));
+						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorVTop));
+					}
+				}
+				if (Gauntlet.map[row][col] == 7){
+					gauntlet.mapMatrix[row][col]= new MapMatrix(x,y, 0f, 0f);
+					if (gauntlet.key3.keyUsed == false) {
+						gauntlet.mapMatrix[row][col].addImageWithBoundingBox(ResourceManager.getImage(Gauntlet.doorVBottom));
 					}
 				}
 				x = x + 32;
