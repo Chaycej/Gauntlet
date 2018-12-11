@@ -308,7 +308,7 @@ public class GameStartUp extends BasicGameState{
 			
 			else if (row > 0 && Gauntlet.map[tempRow-1][col] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
-				gauntlet.ranger.setVelocity(new Vector(0, -0.4f));
+				gauntlet.ranger.setVelocity(new Vector(0, -0.1f));
 			} 
 		}
 
@@ -325,7 +325,7 @@ public class GameStartUp extends BasicGameState{
 			
 			else if (row < Gauntlet.maxRow-1 && Gauntlet.map[tempRow+1][col] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
-				gauntlet.ranger.setVelocity(new Vector(0, 0.4f));
+				gauntlet.ranger.setVelocity(new Vector(0, 0.1f));
 			}
 		}
 
@@ -342,7 +342,7 @@ public class GameStartUp extends BasicGameState{
 			
 			else if (col < Gauntlet.maxColumn && Gauntlet.map[row][tempCol+1] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
-				gauntlet.ranger.setVelocity(new Vector(0.4f, 0));
+				gauntlet.ranger.setVelocity(new Vector(0.1f, 0));
 			}
 		}
 
@@ -359,7 +359,7 @@ public class GameStartUp extends BasicGameState{
 			
 			else if (col > 0 && Gauntlet.map[row][tempCol-1] == 0) {
 				gauntlet.gameState.setRangerMovement(true);
-				gauntlet.ranger.setVelocity(new Vector(-0.4f, 0));
+				gauntlet.ranger.setVelocity(new Vector(-0.1f, 0));
 			}
 		} 
 
@@ -525,8 +525,10 @@ public class GameStartUp extends BasicGameState{
 		
 		int offSet = 0;
 		for (int i : removeList) {
-			projectiles.remove(i - offSet);
-			offSet += 1;
+			if (i - offSet >= 0) {
+			    projectiles.remove(i - offSet);
+			    offSet += 1;
+			}
 		}
 	}
 	
