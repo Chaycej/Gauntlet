@@ -26,6 +26,8 @@ public class GameState implements java.io.Serializable {
 	private AtomicInteger rangerY;
 	private AtomicInteger rangerHealth;
 	
+	private AtomicInteger lives;
+	
 	public ArrayList<Skeleton> skeletons;
 	public ArrayList<Powerups> potions;
 	
@@ -43,6 +45,8 @@ public class GameState implements java.io.Serializable {
 		this.rangerX = new AtomicInteger(280);
 		this.rangerY = new AtomicInteger(200);
 		this.rangerHealth = new AtomicInteger(100);
+		
+		this.lives = new AtomicInteger(100);
 		
 		skeletons = new ArrayList<>();
 		potions = new ArrayList<>();
@@ -183,11 +187,21 @@ public class GameState implements java.io.Serializable {
 		this.warriorHealth.set(health);
 	}
 	
+	/* set lives left between two characters*/
+	synchronized void setLives(int livesLeft) {
+		this.lives.set(livesLeft);
+	}
+	
 	/*
 	 *  Gets the warrior's health
 	 */
 	synchronized int getWarriorHealth() {
 		return this.warriorHealth.intValue();
+	}
+	
+	/* get warrior lives*/
+	synchronized int getWarriorLives() {
+		return this.lives.intValue();
 	}
 
 }
