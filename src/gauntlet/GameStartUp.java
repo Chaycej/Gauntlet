@@ -194,7 +194,6 @@ public class GameStartUp extends BasicGameState{
 			gauntlet.ranger.setHealth(newGameState.getRangerHealth());
 			gauntlet.lives = (newGameState.getWarriorLives());
 			if (gauntlet.lives == 0 ) {
-				System.out.println("Game ended warrior");
 				gauntlet.enterState(Gauntlet.LOSEGAME);
 			}
 			
@@ -254,12 +253,8 @@ public class GameStartUp extends BasicGameState{
 		
 		if (gauntlet.warrior.collides(gauntlet.treasure) != null  || gauntlet.ranger.collides(gauntlet.treasure) != null) {
 			gauntlet.treasure.treasureFound = true;
-			System.out.println("Found the treasure");
 		}
-		if (gauntlet.treasure.treasureFound == true) {
-			System.out.println("Game ended warrior");
-			gauntlet.enterState(Gauntlet.WINGAME);
-		}
+		
 		for (Skeleton s : gauntlet.skeletonList) {
 			s.update(delta);
 		}
@@ -269,6 +264,9 @@ public class GameStartUp extends BasicGameState{
 		
 		//updates the camera as Warrior moves
 		gauntlet.warriorCamera.update(gauntlet.warrior.getPosition().getX(), gauntlet.warrior.getPosition().getY());
+		if (gauntlet.treasure.treasureFound == true) {
+			gauntlet.enterState(Gauntlet.WINGAME);
+		}
 	}
 
 	/*
@@ -317,7 +315,6 @@ public class GameStartUp extends BasicGameState{
 			
 		}
 		if (gauntlet.lives == 0 ) {
-			System.out.println("Game ended warrior");
 			gauntlet.enterState(Gauntlet.LOSEGAME);
 		}
 		
@@ -445,12 +442,8 @@ public class GameStartUp extends BasicGameState{
 		
 		if (gauntlet.warrior.collides(gauntlet.treasure) != null  || gauntlet.ranger.collides(gauntlet.treasure) != null) {
 			gauntlet.treasure.treasureFound = true;
-			System.out.println("Found the treasure");
 		}
-		if (gauntlet.treasure.treasureFound == true) {
-			System.out.println("Game ended warrior");
-			gauntlet.enterState(Gauntlet.WINGAME);
-		}
+		
 		
 		// Update server's game state before sending to client
 		gauntlet.gameState.setRangerPosition((int)gauntlet.ranger.getX(), (int)gauntlet.ranger.getY());
@@ -473,6 +466,9 @@ public class GameStartUp extends BasicGameState{
 		
 		//updates the camera as Ranger moves.
 		gauntlet.rangerCamera.update(gauntlet.ranger.getPosition().getX(), gauntlet.ranger.getPosition().getY());
+		if (gauntlet.treasure.treasureFound == true) {
+			gauntlet.enterState(Gauntlet.WINGAME);
+		}
 	}
 
 	/*
