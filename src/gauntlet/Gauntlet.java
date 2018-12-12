@@ -15,7 +15,8 @@ import org.newdawn.slick.state.StateBasedGame;
 public class Gauntlet extends StateBasedGame {
 	public static final int LOBBYSTATE = 0;
 	public static final int GAMESTARTSTATE = 1;
-	public static final int RESTARTGAME = 2;
+	public static final int LOSEGAME = 2;
+	public static final int WINGAME = 3;
 
 	public final static int maxRow = 75;
 	public final static int maxColumn = 75;
@@ -38,6 +39,8 @@ public class Gauntlet extends StateBasedGame {
 	
 	public final int  treasureX= 1980;
 	public final int  treasureY= 1980;
+
+	public int lives = 1;
 	
 	public static final String pathTile = "gauntlet/resources/WalkingTile.png";
 	public static final String wallTile = "gauntlet/resources/WallTile.png";
@@ -66,7 +69,9 @@ public class Gauntlet extends StateBasedGame {
 	public static final String LobbyPic = "gauntlet/resources/LobbyPic.png";
 	
 	public static final String KeyHDown = "gauntlet/resources/KeyHDown.png";
-
+	
+	public static final String winPic = "gauntlet/resources/Win.png";
+	public static final String losePic = "gauntlet/resources/Lose.png";
 
 	public static final String LowerHealthPotion = "gauntlet/resources/LowerHealthPotion.png";
 	public static final String HealthPotion = "gauntlet/resources/HealthPotion.png";
@@ -135,6 +140,8 @@ public class Gauntlet extends StateBasedGame {
 	public void initStatesList(GameContainer container) throws SlickException {
 		addState(new LobbyState());
 		addState(new GameStartUp());
+		addState(new LoseGame());
+		addState(new WinGame());
 		
 		ResourceManager.loadImage(wallTile);
 		ResourceManager.loadImage(pathTile);
@@ -164,6 +171,8 @@ public class Gauntlet extends StateBasedGame {
 		ResourceManager.loadImage(LobbyPic);
 	
 		ResourceManager.loadImage(KeyHDown);
+		ResourceManager.loadImage(winPic);
+		ResourceManager.loadImage(losePic);
 		
 		ResourceManager.loadImage(HigherHealthPotion);
 		ResourceManager.loadImage(HealthPotion);
@@ -271,7 +280,7 @@ public class Gauntlet extends StateBasedGame {
 	public static void main(String[] args) {
 		try {
 			app = new AppGameContainer(new Gauntlet("Gauntlet", windowWidth, windowHeight));		//(x,y)
-			app.setDisplayMode(1800, 1800, false);
+			app.setDisplayMode(windowWidth, windowHeight, false);
 			app.setClearEachFrame(false);
 			app.setTargetFrameRate(45);
 			app.start();

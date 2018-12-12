@@ -36,11 +36,15 @@ public class GameStartUp extends BasicGameState{
 					gauntlet.warriorCamera.getXoffset() - 100, gauntlet.warriorCamera.getYoffset() - 365);
 			g.drawString("Ranger health: " + String.valueOf(gauntlet.ranger.getHealth()),
 					gauntlet.warriorCamera.getXoffset() - 300, gauntlet.warriorCamera.getYoffset() - 365);
+			g.drawString("Lives Left: " + String.valueOf(gauntlet.lives),
+					gauntlet.warriorCamera.getXoffset() + 100, gauntlet.warriorCamera.getYoffset() - 365);
 		} else {
 			g.drawString("Warrior health: " + String.valueOf(gauntlet.warrior.getHealth()),
 					gauntlet.rangerCamera.getXoffset() - 100, gauntlet.rangerCamera.getYoffset() - 365);
 			g.drawString("Ranger health: " + String.valueOf(gauntlet.ranger.getHealth()),
 					gauntlet.rangerCamera.getXoffset() - 300, gauntlet.rangerCamera.getYoffset() - 365);
+			g.drawString("Lives Left: " + String.valueOf(gauntlet.lives),
+					gauntlet.rangerCamera.getXoffset() + 100, gauntlet.rangerCamera.getYoffset() - 365);
 		}
 		
 		// Don't render a dead guy
@@ -71,7 +75,6 @@ public class GameStartUp extends BasicGameState{
 		for (Powerups potions : gauntlet.potions) {
 			potions.render(g);
 		}
-		
 		
 		if (gauntlet.key1.keyUsed) {
 			gauntlet.key1.removeImage(ResourceManager.getImage(Gauntlet.KeyHDown));
@@ -189,6 +192,10 @@ public class GameStartUp extends BasicGameState{
 			// Update warrior and ranger health
 			gauntlet.warrior.setHealth(newGameState.getWarriorHealth());
 			gauntlet.ranger.setHealth(newGameState.getRangerHealth());
+			gauntlet.lives = (newGameState.getWarriorLives());
+			if (gauntlet.lives == 0 ) {
+				gauntlet.enterState(Gauntlet.LOSEGAME);
+			}
 			
 			// Update warrior
 			gauntlet.warrior.updateWarriorState(newGameState.getWarriorDirection(), newGameState.warriorIsMoving());
@@ -243,6 +250,11 @@ public class GameStartUp extends BasicGameState{
 				}
 			}
 		}
+		
+		if (gauntlet.warrior.collides(gauntlet.treasure) != null  || gauntlet.ranger.collides(gauntlet.treasure) != null) {
+			gauntlet.treasure.treasureFound = true;
+		}
+		
 		for (Skeleton s : gauntlet.skeletonList) {
 			s.update(delta);
 		}
@@ -252,6 +264,9 @@ public class GameStartUp extends BasicGameState{
 		
 		//updates the camera as Warrior moves
 		gauntlet.warriorCamera.update(gauntlet.warrior.getPosition().getX(), gauntlet.warrior.getPosition().getY());
+		if (gauntlet.treasure.treasureFound == true) {
+			gauntlet.enterState(Gauntlet.WINGAME);
+		}
 	}
 
 	/*
@@ -284,16 +299,23 @@ public class GameStartUp extends BasicGameState{
 		int tempRow = 0;
 		
 		if (gauntlet.ranger.isDead()) {
+			gauntlet.lives--;
+			
 			gauntlet.gameState.setRangerDirection(GameState.Direction.STOP);
 			gauntlet.ranger.setPosition(gauntlet.rangerSpawnX, gauntlet.rangerSpawnY);
 			gauntlet.ranger.setHealth(100);
 		}
 		
 		if (gauntlet.warrior.isDead()) {
+			gauntlet.gameState.setLives(gauntlet.lives);
 			gauntlet.gameState.setWarriorDirection(GameState.Direction.STOP);
 			gauntlet.warrior.setPosition(gauntlet.warriorSpawnX, gauntlet.warriorSpawnY);
 			gauntlet.gameState.setWarriorPosition(gauntlet.warriorSpawnX, gauntlet.warriorSpawnY);
 			//gauntlet.warrior.setHealth(100);
+			
+		}
+		if (gauntlet.lives == 0 ) {
+			gauntlet.enterState(Gauntlet.LOSEGAME);
 		}
 		
 		// Up movement
@@ -418,6 +440,11 @@ public class GameStartUp extends BasicGameState{
 			}
 		}
 		
+		if (gauntlet.warrior.collides(gauntlet.treasure) != null  || gauntlet.ranger.collides(gauntlet.treasure) != null) {
+			gauntlet.treasure.treasureFound = true;
+		}
+		
+		
 		// Update server's game state before sending to client
 		gauntlet.gameState.setRangerPosition((int)gauntlet.ranger.getX(), (int)gauntlet.ranger.getY());
 		updateProjectiles(gauntlet.skeletonList, gauntlet.rangerProjectiles, delta);
@@ -439,6 +466,9 @@ public class GameStartUp extends BasicGameState{
 		
 		//updates the camera as Ranger moves.
 		gauntlet.rangerCamera.update(gauntlet.ranger.getPosition().getX(), gauntlet.ranger.getPosition().getY());
+		if (gauntlet.treasure.treasureFound == true) {
+			gauntlet.enterState(Gauntlet.WINGAME);
+		}
 	}
 
 	/*
