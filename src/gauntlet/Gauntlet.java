@@ -38,7 +38,7 @@ public class Gauntlet extends StateBasedGame {
 	public final int  key3Y= 2360;
 	
 	public final int  treasureX= 1980;
-	public final int  treasureY= 1980;
+	public final int  treasureY= 2000;
 
 	public int lives = 4;
 	

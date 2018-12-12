@@ -452,6 +452,7 @@ public class GameStartUp extends BasicGameState{
 		gauntlet.gameState.skeletons = gauntlet.skeletonList;
         gauntlet.gameState.potions = gauntlet.potions;
         
+        
 		// Update teammate's position
 		gauntlet.warrior.setPosition(gauntlet.gameState.getWarriorX(), gauntlet.gameState.getWarriorY());
 		gauntlet.warrior.updateAnimation();
@@ -467,7 +468,7 @@ public class GameStartUp extends BasicGameState{
 		//updates the camera as Ranger moves.
 		gauntlet.rangerCamera.update(gauntlet.ranger.getPosition().getX(), gauntlet.ranger.getPosition().getY());
 		if (gauntlet.treasure.treasureFound == true) {
-			gauntlet.enterState(Gauntlet.WINGAME);
+			gauntlet.enterState(Gauntlet.WINGAME); 
 		}
 	}
 
